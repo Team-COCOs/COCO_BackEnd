@@ -9,8 +9,8 @@ import {
 } from "typeorm";
 import { User } from "../users/users.entity";
 
-@Entity("posts")
-export class Post {
+@Entity("diary")
+export class Diary {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,9 +23,6 @@ export class Post {
 
   @Column({ type: "text" })
   content: string;
-
-  @Column({ type: "int", default: 0 })
-  view_count: number;
 
   @Column({ type: "boolean", default: true })
   is_public: boolean;

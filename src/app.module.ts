@@ -24,6 +24,7 @@ import { SkinModule } from './skin/skin.module';
 import { UseritemsModule } from './useritems/useritems.module';
 import { PaymentsModule } from './payments/payments.module';
 import { PhotosModule } from './photos/photos.module';
+import { DiaryModule } from './diary/diary.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -60,6 +61,7 @@ import { PhotosModule } from './photos/photos.module';
     UseritemsModule,
     PaymentsModule,
     PhotosModule,
+    DiaryModule,
   ],
   controllers: [PhotosController],
   providers: [PhotosService],

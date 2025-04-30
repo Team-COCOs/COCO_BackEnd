@@ -26,6 +26,14 @@ export class Follow {
   @JoinColumn({ name: "accepter_id" })
   accepter: User;
 
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "requester_id" })
+  requester_name: User;
+
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "accepter_id" })
+  accepter_name: User;
+
   @Column({ type: "enum", enum: FriendStatus })
   status: FriendStatus;
 
