@@ -54,6 +54,9 @@ export class User {
   @Column({ type: "varchar", nullable: true })
   refresh_token: string | null;
 
+  @Column()
+  birthday: string;
+
   @CreateDateColumn()
   created_at: Date;
 

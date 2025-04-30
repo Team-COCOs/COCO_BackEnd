@@ -25,6 +25,7 @@ import { UseritemsModule } from './useritems/useritems.module';
 import { PaymentsModule } from './payments/payments.module';
 import { PhotosModule } from './photos/photos.module';
 import { DiaryModule } from './diary/diary.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -62,6 +63,7 @@ import { DiaryModule } from './diary/diary.module';
     PaymentsModule,
     PhotosModule,
     DiaryModule,
+    AuthModule,
   ],
   controllers: [PhotosController],
   providers: [PhotosService],
