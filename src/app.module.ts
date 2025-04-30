@@ -25,6 +25,14 @@ import { PaymentsModule } from "./payments/payments.module";
 import { PhotosModule } from "./photos/photos.module";
 import { DiaryModule } from "./diary/diary.module";
 import { AuthModule } from "./auth/auth.module";
+import { User } from "./users/users.entity";
+import { BGM } from "./bgm/bgm.entity";
+import { Notification } from "./notifications/notifications.entity";
+import { Payment } from "./payments/payments.entity";
+import { Photo } from "./photos/photos.entity";
+import { Friend } from "./friends/friends.entity";
+import { ChatbotMessage } from "./chatbotmessages/chatbotmessages.entity";
+import { Diary } from "./diary/diary.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -38,7 +46,16 @@ import { AuthModule } from "./auth/auth.module";
         username: config.get<string>("DB_USER"),
         password: config.get<string>("DB_PASSWORD"),
         database: config.get<string>("DB_NAME"),
-        entities: [],
+        entities: [
+          User,
+          BGM,
+          Photo,
+          Payment,
+          Notification,
+          Friend,
+          ChatbotMessage,
+          Diary,
+        ],
         synchronize: true,
       }),
     }),

@@ -32,6 +32,14 @@ const payments_module_1 = require("./payments/payments.module");
 const photos_module_1 = require("./photos/photos.module");
 const diary_module_1 = require("./diary/diary.module");
 const auth_module_1 = require("./auth/auth.module");
+const users_entity_1 = require("./users/users.entity");
+const bgm_entity_1 = require("./bgm/bgm.entity");
+const notifications_entity_1 = require("./notifications/notifications.entity");
+const payments_entity_1 = require("./payments/payments.entity");
+const photos_entity_1 = require("./photos/photos.entity");
+const friends_entity_1 = require("./friends/friends.entity");
+const chatbotmessages_entity_1 = require("./chatbotmessages/chatbotmessages.entity");
+const diary_entity_1 = require("./diary/diary.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -49,7 +57,16 @@ exports.AppModule = AppModule = __decorate([
                     username: config.get("DB_USER"),
                     password: config.get("DB_PASSWORD"),
                     database: config.get("DB_NAME"),
-                    entities: [],
+                    entities: [
+                        users_entity_1.User,
+                        bgm_entity_1.BGM,
+                        photos_entity_1.Photo,
+                        payments_entity_1.Payment,
+                        notifications_entity_1.Notification,
+                        friends_entity_1.Friend,
+                        chatbotmessages_entity_1.ChatbotMessage,
+                        diary_entity_1.Diary,
+                    ],
                     synchronize: true,
                 }),
             }),
