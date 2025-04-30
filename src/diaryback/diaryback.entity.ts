@@ -5,8 +5,8 @@ import {
   CreateDateColumn,
 } from "typeorm";
 
-@Entity("mini_mi_items")
-export class MiniMiItem {
+@Entity("diary_backgrounds")
+export class DiaryBackground {
   @PrimaryGeneratedColumn()
   id: number;
 

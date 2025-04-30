@@ -19,7 +19,7 @@ import { ChatbotmessagesModule } from "./chatbotmessages/chatbotmessages.module"
 import { BgmModule } from "./bgm/bgm.module";
 import { MinimiitemsModule } from "./minimiitems/minimiitems.module";
 import { MiniroomitemsModule } from "./miniroomitems/miniroomitems.module";
-import { SkinModule } from "./skin/skin.module";
+import { SkinModule } from "./diaryback/diaryback.module";
 import { UseritemsModule } from "./useritems/useritems.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { PhotosModule } from "./photos/photos.module";
@@ -33,6 +33,7 @@ import { Photo } from "./photos/photos.entity";
 import { Friend } from "./friends/friends.entity";
 import { ChatbotMessage } from "./chatbotmessages/chatbotmessages.entity";
 import { Diary } from "./diary/diary.entity";
+import { TapcolorModule } from "./tapcolor/tapcolor.module";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -79,6 +80,7 @@ import { Diary } from "./diary/diary.entity";
     PhotosModule,
     DiaryModule,
     AuthModule,
+    TapcolorModule,
   ],
   controllers: [PhotosController],
   providers: [PhotosService],
