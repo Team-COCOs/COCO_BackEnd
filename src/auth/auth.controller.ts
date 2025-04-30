@@ -61,8 +61,8 @@ export class AuthController {
   }
 
   // 비밀번호 변경 (로그인 상태)
-  @UseGuards(AuthGuard("jwt"))
   @Patch("change-password")
+  @UseGuards(AuthGuard("jwt"))
   async changePassword(
     @Req() req: Request,
     @Body() body: { newPassword: string }

@@ -14,25 +14,25 @@ export enum FriendStatus {
   REJECTED = "rejected",
 }
 @Entity("friends")
-export class Follow {
+export class Friend {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, { eager: false })
   @JoinColumn({ name: "requester_id" })
   requester: User;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "accepter_id" })
-  accepter: User;
+  receiver: User;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "requester_id" })
-  requester_name: User;
+  // 내가 상대를 부르는 이름
+  @Column({ type: "varchar", length: 50, nullable: true })
+  requester_name: string;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "accepter_id" })
-  accepter_name: User;
+  // 상대가 나를 부르는 이름
+  @Column({ type: "varchar", length: 50, nullable: true })
+  receiver_name: string;
 
   @Column({ type: "enum", enum: FriendStatus })
   status: FriendStatus;

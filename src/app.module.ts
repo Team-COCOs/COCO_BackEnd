@@ -3,29 +3,28 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 // config
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { UsersModule } from './users/users.module';
-import { MinihomepisModule } from './minihomepis/minihomepis.module';
-import { FriendsModule } from './friends/friends.module';
-import { PostsModule } from './posts/posts.module';
-import { CommentsModule } from './comments/comments.module';
-import { PhotosService } from './photos/photos.service';
-import { PhotosController } from './photos/photos.controller';
-import { GuestbooksModule } from './guestbooks/guestbooks.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { StoreitemsModule } from './storeitems/storeitems.module';
-import { PurchasesModule } from './purchases/purchases.module';
-import { GiftsModule } from './gifts/gifts.module';
-import { DotorisModule } from './dotoris/dotoris.module';
-import { ChatbotmessagesModule } from './chatbotmessages/chatbotmessages.module';
-import { BgmModule } from './bgm/bgm.module';
-import { MinimiitemsModule } from './minimiitems/minimiitems.module';
-import { MiniroomitemsModule } from './miniroomitems/miniroomitems.module';
-import { SkinModule } from './skin/skin.module';
-import { UseritemsModule } from './useritems/useritems.module';
-import { PaymentsModule } from './payments/payments.module';
-import { PhotosModule } from './photos/photos.module';
-import { DiaryModule } from './diary/diary.module';
-import { AuthModule } from './auth/auth.module';
+import { UsersModule } from "./users/users.module";
+import { MinihomepisModule } from "./minihomepis/minihomepis.module";
+import { FriendsModule } from "./friends/friends.module";
+import { PostsModule } from "./posts/posts.module";
+import { CommentsModule } from "./comments/comments.module";
+import { PhotosService } from "./photos/photos.service";
+import { PhotosController } from "./photos/photos.controller";
+import { GuestbooksModule } from "./guestbooks/guestbooks.module";
+import { NotificationsModule } from "./notifications/notifications.module";
+import { StoreitemsModule } from "./storeitems/storeitems.module";
+import { PurchasesModule } from "./purchases/purchases.module";
+import { GiftsModule } from "./gifts/gifts.module";
+import { ChatbotmessagesModule } from "./chatbotmessages/chatbotmessages.module";
+import { BgmModule } from "./bgm/bgm.module";
+import { MinimiitemsModule } from "./minimiitems/minimiitems.module";
+import { MiniroomitemsModule } from "./miniroomitems/miniroomitems.module";
+import { SkinModule } from "./skin/skin.module";
+import { UseritemsModule } from "./useritems/useritems.module";
+import { PaymentsModule } from "./payments/payments.module";
+import { PhotosModule } from "./photos/photos.module";
+import { DiaryModule } from "./diary/diary.module";
+import { AuthModule } from "./auth/auth.module";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -53,7 +52,6 @@ import { AuthModule } from './auth/auth.module';
     StoreitemsModule,
     PurchasesModule,
     GiftsModule,
-    DotorisModule,
     ChatbotmessagesModule,
     BgmModule,
     MinimiitemsModule,
