@@ -2,23 +2,34 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToOne,
+  JoinColumn,
   CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
+import { User } from "../users/users.entity";
 
-@Entity("mini_homepi_skins")
-export class MiniHomepiSkin {
+@Entity("minihomepis")
+export class Minihomepi {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
+  @OneToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "user_id" })
+  user: User;
 
-  @Column()
-  image_url: string;
+  @Column({ type: "varchar", length: 100, default: "미니홈피" })
+  title: string;
 
-  @Column()
-  price: number;
+  @Column({ type: "varchar", length: 100, nullable: true })
+  mood: string;
+
+  @Column({ type: "int", default: 0 })
+  visit_count: number;
 
   @CreateDateColumn()
   created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
