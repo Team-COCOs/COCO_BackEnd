@@ -6,7 +6,6 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { MinihomepisModule } from "./minihomepis/minihomepis.module";
 import { FriendsModule } from "./friends/friends.module";
-import { PostsModule } from "./posts/posts.module";
 import { DiaryCommentsModule } from "./diary_comments/diary_comments.module";
 import { PhotosService } from "./photos/photos.service";
 import { PhotosController } from "./photos/photos.controller";
@@ -68,7 +67,6 @@ import { Minihomepi } from "./minihomepis/minihomepis.entity";
     UsersModule,
     MinihomepisModule,
     FriendsModule,
-    PostsModule,
     DiaryCommentsModule,
     GuestbooksModule,
     NotificationsModule,

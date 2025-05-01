@@ -25,7 +25,7 @@ export class Diary {
   content: string;
 
   @Column({ type: "boolean", default: true })
-  is_public: boolean;
+  public: boolean;
 
   @CreateDateColumn()
   created_at: Date;

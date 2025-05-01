@@ -23,8 +23,20 @@ export class Photo {
   @Column({ type: "varchar", length: 255 })
   photo_url: string;
 
-  @Column({ type: "varchar", length: 255, nullable: true })
-  description: string | null;
+  @Column({ type: "varchar", length: 100 })
+  title: string;
+
+  @Column({ type: "text" })
+  content: string;
+
+  @Column({ type: "int", default: 0 })
+  view_count: number;
+
+  @Column({ type: "int", default: 0 })
+  use_count: number;
+
+  @Column({ type: "boolean", default: true })
+  public: boolean;
 
   @CreateDateColumn()
   created_at: Date;
