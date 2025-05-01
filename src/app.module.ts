@@ -36,6 +36,7 @@ import { TapcolorModule } from "./tapcolor/tapcolor.module";
 import { PostCommentsModule } from "./posts_comments/posts_comments.module";
 import { StoreItems } from "./storeitems/storeitems.entity";
 import { Minihomepi } from "./minihomepis/minihomepis.entity";
+import { DiaryComment } from "./diary_comments/diary_comments.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -60,6 +61,7 @@ import { Minihomepi } from "./minihomepis/minihomepis.entity";
           Diary,
           StoreItems,
           Minihomepi,
+          DiaryComment,
         ],
         synchronize: true,
       }),

@@ -6,8 +6,10 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 import { User } from "../users/users.entity";
+import { DiaryComment } from "src/diary_comments/diary_comments.entity";
 
 @Entity("diary")
 export class Diary {
@@ -26,6 +28,9 @@ export class Diary {
 
   @Column({ type: "boolean", default: true })
   public: boolean;
+
+  @OneToMany(() => DiaryComment, (comment) => comment.diary)
+  comments: DiaryComment[];
 
   @CreateDateColumn()
   created_at: Date;
