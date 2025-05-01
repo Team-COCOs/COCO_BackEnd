@@ -36,13 +36,13 @@ export class StoreitemsController {
   @Get()
   @ApiOperation({ summary: "스토어 아이템 전체 또는 타입별 조회" })
   @ApiQuery({
-    name: "type",
+    name: "category",
     required: false,
     enum: StoreItemType,
     description: "아이템 타입 필터 (예: minimi, tapcolor 등)",
   })
-  findAll(@Query("type") type?: StoreItemType) {
-    return this.storeitemsService.findAll(type);
+  findAll(@Query("category") category?: StoreItemType) {
+    return this.storeitemsService.findAll(category);
   }
 
   @Post()
