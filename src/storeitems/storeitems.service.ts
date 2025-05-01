@@ -1,19 +1,19 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { StoreItem, StoreItemType } from "./storeitems.entity";
+import { StoreItems, StoreItemType } from "./storeitems.entity";
 import { Repository } from "typeorm";
 import { CreateStoreItemDto, UpdateStoreItemDto } from "./dto/storeitem.dto";
 
 @Injectable()
 export class StoreitemsService {
   constructor(
-    @InjectRepository(StoreItem)
-    private readonly storeItemRepository: Repository<StoreItem>
+    @InjectRepository(StoreItems)
+    private readonly storeItemRepository: Repository<StoreItems>
   ) {}
 
-  findAll(type?: StoreItemType) {
-    if (type) {
-      return this.storeItemRepository.find({ where: { type } });
+  findAll(category?: StoreItemType) {
+    if (category) {
+      return this.storeItemRepository.find({ where: { category } });
     }
     return this.storeItemRepository.find();
   }

@@ -11,9 +11,10 @@ export enum StoreItemType {
   MINIROOM = "miniroom",
   MINIMI = "minimi",
   DIARY_BG = "diary_background",
+  BGM = "bgm",
 }
 @Entity("store_items")
-export class StoreItem {
+export class StoreItems {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,7 +22,7 @@ export class StoreItem {
   name: string;
 
   @Column()
-  image_url: string;
+  file: string;
 
   @Column()
   price: number;
@@ -30,7 +31,13 @@ export class StoreItem {
     type: "enum",
     enum: StoreItemType,
   })
-  type: StoreItemType;
+  category: StoreItemType;
+
+  @Column({ type: "varchar", length: 100, nullable: true })
+  artist: string;
+
+  @Column({ type: "int", nullable: true })
+  duration: number;
 
   @CreateDateColumn()
   created_at: Date;

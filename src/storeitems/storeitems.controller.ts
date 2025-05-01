@@ -9,13 +9,23 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from "@nestjs/common";
 import { StoreitemsService } from "./storeitems.service";
 import { CreateStoreItemDto, UpdateStoreItemDto } from "./dto/storeitem.dto";
 import { StoreItemType } from "./storeitems.entity";
-import { ApiTags, ApiOperation, ApiQuery, ApiParam } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiQuery,
+  ApiParam,
+  ApiConsumes,
+} from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { AdminGuard } from "../auth/guards/admin.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
+
 @ApiTags("스토어 아이템")
 @Controller("storeitems")
 export class StoreitemsController {
@@ -35,9 +45,33 @@ export class StoreitemsController {
 
   @Post()
   @UseGuards(AuthGuard("jwt"), AdminGuard)
+  @UseInterceptors(FileInterceptor("file"))
+  @ApiConsumes("multipart/form-data")
   @ApiOperation({ summary: "스토어 아이템 등록 (관리자)" })
-  create(@Body() dto: CreateStoreItemDto) {
-    return this.storeitemsService.create(dto);
+  create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() dto: CreateStoreItemDto
+  ) {
+    const categoryMap: Record<string, StoreItemType> = {
+      "미니홈피 배경": StoreItemType.MINIHOMEPIS,
+      "다이어리 배경": StoreItemType.DIARY_BG,
+      탭: StoreItemType.TAPCOLOR,
+      미니룸: StoreItemType.MINIROOM,
+      미니미: StoreItemType.MINIMI,
+      노래: StoreItemType.BGM,
+    };
+    const mappedCategory = categoryMap[dto.category];
+    if (!mappedCategory) {
+      throw new Error("유효하지 않은 category입니다.");
+    }
+
+    const imageUrl = `https://your-cdn.com/${file.filename}`;
+
+    return this.storeitemsService.create({
+      ...dto,
+      category: mappedCategory,
+      file: imageUrl,
+    });
   }
 
   @Patch(":id")

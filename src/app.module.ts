@@ -35,6 +35,7 @@ import { ChatbotMessage } from "./chatbotmessages/chatbotmessages.entity";
 import { Diary } from "./diary/diary.entity";
 import { TapcolorModule } from "./tapcolor/tapcolor.module";
 import { PostCommentsModule } from "./posts_comments/posts_comments.module";
+import { StoreItems } from "./storeitems/storeitems.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -57,6 +58,7 @@ import { PostCommentsModule } from "./posts_comments/posts_comments.module";
           Friend,
           ChatbotMessage,
           Diary,
+          StoreItems,
         ],
         synchronize: true,
       }),

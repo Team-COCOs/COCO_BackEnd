@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
 } from "typeorm";
 import { User } from "../users/users.entity";
-import { StoreItem } from "../storeitems/storeitems.entity";
+import { StoreItems } from "../storeitems/storeitems.entity";
 
 @Entity("purchase")
 export class Purchase {
@@ -18,9 +18,9 @@ export class Purchase {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => StoreItem, { onDelete: "CASCADE" })
+  @ManyToOne(() => StoreItems, { onDelete: "CASCADE" })
   @JoinColumn({ name: "store_item_id" })
-  storeItem: StoreItem;
+  storeItems: StoreItems;
 
   @CreateDateColumn()
   acquired_at: Date;
