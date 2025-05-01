@@ -40,7 +40,7 @@ export class AuthController {
   }
 
   // 로그인
-  @Post("login")
+  @Post("localLogin")
   async login(@Body() body: any) {
     const { email, password } = body;
     return await this.authService.localLogin(email, password);
