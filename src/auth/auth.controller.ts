@@ -29,6 +29,7 @@ export class AuthController {
   @Post("signup")
   async signUp(@Body() body: any) {
     const { email, password, name, phone, gender, birthday } = body;
+
     return await this.authService.signUp(
       email,
       password,
@@ -43,6 +44,10 @@ export class AuthController {
   @Post("localLogin")
   async login(@Body() body: any) {
     const { email, password } = body;
+
+    const hashed = await bcrypt.hash("cocoworld", 10);
+    console.log("🔐 Hashed Password:", hashed);
+
     return await this.authService.localLogin(email, password);
   }
 

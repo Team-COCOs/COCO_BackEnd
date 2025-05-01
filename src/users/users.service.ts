@@ -42,8 +42,12 @@ export class UsersService {
   }
 
   // 이메일로 유저 찾기
-  findUserByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({ where: { email } });
+  async findUserByEmail(email: string): Promise<User | null> {
+    return await this.userRepository
+      .createQueryBuilder("user")
+      .where("user.email = :email", { email })
+      .addSelect("user.password")
+      .getOne();
   }
 
   // 아이디로 유저 찾기
