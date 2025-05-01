@@ -45,9 +45,6 @@ export class AuthController {
   async login(@Body() body: any) {
     const { email, password } = body;
 
-    const hashed = await bcrypt.hash("cocoworld", 10);
-    console.log("🔐 Hashed Password:", hashed);
-
     return await this.authService.localLogin(email, password);
   }
 
