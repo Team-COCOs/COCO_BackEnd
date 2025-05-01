@@ -80,7 +80,7 @@ export class StoreitemsController {
       throw new Error("유효하지 않은 category입니다.");
     }
 
-    const imageUrl = `http://localhost:5000/uploads/${file.filename}`;
+    const imageUrl = `http://localhost:5001/uploads/${file.filename}`;
 
     return this.storeitemsService.create({
       ...dto,
