@@ -2,8 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
 } from "typeorm";
 
@@ -20,6 +18,14 @@ export class BGM {
 
   @Column({ type: "varchar", length: 255 })
   url: string;
+  // 썸네일 또는 미리듣기용
+
+  @Column({ type: "varchar", length: 255 })
+  audio_file: string;
+  // 실제 음원 파일 경로
+
+  @Column({ type: "int" })
+  duration: number;
 
   @CreateDateColumn()
   created_at: Date;

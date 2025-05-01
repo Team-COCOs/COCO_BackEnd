@@ -6,12 +6,11 @@ import {
 } from "typeorm";
 
 export enum StoreItemType {
-  SKIN = "skin",
+  TAPCOLOR = "tapcolor",
+  MINIHOMEPIS = "minihomepis",
   MINIROOM = "miniroom",
   MINIMI = "minimi",
   DIARY_BG = "diary_background",
-  BGM = "bgm",
-  FONT = "font",
 }
 @Entity("store_items")
 export class StoreItem {
