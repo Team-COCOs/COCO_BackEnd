@@ -7,7 +7,7 @@ import { UsersModule } from "./users/users.module";
 import { MinihomepisModule } from "./minihomepis/minihomepis.module";
 import { FriendsModule } from "./friends/friends.module";
 import { PostsModule } from "./posts/posts.module";
-import { CommentsModule } from "./comments/comments.module";
+import { DiaryCommentsModule } from "./diary_comments/diary_comments.module";
 import { PhotosService } from "./photos/photos.service";
 import { PhotosController } from "./photos/photos.controller";
 import { GuestbooksModule } from "./guestbooks/guestbooks.module";
@@ -34,6 +34,7 @@ import { Friend } from "./friends/friends.entity";
 import { ChatbotMessage } from "./chatbotmessages/chatbotmessages.entity";
 import { Diary } from "./diary/diary.entity";
 import { TapcolorModule } from "./tapcolor/tapcolor.module";
+import { PostCommentsModule } from "./posts_comments/posts_comments.module";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -64,7 +65,7 @@ import { TapcolorModule } from "./tapcolor/tapcolor.module";
     MinihomepisModule,
     FriendsModule,
     PostsModule,
-    CommentsModule,
+    DiaryCommentsModule,
     GuestbooksModule,
     NotificationsModule,
     StoreitemsModule,
@@ -81,6 +82,7 @@ import { TapcolorModule } from "./tapcolor/tapcolor.module";
     DiaryModule,
     AuthModule,
     TapcolorModule,
+    PostCommentsModule,
   ],
   controllers: [PhotosController],
   providers: [PhotosService],
