@@ -25,6 +25,8 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { AdminGuard } from "../auth/guards/admin.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { extname } from "path";
 
 @ApiTags("스토어 아이템")
 @Controller("storeitems")
@@ -45,7 +47,19 @@ export class StoreitemsController {
 
   @Post()
   @UseGuards(AuthGuard("jwt"), AdminGuard)
-  @UseInterceptors(FileInterceptor("file"))
+  @UseInterceptors(
+    FileInterceptor("file", {
+      storage: diskStorage({
+        destination: "./uploads",
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    })
+  )
   @ApiConsumes("multipart/form-data")
   @ApiOperation({ summary: "스토어 아이템 등록 (관리자)" })
   create(
@@ -60,12 +74,13 @@ export class StoreitemsController {
       미니미: StoreItemType.MINIMI,
       노래: StoreItemType.BGM,
     };
+
     const mappedCategory = categoryMap[dto.category];
     if (!mappedCategory) {
       throw new Error("유효하지 않은 category입니다.");
     }
 
-    const imageUrl = `https://your-cdn.com/${file.filename}`;
+    const imageUrl = `http://localhost:5000/uploads/${file.filename}`;
 
     return this.storeitemsService.create({
       ...dto,
