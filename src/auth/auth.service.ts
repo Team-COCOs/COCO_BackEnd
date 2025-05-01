@@ -129,7 +129,6 @@ export class AuthService {
       {
         id: user.id,
         role: user.role,
-        isPhoneVerified: user.isPhoneVerified,
       },
       this.configService.get("JWT_ACCESS_TOKEN_SECRET_KEY")!,
       {

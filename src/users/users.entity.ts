@@ -33,17 +33,11 @@ export class User {
   @Column({ type: "varchar", length: 15, nullable: true, unique: true })
   phone: string | null;
 
-  @Column({ type: "boolean", default: false })
-  isPhoneVerified: boolean;
-
   @Column({ type: "enum", enum: Gender, nullable: true })
   gender: Gender | null;
 
   @Column({ type: "varchar", nullable: true })
   profile_image: string;
-
-  @Column({ type: "varchar", nullable: true })
-  minimi_image: string;
 
   @Column({ type: "enum", enum: UserRole, default: UserRole.USER })
   role: UserRole;
