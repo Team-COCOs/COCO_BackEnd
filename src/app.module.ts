@@ -37,6 +37,8 @@ import { PostCommentsModule } from "./posts_comments/posts_comments.module";
 import { StoreItems } from "./storeitems/storeitems.entity";
 import { Minihomepi } from "./minihomepis/minihomepis.entity";
 import { DiaryComment } from "./diary_comments/diary_comments.entity";
+import { VisitModule } from "./visit/visit.module";
+import { Visit } from "./visit/visit.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -62,6 +64,7 @@ import { DiaryComment } from "./diary_comments/diary_comments.entity";
           StoreItems,
           Minihomepi,
           DiaryComment,
+          Visit,
         ],
         synchronize: true,
       }),
@@ -87,6 +90,7 @@ import { DiaryComment } from "./diary_comments/diary_comments.entity";
     AuthModule,
     TapcolorModule,
     PostCommentsModule,
+    VisitModule,
   ],
   controllers: [PhotosController],
   providers: [PhotosService],
