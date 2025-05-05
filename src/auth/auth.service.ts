@@ -28,13 +28,6 @@ export class AuthService {
     gender: Gender,
     birthday: string
   ) {
-    // 이메일 중복 체크
-    const existingUser = await this.userService.findUserByEmail(email);
-
-    if (existingUser) {
-      throw new Error("이미 존재하는 이메일입니다.");
-    }
-
     // 비밀번호
     const hashPW = await bcrypt.hash(password, 10);
 
@@ -48,6 +41,22 @@ export class AuthService {
     );
 
     return { message: "회원가입 성공" };
+  }
+
+  // 회원가입 중복 검사
+  async checkDuplicate(
+    type: "email" | "phone",
+    body: { email?: string; phone?: string }
+  ): Promise<boolean> {
+    if (type === "email") {
+      const user = await this.userService.findUserByEmail(body.email!);
+      return !!user;
+    } else if (type === "phone") {
+      const user = await this.userService.findUserByPhone(body.phone!);
+      return !!user;
+    } else {
+      throw new Error("지원하지 않는 타입입니다.");
+    }
   }
 
   // 로그인

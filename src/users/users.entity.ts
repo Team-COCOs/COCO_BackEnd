@@ -7,8 +7,8 @@ import {
 } from "typeorm";
 
 export enum Gender {
-  MALE = "male",
-  FEMALE = "female",
+  MAN = "man",
+  WOMAN = "woman",
 }
 
 export enum UserRole {

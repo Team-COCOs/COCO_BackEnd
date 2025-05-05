@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Patch,
   Post,
   Query,
@@ -38,6 +39,16 @@ export class AuthController {
       gender,
       birthday
     );
+  }
+
+  // 회원가입 시 중복 체크
+  @Post("check/:type")
+  async checkDuplicate(
+    @Param("type") type: "email" | "phone",
+    @Body() body: { email?: string; phone?: string }
+  ) {
+    const exists = await this.authService.checkDuplicate(type, body);
+    return { exists };
   }
 
   // 로그인

@@ -55,6 +55,11 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id } });
   }
 
+  // 전화번호로 유저 찾기
+  findUserByPhone(phone: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { phone } });
+  }
+
   // 유저 정보 수정
   async save(user: User): Promise<User> {
     return await this.userRepository.save(user);
