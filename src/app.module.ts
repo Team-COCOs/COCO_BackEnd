@@ -18,7 +18,6 @@ import { ChatbotmessagesModule } from "./chatbotmessages/chatbotmessages.module"
 import { BgmModule } from "./bgm/bgm.module";
 import { MinimiitemsModule } from "./minimiitems/minimiitems.module";
 import { MiniroomitemsModule } from "./miniroomitems/miniroomitems.module";
-import { SkinModule } from "./diaryback/diaryback.module";
 import { UseritemsModule } from "./useritems/useritems.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { PhotosModule } from "./photos/photos.module";
@@ -33,7 +32,7 @@ import { Friend } from "./friends/friends.entity";
 import { ChatbotMessage } from "./chatbotmessages/chatbotmessages.entity";
 import { Diary } from "./diary/diary.entity";
 import { TapcolorModule } from "./tapcolor/tapcolor.module";
-import { PostCommentsModule } from "./posts_comments/posts_comments.module";
+import { PhotosCommentsModule } from "./photos_comments/photos_comments.module";
 import { StoreItems } from "./storeitems/storeitems.entity";
 import { Minihomepi } from "./minihomepis/minihomepis.entity";
 import { DiaryComment } from "./diary_comments/diary_comments.entity";
@@ -82,14 +81,13 @@ import { Visit } from "./visit/visit.entity";
     BgmModule,
     MinimiitemsModule,
     MiniroomitemsModule,
-    SkinModule,
     UseritemsModule,
     PaymentsModule,
     PhotosModule,
     DiaryModule,
     AuthModule,
     TapcolorModule,
-    PostCommentsModule,
+    PhotosCommentsModule,
     VisitModule,
   ],
   controllers: [PhotosController],

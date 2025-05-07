@@ -12,6 +12,5 @@ import { DiaryCommentsModule } from "src/diary_comments/diary_comments.module";
   ],
   providers: [DiaryService],
   controllers: [DiaryController],
-  exports: [DiaryService],
 })
 export class DiaryModule {}

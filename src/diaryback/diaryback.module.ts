@@ -6,4 +6,4 @@ import { DiaryController } from "src/diary/diary.controller";
   providers: [DiaryService],
   controllers: [DiaryController],
 })
-export class SkinModule {}
+export class DiaryModule {}
