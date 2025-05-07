@@ -4,9 +4,9 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { LessThan, Repository } from "typeorm";
-import { User, Gender, UserRole } from "./users.entity";
-
+import { Repository, ILike } from "typeorm";
+import { User, Gender } from "./users.entity";
+import { SearchUserDto } from "./dto/users.dto";
 @Injectable()
 export class UsersService {
   constructor(
@@ -63,5 +63,20 @@ export class UsersService {
   // 유저 정보 수정
   async save(user: User): Promise<User> {
     return await this.userRepository.save(user);
+  }
+
+  async searchUsers(keyword: string): Promise<SearchUserDto[]> {
+    if (!keyword.trim()) {
+      return [];
+    }
+
+    return this.userRepository.find({
+      select: ["id", "name", "profile_image", "gender", "birthday"],
+      where: {
+        name: ILike(`%${keyword}%`),
+        // 대소문자 무시 LIKE
+      },
+      take: 20,
+    });
   }
 }

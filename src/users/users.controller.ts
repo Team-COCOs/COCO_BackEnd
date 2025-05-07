@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   NotFoundException,
+  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -10,6 +11,8 @@ import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "src/auth/auth.service";
 import { UsersService } from "./users.service";
 import { Request, Response } from "express";
+import { ApiOperation, ApiQuery } from "@nestjs/swagger";
+import { SearchUserDto } from "./dto/users.dto";
 
 @Controller("users")
 export class UsersController {
@@ -18,6 +21,8 @@ export class UsersController {
     private readonly configService: ConfigService,
     private readonly usersService: UsersService
   ) {}
+
+  // 메인화면 프로필
   @Get("profile")
   @UseGuards(AuthGuard("jwt"))
   async getProfile(@Req() req: Request) {
@@ -39,5 +44,15 @@ export class UsersController {
         { id: 3, name: "최다혜" },
       ],
     };
+  }
+
+  // 키워드로 검색
+  @Get("search")
+  @ApiOperation({ summary: "키워드로 유저 검색" })
+  @ApiQuery({ name: "keyword", required: true, description: "검색 키워드" })
+  async searchUsers(
+    @Query("keyword") keyword: string
+  ): Promise<SearchUserDto[]> {
+    return this.usersService.searchUsers(keyword);
   }
 }
