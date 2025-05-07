@@ -16,20 +16,24 @@ export class VisitService {
   async countTodayVisits(userId: number): Promise<number> {
     const todayStart = startOfToday(); // 00:00:00
 
-    return await this.visitRepository.count({
-      where: {
-        host: { id: userId },
-        visitedAt: MoreThanOrEqual(todayStart),
-      },
-    });
+    const raw = await this.visitRepository
+      .createQueryBuilder("visit")
+      .select("COUNT(DISTINCT visit.visitor_id)", "count")
+      .where("visit.host_id = :hostId", { hostId: userId })
+      .andWhere("visit.visited_at >= :todayStart", { todayStart })
+      .getRawOne<{ count: string }>();
+
+    return parseInt(raw.count, 10);
   }
 
   // 총 방문자 수
   async countTotalVisits(userId: number): Promise<number> {
-    return await this.visitRepository.count({
-      where: {
-        host: { id: userId },
-      },
-    });
+    const raw = await this.visitRepository
+      .createQueryBuilder("visit")
+      .select("COUNT(DISTINCT visit.visitor_id)", "count")
+      .where("visit.host_id = :hostId", { hostId: userId })
+      .getRawOne<{ count: string }>();
+
+    return parseInt(raw.count, 10);
   }
 }
