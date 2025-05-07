@@ -12,11 +12,9 @@ export class DiaryService {
   ) {}
 
   async getNewDiarys(userId: number): Promise<NewDiaryDto[]> {
-    // “오늘” 00:00 기준
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
-    //오늘 내가 쓴 다이어리
     const diaries = await this.diaryRepository.find({
       where: {
         user: { id: userId },
@@ -26,7 +24,6 @@ export class DiaryService {
       take: 10,
     });
 
-    // ── 4) DTO 매핑
     const mappedDiaries = diaries.map((d) => ({
       id: d.id,
       title: d.title,
@@ -35,7 +32,6 @@ export class DiaryService {
       type: "diary" as const,
     }));
 
-    // ── 5) 합쳐서 최신순 정렬
     return mappedDiaries;
   }
 }
