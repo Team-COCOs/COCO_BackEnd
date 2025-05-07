@@ -27,7 +27,7 @@ export class User {
   @Column({ select: false })
   password: string;
 
-  @Column({ type: "varchar", length: 20, unique: true, nullable: true })
+  @Column({ type: "varchar", length: 20, nullable: true })
   name: string | null;
 
   @Column({ type: "varchar", length: 15, nullable: true, unique: true })

@@ -105,4 +105,6 @@ export class FriendsService {
       receiverId
     );
   }
+
+  // 아직 수락되지 않은 일촌 요청
 }

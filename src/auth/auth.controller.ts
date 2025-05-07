@@ -15,7 +15,6 @@ import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
 import * as jwt from "jsonwebtoken";
-import * as bcrypt from "bcrypt";
 import { UsersService } from "../users/users.service";
 
 @Controller("auth")
