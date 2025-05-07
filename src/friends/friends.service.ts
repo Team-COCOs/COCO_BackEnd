@@ -20,7 +20,7 @@ export class FriendsService {
     private readonly notificationsService: NotificationsService
   ) {}
 
-  // 일촌 맺기
+  // 일촌 신청
   async request(
     requesterId: number,
     receiverId: number,
@@ -55,6 +55,54 @@ export class FriendsService {
       receiverId,
       `${requester?.name || "누군가"}님이 일촌 신청을 보냈습니다.`,
       requesterId
+    );
+  }
+
+  // 수락
+  async accept(requesterId: number, receiverId: number) {
+    const friendship = await this.friendsRepository.findOne({
+      where: {
+        requester: { id: requesterId },
+        receiver: { id: receiverId },
+        status: FriendStatus.PENDING,
+      },
+    });
+    if (!friendship) {
+      throw new NotFoundException("해당 일촌 요청을 찾을 수 없습니다.");
+    }
+
+    friendship.status = FriendStatus.ACCEPTED;
+    await this.friendsRepository.save(friendship);
+
+    const receiver = await this.usersService.findUserById(receiverId);
+    await this.notificationsService.create(
+      requesterId,
+      `${receiver?.name || "누군가"}님이 일촌 신청을 수락했습니다.`,
+      receiverId
+    );
+  }
+
+  // 수락
+  async reject(requesterId: number, receiverId: number) {
+    const friendship = await this.friendsRepository.findOne({
+      where: {
+        requester: { id: requesterId },
+        receiver: { id: receiverId },
+        status: FriendStatus.PENDING,
+      },
+    });
+    if (!friendship) {
+      throw new NotFoundException("해당 일촌 요청을 찾을 수 없습니다.");
+    }
+
+    friendship.status = FriendStatus.REJECTED;
+    await this.friendsRepository.save(friendship);
+
+    const receiver = await this.usersService.findUserById(receiverId);
+    await this.notificationsService.create(
+      requesterId,
+      `${receiver?.name || "누군가"}님이 일촌 신청을 거절했습니다.`,
+      receiverId
     );
   }
 }

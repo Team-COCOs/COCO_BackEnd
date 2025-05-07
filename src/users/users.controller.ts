@@ -37,7 +37,7 @@ export class UsersController {
         { id: 1, name: "김지은" },
         { id: 2, name: "박민수" },
         { id: 3, name: "최다혜" },
-      ], // 추후 실제 친구 목록 연결
+      ],
     };
   }
 }
