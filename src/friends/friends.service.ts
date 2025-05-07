@@ -10,7 +10,7 @@ import { Friend, FriendStatus } from "./friends.entity";
 import { User } from "../users/users.entity";
 import { NotificationsService } from "../notifications/notifications.service";
 import { UsersService } from "../users/users.service";
-import { NewFriendDto } from "./dto/friends.dto";
+import { FriendListDto, NewFriendDto } from "./dto/friends.dto";
 
 @Injectable()
 export class FriendsService {
@@ -83,7 +83,7 @@ export class FriendsService {
     );
   }
 
-  // 수락
+  // 거절
   async reject(requesterId: number, receiverId: number) {
     const friendship = await this.friendsRepository.findOne({
       where: {
@@ -125,5 +125,29 @@ export class FriendsService {
       profileImg: r.requester.profile_image,
       receivedAt: r.created_at.toISOString().replace("T", " ").substring(0, 16),
     }));
+  }
+
+  // 친구 목록
+  async getMyFriends(userId: number): Promise<FriendListDto[]> {
+    const relations = ["requester", "receiver"];
+    const friends = await this.friendsRepository.find({
+      where: [
+        { requester: { id: userId }, status: FriendStatus.ACCEPTED },
+        { receiver: { id: userId }, status: FriendStatus.ACCEPTED },
+      ],
+      relations,
+      order: { created_at: "DESC" },
+    });
+
+    return friends.map((f) => {
+      const other = f.requester.id === userId ? f.receiver : f.requester;
+      return {
+        id: f.id,
+        userId: other.id,
+        name: other.name,
+        profile_image: other.profile_image,
+        since: f.created_at.toISOString().replace("T", " ").substring(0, 16),
+      };
+    });
   }
 }

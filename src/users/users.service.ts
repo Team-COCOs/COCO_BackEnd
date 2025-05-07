@@ -65,6 +65,7 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
+  // 유저 검색
   async searchUsers(keyword: string): Promise<SearchUserDto[]> {
     if (!keyword.trim()) {
       return [];

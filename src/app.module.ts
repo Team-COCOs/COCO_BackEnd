@@ -90,7 +90,5 @@ import { Visit } from "./visit/visit.entity";
     PhotosCommentsModule,
     VisitModule,
   ],
-  controllers: [PhotosController],
-  providers: [PhotosService],
 })
 export class AppModule {}

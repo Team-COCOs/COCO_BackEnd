@@ -13,13 +13,21 @@ import { UsersService } from "./users.service";
 import { Request, Response } from "express";
 import { ApiOperation, ApiQuery } from "@nestjs/swagger";
 import { SearchUserDto } from "./dto/users.dto";
+import { DiaryService } from "src/diary/diary.service";
+import { PhotosService } from "src/photos/photos.service";
+import { FriendsService } from "src/friends/friends.service";
+import { NewDiaryDto } from "src/diary/dto/diary.dto";
+import { NewPhotoDto } from "src/photos/dto/photos.dto";
 
 @Controller("users")
 export class UsersController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly diarysService: DiaryService,
+    private readonly photosService: PhotosService,
+    private readonly friendsService: FriendsService
   ) {}
 
   // 메인화면 프로필
@@ -31,18 +39,35 @@ export class UsersController {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
 
+    const newDiary = await this.diarysService.getNewDiarys(userId);
+    const newPhoto = await this.photosService.getNewPhotos(userId);
+
+    const newPost: (NewDiaryDto | NewPhotoDto)[] = [
+      ...newDiary,
+      ...newPhoto,
+    ].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    const friendRequest =
+      await this.friendsService.getNewFriendRequests(userId);
+
+    const friends = await this.friendsService.getMyFriends(userId);
+
     return {
       name: user.name,
-      todayVisit: 34, // 추후 DB에서 방문자 수 가져오면 바꾸기
-      newPost: 1, // 추후 게시글 수 가져오면 바꾸기
-      friendRequest: 2, // 추후 일촌 신청 수로 바꾸기
+      todayVisit: 34,
+      newPost,
+      newPostCount: newPost.length,
+      friendRequest,
+      friendRequestCount: friendRequest.length,
       avatar: user.profile_image ?? "/avatarImg/default.png",
       dotoris: user.dotoris,
-      friends: [
-        { id: 1, name: "김지은" },
-        { id: 2, name: "박민수" },
-        { id: 3, name: "최다혜" },
-      ],
+      friends: friends.map((f) => ({
+        id: f.userId,
+        name: f.name,
+      })),
     };
   }
 
