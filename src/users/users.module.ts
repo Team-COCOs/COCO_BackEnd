@@ -7,6 +7,7 @@ import { AuthModule } from "../auth/auth.module";
 import { PhotosModule } from "src/photos/photos.module";
 import { DiaryModule } from "src/diary/diary.module";
 import { FriendsModule } from "src/friends/friends.module";
+import { VisitModule } from "src/visit/visit.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { FriendsModule } from "src/friends/friends.module";
     forwardRef(() => PhotosModule),
     forwardRef(() => DiaryModule),
     forwardRef(() => FriendsModule),
+    forwardRef(() => VisitModule),
   ],
   providers: [UsersService],
   controllers: [UsersController],

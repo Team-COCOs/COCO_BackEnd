@@ -3,7 +3,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThanOrEqual } from "typeorm";
 import { Visit } from "./visit.entity";
 import { startOfToday } from "date-fns";
-import { User } from "src/users/users.entity";
 
 @Injectable()
 export class VisitService {
