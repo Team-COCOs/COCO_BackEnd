@@ -62,7 +62,9 @@ export class AuthService {
 
   // 로그인
   async localLogin(email: string, password: string): Promise<LoginResponseDto> {
-    const user = await this.userService.findUserByEmail(email);
+    const user = await this.userService.findUserByEmail(email, {
+      withPassword: true,
+    });
     if (!user) {
       throw new UnauthorizedException("유저 정보 없음.");
     }

@@ -42,10 +42,18 @@ export class UsersService {
   }
 
   // 이메일로 유저 찾기
-  async findUserByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({
-      where: { email },
-    });
+  async findUserByEmail(
+    email: string,
+    options?: { withPassword: boolean }
+  ): Promise<User | null> {
+    if (options?.withPassword) {
+      return this.userRepository
+        .createQueryBuilder("user")
+        .addSelect("user.password")
+        .where("user.email = :email", { email })
+        .getOne();
+    }
+    return this.userRepository.findOne({ where: { email } });
   }
 
   // 아이디로 유저 찾기
