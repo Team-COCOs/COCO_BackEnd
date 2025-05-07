@@ -10,6 +10,7 @@ import { Friend, FriendStatus } from "./friends.entity";
 import { User } from "../users/users.entity";
 import { NotificationsService } from "../notifications/notifications.service";
 import { UsersService } from "../users/users.service";
+import { NewFriendDto } from "./dto/friends.dto";
 
 @Injectable()
 export class FriendsService {
@@ -107,4 +108,22 @@ export class FriendsService {
   }
 
   // 아직 수락되지 않은 일촌 요청
+  async getNewFriendRequests(userId: number): Promise<NewFriendDto[]> {
+    const reqs = await this.friendsRepository.find({
+      where: {
+        receiver: { id: userId },
+        status: FriendStatus.PENDING,
+      },
+      relations: ["requester"],
+      order: { created_at: "DESC" },
+      take: 10,
+    });
+
+    return reqs.map((r) => ({
+      id: r.id,
+      requester: r.requester.name,
+      profileImg: r.requester.profile_image,
+      receivedAt: r.created_at.toISOString().replace("T", " ").substring(0, 16),
+    }));
+  }
 }

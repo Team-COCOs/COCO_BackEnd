@@ -10,6 +10,7 @@ import { UsersService } from "../users/users.service";
 import { Gender, User } from "../users/users.entity";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
+import { LoginResponseDto } from "./dto/login.dto";
 
 @Injectable()
 export class AuthService {
@@ -60,16 +61,14 @@ export class AuthService {
   }
 
   // 로그인
-  async localLogin(email: string, password: string) {
-    // 유저 정보 확인
+  async localLogin(email: string, password: string): Promise<LoginResponseDto> {
     const user = await this.userService.findUserByEmail(email);
-
     if (!user) {
       throw new UnauthorizedException("유저 정보 없음.");
     }
 
+    // 비밀번호 검증
     const match = await bcrypt.compare(password, user.password!);
-
     if (!match) {
       throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
     }
@@ -80,6 +79,13 @@ export class AuthService {
     return {
       id: user.id,
       email: user.email,
+      name: user.name,
+      phone: user.phone,
+      gender: user.gender,
+      profile_image: user.profile_image,
+      role: user.role,
+      dotoris: user.dotoris,
+      birthday: user.birthday,
       access_token,
       refresh_token,
     };
