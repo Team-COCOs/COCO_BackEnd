@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, ILike } from "typeorm";
 import { User, Gender } from "./users.entity";
-import { SearchUserDto } from "./dto/users.dto";
+import { SearchUserDto } from "./dto/searchUsers.dto";
 @Injectable()
 export class UsersService {
   constructor(

@@ -10,13 +10,14 @@ import { AuthGuard } from "@nestjs/passport";
 import { UsersService } from "./users.service";
 import { Request } from "express";
 import { ApiOperation, ApiQuery } from "@nestjs/swagger";
-import { SearchUserDto } from "./dto/users.dto";
+import { SearchUserDto } from "./dto/searchUsers.dto";
 import { DiaryService } from "../diary/diary.service";
 import { PhotosService } from "../photos/photos.service";
 import { FriendsService } from "../friends/friends.service";
 import { NewDiaryDto } from "../diary/dto/diary.dto";
 import { NewPhotoDto } from "../photos/dto/photos.dto";
 import { VisitService } from "../visit/visit.service";
+import { UserProfileDto } from "./dto/userProfile.dto";
 
 @Controller("users")
 export class UsersController {
@@ -31,13 +32,14 @@ export class UsersController {
   // 유저 프로필
   @Get("profile")
   @UseGuards(AuthGuard("jwt"))
-  async getProfile(@Req() req: Request) {
+  async getProfile(@Req() req: Request): Promise<UserProfileDto> {
     const userId = req.user["id"];
 
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
 
     return {
+      id: user.id,
       email: user.email,
       name: user.name,
       phone: user.phone,
