@@ -9,7 +9,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { User } from "../users/users.entity";
-import { DiaryComment } from "src/diary_comments/diary_comments.entity";
+import { DiaryComment } from "../diary_comments/diary_comments.entity";
 
 @Entity("diary")
 export class Diary {
@@ -31,6 +31,9 @@ export class Diary {
 
   @OneToMany(() => DiaryComment, (comment) => comment.diary)
   comments: DiaryComment[];
+
+  @Column({ type: "int", default: 0 })
+  view_count: number;
 
   @CreateDateColumn()
   created_at: Date;

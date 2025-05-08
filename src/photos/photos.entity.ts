@@ -6,7 +6,10 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  OneToMany,
 } from "typeorm";
+
+import { PhotoComment } from "../photos_comments/photos_comments.entity";
 
 @Entity("photos")
 export class Photo {
@@ -28,6 +31,9 @@ export class Photo {
 
   @Column({ type: "text" })
   content: string;
+
+  @OneToMany(() => PhotoComment, (comment) => comment.photo)
+  comments: PhotoComment[];
 
   @Column({ type: "int", default: 0 })
   view_count: number;
