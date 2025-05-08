@@ -14,7 +14,6 @@ import { FriendsService } from "./friends.service";
 import { UsersService } from "../users/users.service";
 
 @Controller("friends")
-@UseGuards(AuthGuard("jwt"))
 export class FriendsController {
   constructor(
     private readonly friendsService: FriendsService,
@@ -23,6 +22,7 @@ export class FriendsController {
 
   // 요청 전 이름
   @Get("names/:userId")
+  @UseGuards(AuthGuard("jwt"))
   async getUserNames(@Param("userId") userId: string, @Req() req: any) {
     const requesterId = req.user.id;
     const receiverId = parseInt(userId, 10);
@@ -38,6 +38,7 @@ export class FriendsController {
 
   // 요청
   @Post("request")
+  @UseGuards(AuthGuard("jwt"))
   async requestFriend(
     @Body("receiverId") receiverId: number,
     @Body("requester_name") requester_name: string,
@@ -65,6 +66,7 @@ export class FriendsController {
 
   // 수락
   @Post("accept")
+  @UseGuards(AuthGuard("jwt"))
   async acceptFriend(
     @Body("requesterId") requesterId: number,
     @Req() req: any
@@ -76,6 +78,7 @@ export class FriendsController {
 
   // 거절
   @Post("reject")
+  @UseGuards(AuthGuard("jwt"))
   async rejectFriend(
     @Body("requesterId") requesterId: number,
     @Req() req: any
