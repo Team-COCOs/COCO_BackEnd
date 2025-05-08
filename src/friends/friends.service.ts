@@ -204,6 +204,8 @@ export class FriendsService {
       return {
         id: f.id,
         userId: other.id,
+        request: f.requester.name,
+        receiver: f.receiver.name,
         requester_name: f.requester_name,
         receiver_name: f.receiver_name,
         profile_image: other.profile_image,

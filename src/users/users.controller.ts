@@ -95,11 +95,7 @@ export class UsersController {
       friendRequestCount: friendRequest.length,
       profile_image: user.profile_image ?? "/avatarImg/default.png",
       dotoris: user.dotoris,
-      friends: friends.map((f) => ({
-        id: f.userId,
-        requester_name: f.requester_name,
-        receiver_name: f.receiver_name,
-      })),
+      friends,
     };
   }
 
