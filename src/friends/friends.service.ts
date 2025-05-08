@@ -144,7 +144,7 @@ export class FriendsService {
         receiver: { id: userId },
         status: FriendStatus.PENDING,
       },
-      relations: ["requester"],
+      relations: ["requester", "receiver"],
       order: { created_at: "DESC" },
       take: 10,
     });
