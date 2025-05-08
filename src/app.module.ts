@@ -38,7 +38,9 @@ import { Minihomepi } from "./minihomepis/minihomepis.entity";
 import { DiaryComment } from "./diary_comments/diary_comments.entity";
 import { VisitModule } from "./visit/visit.module";
 import { Visit } from "./visit/visit.entity";
-import { FriendCommentsModule } from './friend_comments/friend_comments.module';
+import { FriendCommentsModule } from "./friend_comments/friend_comments.module";
+import { UserItem } from "./useritems/useritems.entity";
+import { Purchase } from "./purchases/purchases.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -65,6 +67,8 @@ import { FriendCommentsModule } from './friend_comments/friend_comments.module';
           Minihomepi,
           DiaryComment,
           Visit,
+          UserItem,
+          Purchase,
         ],
         synchronize: true,
       }),

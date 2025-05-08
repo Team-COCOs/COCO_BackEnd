@@ -15,13 +15,7 @@ export class StoreitemsService {
     private readonly storeItemRepository: Repository<StoreItems>
   ) {}
 
-  findItems(category?: StoreItemType) {
-    if (category) {
-      return this.storeItemRepository.find({ where: { category } });
-    }
-    return this.storeItemRepository.find();
-  }
-
+  // 아이템 저장
   async create(dto: CreateStoreItemDto & { file: string }) {
     const item = this.storeItemRepository.create(dto);
     const saved = await this.storeItemRepository.save(item);
@@ -37,6 +31,7 @@ export class StoreitemsService {
     return saved;
   }
 
+  // 수정
   async update(id: number, dto: UpdateStoreItemDto) {
     const item = await this.storeItemRepository.findOne({ where: { id } });
     if (!item) throw new NotFoundException("아이템이 존재하지 않습니다.");
@@ -44,9 +39,30 @@ export class StoreitemsService {
     return this.storeItemRepository.save(item);
   }
 
+  // 삭제
   async remove(id: number) {
     const item = await this.storeItemRepository.findOne({ where: { id } });
     if (!item) throw new NotFoundException("아이템이 존재하지 않습니다.");
     return this.storeItemRepository.remove(item);
+  }
+
+  // 모든 아이템/카테고리별
+  findItems(category?: StoreItemType) {
+    if (category) {
+      return this.storeItemRepository.find({ where: { category } });
+    }
+    return this.storeItemRepository.find();
+  }
+
+  async findItemById(id: number) {
+    const item = await this.storeItemRepository.findOne({
+      where: { id },
+    });
+
+    if (!item) {
+      throw new NotFoundException("스토어 아이템을 찾을 수 없습니다.");
+    }
+
+    return item;
   }
 }

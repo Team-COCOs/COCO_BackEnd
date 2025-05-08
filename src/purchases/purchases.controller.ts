@@ -1,4 +1,26 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Get } from "@nestjs/common";
+import { PurchasesService } from "./purchases.service";
+import { AuthGuard } from "@nestjs/passport";
+import { Request } from "express";
+import { ApiTags, ApiOperation } from "@nestjs/swagger";
 
-@Controller('purchases')
-export class PurchasesController {}
+@ApiTags("스토어 구매")
+@Controller("purchases")
+@UseGuards(AuthGuard("jwt"))
+export class PurchasesController {
+  constructor(private readonly purchasesService: PurchasesService) {}
+
+  @Post()
+  @ApiOperation({ summary: "스토어 아이템 구매" })
+  async buyItem(@Body("storeItemId") storeItemId: number, @Req() req: Request) {
+    const userId = (req.user as any).id;
+    return this.purchasesService.buyItem(userId, storeItemId);
+  }
+
+  @Get()
+  @ApiOperation({ summary: "내가 구매한 아이템 목록" })
+  async getMyItems(@Req() req: Request) {
+    const userId = (req.user as any).id;
+    return this.purchasesService.getUserPurchases(userId);
+  }
+}

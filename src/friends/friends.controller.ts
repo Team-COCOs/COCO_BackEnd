@@ -40,6 +40,8 @@ export class FriendsController {
   @Post("request")
   async requestFriend(
     @Body("receiverId") receiverId: number,
+    @Body("requester_name") requester_name: string,
+    @Body("receiver_name") receiver_name: string,
     @Body("message") message: string,
     @Req() req: any
   ) {
@@ -53,8 +55,8 @@ export class FriendsController {
     await this.friendsService.request(
       requesterId,
       receiverId,
-      requester.name,
-      receiver.name,
+      requester_name,
+      receiver_name,
       message
     );
 
