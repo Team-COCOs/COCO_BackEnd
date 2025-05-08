@@ -51,7 +51,7 @@ export class FriendCommentsController {
       hostName: string;
     } | null;
   }> {
-    const authorId = req.user.id;
+    const authorId = req.user?.id;
 
     const comment = await this.friendCommentsService.getComment(
       authorId,
