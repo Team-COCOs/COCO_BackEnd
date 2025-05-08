@@ -101,6 +101,14 @@ export class UsersController {
     };
   }
 
+  // 모든 유저 id 조회
+  @Get("id")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "모든 유저 ID 조회" })
+  async getAllUserIds() {
+    return this.usersService.getAllUserId();
+  }
+
   // 키워드로 검색
   @Get("search")
   @ApiOperation({ summary: "키워드로 유저 검색" })

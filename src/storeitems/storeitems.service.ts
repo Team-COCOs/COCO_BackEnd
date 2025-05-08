@@ -4,6 +4,10 @@ import { StoreItems, StoreItemType } from "./storeitems.entity";
 import { Repository } from "typeorm";
 import { CreateStoreItemDto, UpdateStoreItemDto } from "./dto/storeitem.dto";
 
+import { exec } from "child_process";
+import { promisify } from "util";
+const execAsync = promisify(exec);
+
 @Injectable()
 export class StoreitemsService {
   constructor(
@@ -11,16 +15,26 @@ export class StoreitemsService {
     private readonly storeItemRepository: Repository<StoreItems>
   ) {}
 
-  findAll(category?: StoreItemType) {
+  findItems(category?: StoreItemType) {
     if (category) {
       return this.storeItemRepository.find({ where: { category } });
     }
     return this.storeItemRepository.find();
   }
 
-  create(dto: CreateStoreItemDto) {
+  async create(dto: CreateStoreItemDto & { file: string }) {
     const item = this.storeItemRepository.create(dto);
-    return this.storeItemRepository.save(item);
+    const saved = await this.storeItemRepository.save(item);
+
+    if (dto.category === StoreItemType.BGM) {
+      const filePath = dto.file.replace("http://localhost:5001", ".");
+      const previewPath = filePath.replace(".mp3", "_preview.mp3");
+
+      const command = `ffmpeg -y -i ${filePath} -t 10 ${previewPath}`;
+      await execAsync(command);
+    }
+
+    return saved;
   }
 
   async update(id: number, dto: UpdateStoreItemDto) {

@@ -41,8 +41,20 @@ export class StoreitemsController {
     enum: StoreItemType,
     description: "아이템 타입 필터 (예: minimi, tapcolor 등)",
   })
-  findAll(@Query("category") category?: StoreItemType) {
-    return this.storeitemsService.findAll(category);
+  async findAll(@Query("category") category?: StoreItemType) {
+    const items = await this.storeitemsService.findItems(category);
+
+    return items.map((item) => {
+      if (item.category === StoreItemType.BGM) {
+        const previewUrl = item.file.replace(".mp3", "_preview.mp3");
+        return {
+          ...item,
+          preview_url: previewUrl,
+          full_url: item.file,
+        };
+      }
+      return item;
+    });
   }
 
   @Post()

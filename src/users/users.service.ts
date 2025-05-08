@@ -86,4 +86,10 @@ export class UsersService {
       take: 20,
     });
   }
+
+  // 모든 유저 아이디
+  async getAllUserId(): Promise<number[]> {
+    const users = await this.userRepository.find({ select: ["id"] });
+    return users.map((user) => user.id);
+  }
 }
