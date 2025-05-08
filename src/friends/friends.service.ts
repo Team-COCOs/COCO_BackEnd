@@ -72,7 +72,7 @@ export class FriendsService {
       message,
     });
 
-    await this.friendsRepository.save(request);
+    const saved = await this.friendsRepository.save(request);
 
     const requester = await this.usersService.findUserById(requesterId);
 
@@ -85,6 +85,7 @@ export class FriendsService {
     return {
       requesterId,
       receiverId,
+      create_at: saved.created_at.toISOString().substring(0, 10),
     };
   }
 
@@ -152,7 +153,7 @@ export class FriendsService {
       id: r.id,
       requester: r.requester.name,
       profileImg: r.requester.profile_image,
-      receivedAt: r.created_at.toISOString().replace("T", " ").substring(0, 16),
+      receivedAt: r.created_at.toISOString().substring(0, 10),
     }));
   }
 

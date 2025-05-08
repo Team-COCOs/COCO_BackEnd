@@ -54,10 +54,21 @@ export class FriendCommentsService {
 
   // 조회
   async getComment(authorId: number, hostId: number) {
-    return this.friendCommentsRepository.findOne({
+    const comment = await this.friendCommentsRepository.findOne({
       where: { author: { id: authorId }, host: { id: hostId } },
       order: { created_at: "DESC" },
+      relations: ["author", "target"],
     });
+
+    if (!comment) return null;
+
+    return {
+      content: comment.content,
+      createdAt: comment.created_at
+        .toISOString()
+        .replace("T", " ")
+        .substring(0, 16),
+    };
   }
 
   // 삭제
