@@ -39,8 +39,25 @@ export class FriendCommentsController {
 
   // 조회
   @Get(":hostId")
-  async getComment(@Param("hostId") hostId: number, @Req() req: any) {
-    const comment = await this.friendCommentsService.getComment(hostId);
+  @UseGuards(AuthGuard("jwt"))
+  async getComment(
+    @Param("hostId") hostId: number,
+    @Req() req: any
+  ): Promise<{
+    message: string;
+    data: {
+      content: string;
+      createdAt: string;
+      authorName: string;
+      hostName: string;
+    } | null;
+  }> {
+    const authorId = req.user.id;
+
+    const comment = await this.friendCommentsService.getComment(
+      authorId,
+      hostId
+    );
 
     return {
       message: "일촌평 조회 성공",

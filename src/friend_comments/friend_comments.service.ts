@@ -61,12 +61,25 @@ export class FriendCommentsService {
 
     if (!comment) return null;
 
-    // 친구 테이블에서 별명 가져오기
+    // 친구 관계 확인
     const friendship = await this.friendsService.getFriendshipBetween(
       authorId,
       hostId
     );
-    const isRequester = friendship?.requester.id === authorId;
+
+    if (!friendship) {
+      throw new NotFoundException("친구 관계를 찾을 수 없습니다.");
+    }
+
+    const isRequester = friendship.requester.id === authorId;
+
+    const authorName = isRequester
+      ? friendship.requester_name
+      : friendship.receiver_name;
+
+    const hostName = isRequester
+      ? friendship.receiver_name
+      : friendship.requester_name;
 
     return {
       content: comment.content,
@@ -74,12 +87,8 @@ export class FriendCommentsService {
         .toISOString()
         .replace("T", " ")
         .substring(0, 16),
-      authorName: isRequester
-        ? friendship?.requester_name
-        : friendship?.receiver_name,
-      hostName: isRequester
-        ? friendship?.receiver_name
-        : friendship?.requester_name,
+      authorName,
+      hostName,
     };
   }
 
