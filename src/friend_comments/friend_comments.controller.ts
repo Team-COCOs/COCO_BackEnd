@@ -39,7 +39,6 @@ export class FriendCommentsController {
 
   // 조회
   @Get(":hostId")
-  @UseGuards(AuthGuard("jwt"))
   async getComment(
     @Param("hostId") hostId: number,
     @Req() req: any
