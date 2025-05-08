@@ -152,6 +152,10 @@ export class FriendsService {
     return reqs.map((r) => ({
       id: r.id,
       requester: r.requester.name,
+      requesterId: r.requester.id,
+      requester_name: r.requester_name,
+      receiver_name: r.receiver_name,
+      message: r.message,
       profileImg: r.requester.profile_image,
       receivedAt: r.created_at.toISOString().substring(0, 10),
     }));

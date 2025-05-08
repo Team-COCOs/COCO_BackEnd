@@ -4,8 +4,14 @@ export class NewFriendDto {
   @ApiProperty({ example: 42, description: "친구 요청 레코드 ID" })
   id: number;
 
-  @ApiProperty({ example: "김도현", description: "요청자 이름" })
+  @ApiProperty({ example: "김도현", description: "요청자 실명" })
   requester: string;
+
+  @ApiProperty({ example: "도도", description: "요청자가 설정한 내 별명" })
+  requester_name: string;
+
+  @ApiProperty({ example: "나나", description: "요청자가 설정한 본인 별명" })
+  receiver_name: string;
 
   @ApiProperty({
     example: "https://…/avatar.png",
@@ -14,7 +20,13 @@ export class NewFriendDto {
   profileImg: string;
 
   @ApiProperty({
-    example: "2025-05-07 09:15",
+    example: "친구해요~!",
+    description: "요청 메시지 (최대 50자)",
+  })
+  message: string;
+
+  @ApiProperty({
+    example: "2025-05-08 14:30",
     description: "요청 받은 일시 (yyyy-MM-dd HH:mm)",
   })
   receivedAt: string;
