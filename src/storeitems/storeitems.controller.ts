@@ -51,8 +51,10 @@ export class StoreitemsController {
           ...item,
           preview_url: previewUrl,
           full_url: item.file,
+          file: undefined,
         };
       }
+
       return item;
     });
   }
