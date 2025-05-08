@@ -52,11 +52,11 @@ export class FriendCommentsService {
   }
 
   // 조회
-  async getComment(authorId: number, hostId: number) {
+  async getComment(hostId: number) {
     const comment = await this.friendCommentsRepository.findOne({
-      where: { author: { id: authorId }, host: { id: hostId } },
+      where: { host: { id: hostId } },
       order: { created_at: "DESC" },
-      relations: ["author", "target"],
+      relations: ["target"],
     });
 
     if (!comment) return null;

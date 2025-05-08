@@ -40,11 +40,7 @@ export class FriendCommentsController {
   // 조회
   @Get(":hostId")
   async getComment(@Param("hostId") hostId: number, @Req() req: any) {
-    const authorId = req.user.id;
-    const comment = await this.friendCommentsService.getComment(
-      authorId,
-      hostId
-    );
+    const comment = await this.friendCommentsService.getComment(hostId);
 
     return {
       message: "일촌평 조회 성공",
