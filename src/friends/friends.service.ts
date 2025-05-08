@@ -128,6 +128,50 @@ export class FriendsService {
   }
 
   // 일촌인지 아닌지 상태 확인
+  async friendStatus(
+    requesterId: number,
+    receiverId: number
+  ): Promise<{ areFriends: boolean; requested: boolean; received: boolean }> {
+    // 요청자가 받은 상태 (상대가 나에게 보낸 요청)
+    const received = await this.friendsRepository.findOne({
+      where: {
+        requester: { id: receiverId },
+        receiver: { id: requesterId },
+        status: FriendStatus.PENDING,
+      },
+    });
+
+    // 요청자가 보낸 상태 (내가 상대에게 보낸 요청)
+    const requested = await this.friendsRepository.findOne({
+      where: {
+        requester: { id: requesterId },
+        receiver: { id: receiverId },
+        status: FriendStatus.PENDING,
+      },
+    });
+
+    // 일촌 상태
+    const areFriends = await this.friendsRepository.findOne({
+      where: [
+        {
+          requester: { id: requesterId },
+          receiver: { id: receiverId },
+          status: FriendStatus.ACCEPTED,
+        },
+        {
+          requester: { id: receiverId },
+          receiver: { id: requesterId },
+          status: FriendStatus.ACCEPTED,
+        },
+      ],
+    });
+
+    return {
+      areFriends: !!areFriends,
+      requested: !!requested,
+      received: !!received,
+    };
+  }
 
   // 친구 목록
   async getMyFriends(userId: number): Promise<FriendListDto[]> {

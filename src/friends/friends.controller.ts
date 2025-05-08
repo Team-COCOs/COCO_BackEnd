@@ -6,6 +6,8 @@ import {
   Req,
   UseGuards,
   NotFoundException,
+  Get,
+  Param,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FriendsService } from "./friends.service";
@@ -19,6 +21,7 @@ export class FriendsController {
     private readonly usersService: UsersService
   ) {}
 
+  // 요청
   @Post("request")
   async requestFriend(@Body("receiverId") receiverId: number, @Req() req: any) {
     const requesterId = req.user.id;
@@ -37,6 +40,7 @@ export class FriendsController {
     return { message: "일촌 신청이 전송되었습니다." };
   }
 
+  // 수락
   @Post("accept")
   async acceptFriend(
     @Body("requesterId") requesterId: number,
@@ -47,6 +51,7 @@ export class FriendsController {
     return { message: "일촌 신청을 수락했습니다." };
   }
 
+  // 거절
   @Post("reject")
   async rejectFriend(
     @Body("requesterId") requesterId: number,
@@ -55,5 +60,13 @@ export class FriendsController {
     const receiverId = req.user.id;
     await this.friendsService.reject(requesterId, receiverId);
     return { message: "일촌 신청을 거절했습니다." };
+  }
+
+  // 일촌 상태
+  @Get("status/:userId")
+  async checkFollowStatus(@Param("userId") userId: string, @Req() req: any) {
+    const receiverId = parseInt(userId, 10);
+    const requesterId = req.user.id;
+    return this.friendsService.friendStatus(requesterId, receiverId);
   }
 }
