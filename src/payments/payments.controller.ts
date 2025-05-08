@@ -32,11 +32,11 @@ export class PaymentsController {
   @UseGuards(AuthGuard("jwt"))
   async createPayment(
     @Req() req: Request,
-    @Body() { dotori }: CreatePaymentDto
+    @Body() { dotori, tossPaymentId }: CreatePaymentDto
   ) {
     const userId = (req.user as any).id;
     if (!userId) throw new NotFoundException("유저 정보가 없습니다.");
-    return this.paymentsService.createPayment(userId, dotori);
+    return this.paymentsService.createPayment(userId, dotori, tossPaymentId);
   }
 
   @Get()

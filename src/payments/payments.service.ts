@@ -24,7 +24,11 @@ export class PaymentsService {
   };
 
   // 결제하기
-  async createPayment(userId: number, dotori: number): Promise<Payment> {
+  async createPayment(
+    userId: number,
+    dotori: number,
+    tossPaymentId: string
+  ): Promise<Payment> {
     const amount = this.priceMap[dotori];
     if (!amount) {
       throw new BadRequestException("유효하지 않은 도토리 개수입니다.");
@@ -36,40 +40,20 @@ export class PaymentsService {
     }
 
     const orderId = `order-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
     const payment = this.paymentRepository.create({
       user,
       dotori_amount: dotori,
       amount,
       order_id: orderId,
-    });
-    return this.paymentRepository.save(payment);
-  }
-
-  // 결제 상태 업로드
-  async updatePaymentStatus(
-    orderId: string,
-    tossPaymentId: string
-  ): Promise<Payment> {
-    const payment = await this.paymentRepository.findOne({
-      where: { order_id: orderId },
-      relations: ["user"],
+      toss_payment_id: tossPaymentId,
     });
 
-    if (!payment) {
-      throw new NotFoundException("해당 order_id의 결제 기록이 없습니다.");
-    }
+    const savedPayment = await this.paymentRepository.save(payment);
 
-    // 결제 고유 ID 저장
-    payment.toss_payment_id = tossPaymentId;
-    await this.paymentRepository.save(payment);
-
-    // 유저 도토리 충전
-    const user = await this.userService.findUserById(payment.user.id); // 직접 다시 로드
-    user.dotoris += payment.dotori_amount;
+    user.dotoris += dotori;
     await this.userService.save(user);
 
-    return payment;
+    return savedPayment;
   }
 
   async getPaymentByUser(userId: number) {

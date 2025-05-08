@@ -1,5 +1,6 @@
 export class CreatePaymentDto {
   dotori: number;
+  tossPaymentId: string;
 }
 
 export class WebhookDto {
