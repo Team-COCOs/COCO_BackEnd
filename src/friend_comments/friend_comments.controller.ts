@@ -6,10 +6,13 @@ import {
   Param,
   Post,
   Req,
+  UseGuards,
 } from "@nestjs/common";
 import { FriendCommentsService } from "./friend_comments.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("friend-comments")
+@UseGuards(AuthGuard("jwt"))
 export class FriendCommentsController {
   constructor(private readonly friendCommentsService: FriendCommentsService) {}
 

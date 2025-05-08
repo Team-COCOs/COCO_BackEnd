@@ -65,9 +65,9 @@ export class PaymentsService {
     await this.paymentRepository.save(payment);
 
     // 유저 도토리 충전
-    // `user` 엔티티에 `dotori` 필드가 있다고 가정합니다.
-    payment.user.dotoris = (payment.user.dotoris || 0) + payment.dotori_amount;
-    await this.userService.save(payment.user);
+    const user = await this.userService.findUserById(payment.user.id); // 직접 다시 로드
+    user.dotoris += payment.dotori_amount;
+    await this.userService.save(user);
 
     return payment;
   }
