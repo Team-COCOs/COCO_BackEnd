@@ -9,7 +9,7 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { UsersService } from "./users.service";
 import { Request } from "express";
-import { ApiOperation, ApiQuery } from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiQuery } from "@nestjs/swagger";
 import { SearchUserDto } from "./dto/searchUsers.dto";
 import { DiaryService } from "../diary/diary.service";
 import { PhotosService } from "../photos/photos.service";
@@ -18,6 +18,7 @@ import { NewDiaryDto } from "../diary/dto/diary.dto";
 import { NewPhotoDto } from "../photos/dto/photos.dto";
 import { VisitService } from "../visit/visit.service";
 import { UserProfileDto } from "./dto/userProfile.dto";
+import { UserIdNameDto } from "./dto/userIdName.dto";
 
 @Controller("users")
 export class UsersController {
@@ -104,7 +105,8 @@ export class UsersController {
   // 모든 유저 id 조회
   @Get("id")
   @UseGuards(AuthGuard("jwt"))
-  @ApiOperation({ summary: "모든 유저 ID 조회" })
+  @ApiOperation({ summary: "모든 유저의 ID 및 이름 조회" })
+  @ApiOkResponse({ type: [UserIdNameDto] })
   async getAllUserIds() {
     return this.usersService.getAllUserId();
   }
