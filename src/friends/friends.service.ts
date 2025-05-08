@@ -199,15 +199,16 @@ export class FriendsService {
     });
 
     return friends.map((f) => {
-      const other = f.requester.id === userId ? f.receiver : f.requester;
+      const isRequester = f.requester.id === userId;
+      const other = isRequester ? f.receiver : f.requester;
 
       return {
         id: f.id,
         userId: other.id,
         request: f.requester.name,
         receiver: f.receiver.name,
-        requester_name: f.requester_name,
-        receiver_name: f.receiver_name,
+        requester_name: isRequester ? f.requester_name : f.receiver_name,
+        receiver_name: isRequester ? f.receiver_name : f.requester_name,
         profile_image: other.profile_image,
         since: f.created_at.toISOString().replace("T", " ").substring(0, 16),
       };
