@@ -97,7 +97,8 @@ export class UsersController {
       dotoris: user.dotoris,
       friends: friends.map((f) => ({
         id: f.userId,
-        name: f.name,
+        requester_name: f.requester_name,
+        receiver_name: f.receiver_name,
       })),
     };
   }

@@ -4,8 +4,8 @@ export class NewFriendDto {
   @ApiProperty({ example: 42, description: "친구 요청 레코드 ID" })
   id: number;
 
-  @ApiProperty({ example: "김도현", description: "요청자 실명" })
-  requester: string;
+  @ApiProperty({ example: 3, description: "요청자 유저 ID" })
+  requesterId: number;
 
   @ApiProperty({ example: "도도", description: "요청자가 설정한 내 별명" })
   requester_name: string;
@@ -39,8 +39,11 @@ export class FriendListDto {
   @ApiProperty({ example: 3, description: "친구 유저 ID" })
   userId: number;
 
-  @ApiProperty({ example: "홍길동", description: "친구 이름" })
-  name: string;
+  @ApiProperty({ example: "지니야", description: "내가 친구를 부르는 별명" })
+  requester_name: string;
+
+  @ApiProperty({ example: "유민이", description: "친구가 나를 부르는 별명" })
+  receiver_name: string;
 
   @ApiProperty({
     example: "https://…/avatar.png",

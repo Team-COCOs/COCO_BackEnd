@@ -222,10 +222,12 @@ export class FriendsService {
 
     return friends.map((f) => {
       const other = f.requester.id === userId ? f.receiver : f.requester;
+
       return {
         id: f.id,
         userId: other.id,
-        name: other.name,
+        requester_name: f.requester_name,
+        receiver_name: f.receiver_name,
         profile_image: other.profile_image,
         since: f.created_at.toISOString().replace("T", " ").substring(0, 16),
       };
