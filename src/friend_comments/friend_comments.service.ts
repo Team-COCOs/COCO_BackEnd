@@ -52,14 +52,21 @@ export class FriendCommentsService {
   }
 
   // 조회
-  async getComment(hostId: number) {
+  async getComment(authorId: number, hostId: number) {
     const comment = await this.friendCommentsRepository.findOne({
-      where: { host: { id: hostId } },
+      where: { author: { id: authorId }, host: { id: hostId } },
       order: { created_at: "DESC" },
-      relations: ["target"],
+      relations: ["author", "host"],
     });
 
     if (!comment) return null;
+
+    // 친구 테이블에서 별명 가져오기
+    const friendship = await this.friendsService.getFriendshipBetween(
+      authorId,
+      hostId
+    );
+    const isRequester = friendship?.requester.id === authorId;
 
     return {
       content: comment.content,
@@ -67,6 +74,12 @@ export class FriendCommentsService {
         .toISOString()
         .replace("T", " ")
         .substring(0, 16),
+      authorName: isRequester
+        ? friendship?.requester_name
+        : friendship?.receiver_name,
+      hostName: isRequester
+        ? friendship?.receiver_name
+        : friendship?.requester_name,
     };
   }
 

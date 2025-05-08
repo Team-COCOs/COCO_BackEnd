@@ -200,18 +200,39 @@ export class FriendsService {
 
     return friends.map((f) => {
       const isRequester = f.requester.id === userId;
-      const other = isRequester ? f.receiver : f.requester;
+      const friend = isRequester ? f.receiver : f.requester;
 
       return {
         id: f.id,
-        userId: other.id,
-        request: f.requester.name,
-        receiver: f.receiver.name,
-        requester_name: isRequester ? f.requester_name : f.receiver_name,
-        receiver_name: isRequester ? f.receiver_name : f.requester_name,
-        profile_image: other.profile_image,
+        userId: friend.id,
+        friend: friend.name,
+        profile_image: friend.profile_image ?? "/avatarImg/default.png",
+        myNaming: isRequester ? f.requester_name : f.receiver_name,
+        theirNaming: isRequester ? f.receiver_name : f.requester_name,
         since: f.created_at.toISOString().replace("T", " ").substring(0, 16),
       };
+    });
+  }
+
+  // 일촌 확인
+  async getFriendshipBetween(
+    userIdA: number,
+    userIdB: number
+  ): Promise<Friend | null> {
+    return this.friendsRepository.findOne({
+      where: [
+        {
+          requester: { id: userIdA },
+          receiver: { id: userIdB },
+          status: FriendStatus.ACCEPTED,
+        },
+        {
+          requester: { id: userIdB },
+          receiver: { id: userIdA },
+          status: FriendStatus.ACCEPTED,
+        },
+      ],
+      relations: ["requester", "receiver"],
     });
   }
 }
