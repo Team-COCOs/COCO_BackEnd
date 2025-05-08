@@ -38,6 +38,7 @@ import { Minihomepi } from "./minihomepis/minihomepis.entity";
 import { DiaryComment } from "./diary_comments/diary_comments.entity";
 import { VisitModule } from "./visit/visit.module";
 import { Visit } from "./visit/visit.entity";
+import { FriendCommentsModule } from './friend_comments/friend_comments.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -89,6 +90,7 @@ import { Visit } from "./visit/visit.entity";
     TapcolorModule,
     PhotosCommentsModule,
     VisitModule,
+    FriendCommentsModule,
   ],
 })
 export class AppModule {}
