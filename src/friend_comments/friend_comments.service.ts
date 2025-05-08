@@ -89,6 +89,8 @@ export class FriendCommentsService {
         .substring(0, 16),
       authorName,
       hostName,
+      authorRealName: comment.author.name,
+      hostRealName: comment.host.name,
     };
   }
 
