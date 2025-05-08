@@ -12,12 +12,12 @@ import { FriendCommentsService } from "./friend_comments.service";
 import { AuthGuard } from "@nestjs/passport";
 
 @Controller("friend-comments")
-@UseGuards(AuthGuard("jwt"))
 export class FriendCommentsController {
   constructor(private readonly friendCommentsService: FriendCommentsService) {}
 
   // 등록
   @Post()
+  @UseGuards(AuthGuard("jwt"))
   async createFriendComment(
     @Body("hostId") hostId: number,
     @Body("content") content: string,
@@ -54,6 +54,7 @@ export class FriendCommentsController {
 
   // 삭제
   @Delete(":hostId")
+  @UseGuards(AuthGuard("jwt"))
   async deleteComment(@Param("hostId") hostId: number, @Req() req: any) {
     const authorId = req.user.id;
 
