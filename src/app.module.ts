@@ -37,6 +37,7 @@ import { Visit } from "./visit/visit.entity";
 import { FriendCommentsModule } from "./friend_comments/friend_comments.module";
 import { UserItem } from "./useritems/useritems.entity";
 import { Purchase } from "./purchases/purchases.entity";
+import { FriendComment } from "./friend_comments/friend_comments.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -64,6 +65,7 @@ import { Purchase } from "./purchases/purchases.entity";
           Visit,
           UserItem,
           Purchase,
+          FriendComment,
         ],
         synchronize: true,
       }),

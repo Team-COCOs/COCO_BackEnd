@@ -12,7 +12,6 @@ import { UsersService } from "../users/users.service";
 import { AuthGuard } from "@nestjs/passport";
 
 @Injectable()
-@UseGuards(AuthGuard("jwt"))
 export class FriendCommentsService {
   constructor(
     @InjectRepository(FriendComment)
