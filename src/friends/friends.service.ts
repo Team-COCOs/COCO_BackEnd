@@ -21,6 +21,28 @@ export class FriendsService {
     private readonly notificationsService: NotificationsService
   ) {}
 
+  // 일촌 신청 전 실명
+  async getNames(
+    requesterId: number,
+    receiverId: number
+  ): Promise<{ requesterName: string; receiverName: string }> {
+    if (requesterId === receiverId) {
+      throw new BadRequestException("자기 자신은 선택할 수 없습니다.");
+    }
+
+    const requester = await this.usersService.findUserById(requesterId);
+    const receiver = await this.usersService.findUserById(receiverId);
+
+    if (!receiver) {
+      throw new NotFoundException("상대 사용자를 찾을 수 없습니다.");
+    }
+
+    return {
+      requesterName: requester.name,
+      receiverName: receiver.name,
+    };
+  }
+
   // 일촌 신청
   async request(
     requesterId: number,
@@ -57,6 +79,11 @@ export class FriendsService {
       `${requester?.name || "누군가"}님이 일촌 신청을 보냈습니다.`,
       requesterId
     );
+
+    return {
+      requesterId,
+      receiverId,
+    };
   }
 
   // 수락
