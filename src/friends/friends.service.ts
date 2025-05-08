@@ -127,6 +127,8 @@ export class FriendsService {
     }));
   }
 
+  // 일촌인지 아닌지 상태 확인
+
   // 친구 목록
   async getMyFriends(userId: number): Promise<FriendListDto[]> {
     const relations = ["requester", "receiver"];
