@@ -34,6 +34,10 @@ export class Friend {
   @Column({ type: "varchar", length: 50, nullable: true })
   receiver_name: string;
 
+  // 요청 메시지
+  @Column({ type: "varchar", length: 50, nullable: true })
+  message: string;
+
   @Column({ type: "enum", enum: FriendStatus })
   status: FriendStatus;
 

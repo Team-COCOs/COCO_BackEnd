@@ -38,7 +38,11 @@ export class FriendsController {
 
   // 요청
   @Post("request")
-  async requestFriend(@Body("receiverId") receiverId: number, @Req() req: any) {
+  async requestFriend(
+    @Body("receiverId") receiverId: number,
+    @Body("message") message: string,
+    @Req() req: any
+  ) {
     const requesterId = req.user.id;
     const requester = await this.usersService.findUserById(requesterId);
     const receiver = await this.usersService.findUserById(receiverId);
@@ -50,7 +54,8 @@ export class FriendsController {
       requesterId,
       receiverId,
       requester.name,
-      receiver.name
+      receiver.name,
+      message
     );
 
     return { message: "일촌 신청이 전송되었습니다." };

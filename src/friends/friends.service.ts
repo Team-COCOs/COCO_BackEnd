@@ -48,7 +48,8 @@ export class FriendsService {
     requesterId: number,
     receiverId: number,
     requester_name: string,
-    receiver_name: string
+    receiver_name: string,
+    message: string
   ) {
     if (requesterId === receiverId)
       throw new BadRequestException("자기 자신에게 신청할 수 없습니다.");
@@ -68,6 +69,7 @@ export class FriendsService {
       requester_name,
       receiver_name,
       status: FriendStatus.PENDING,
+      message,
     });
 
     await this.friendsRepository.save(request);
