@@ -8,7 +8,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Friend, FriendStatus } from "./friends.entity";
 import { User } from "../users/users.entity";
-import { NotificationsService } from "../notifications/notifications.service";
 import { UsersService } from "../users/users.service";
 import { FriendListDto, NewFriendDto } from "./dto/friends.dto";
 
@@ -17,8 +16,7 @@ export class FriendsService {
   constructor(
     @InjectRepository(Friend)
     private readonly friendsRepository: Repository<Friend>,
-    private readonly usersService: UsersService,
-    private readonly notificationsService: NotificationsService
+    private readonly usersService: UsersService
   ) {}
 
   // 일촌 신청 전 실명
@@ -76,12 +74,6 @@ export class FriendsService {
 
     const requester = await this.usersService.findUserById(requesterId);
 
-    await this.notificationsService.create(
-      receiverId,
-      `${requester?.name || "누군가"}님이 일촌 신청을 보냈습니다.`,
-      requesterId
-    );
-
     return {
       requesterId,
       receiverId,
@@ -104,13 +96,6 @@ export class FriendsService {
 
     friendship.status = FriendStatus.ACCEPTED;
     await this.friendsRepository.save(friendship);
-
-    const receiver = await this.usersService.findUserById(receiverId);
-    await this.notificationsService.create(
-      requesterId,
-      `${receiver?.name || "누군가"}님이 일촌 신청을 수락했습니다.`,
-      receiverId
-    );
   }
 
   // 거절
@@ -128,13 +113,6 @@ export class FriendsService {
 
     friendship.status = FriendStatus.REJECTED;
     await this.friendsRepository.save(friendship);
-
-    const receiver = await this.usersService.findUserById(receiverId);
-    await this.notificationsService.create(
-      requesterId,
-      `${receiver?.name || "누군가"}님이 일촌 신청을 거절했습니다.`,
-      receiverId
-    );
   }
 
   // 아직 수락되지 않은 일촌 요청

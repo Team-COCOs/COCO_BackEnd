@@ -7,10 +7,7 @@ import { UsersModule } from "./users/users.module";
 import { MinihomepisModule } from "./minihomepis/minihomepis.module";
 import { FriendsModule } from "./friends/friends.module";
 import { DiaryCommentsModule } from "./diary_comments/diary_comments.module";
-import { PhotosService } from "./photos/photos.service";
-import { PhotosController } from "./photos/photos.controller";
 import { GuestbooksModule } from "./guestbooks/guestbooks.module";
-import { NotificationsModule } from "./notifications/notifications.module";
 import { StoreitemsModule } from "./storeitems/storeitems.module";
 import { PurchasesModule } from "./purchases/purchases.module";
 import { GiftsModule } from "./gifts/gifts.module";
@@ -25,7 +22,6 @@ import { DiaryModule } from "./diary/diary.module";
 import { AuthModule } from "./auth/auth.module";
 import { User } from "./users/users.entity";
 import { BGM } from "./bgm/bgm.entity";
-import { Notification } from "./notifications/notifications.entity";
 import { Payment } from "./payments/payments.entity";
 import { Photo } from "./photos/photos.entity";
 import { Friend } from "./friends/friends.entity";
@@ -59,7 +55,6 @@ import { Purchase } from "./purchases/purchases.entity";
           BGM,
           Photo,
           Payment,
-          Notification,
           Friend,
           ChatbotMessage,
           Diary,
@@ -78,7 +73,6 @@ import { Purchase } from "./purchases/purchases.entity";
     FriendsModule,
     DiaryCommentsModule,
     GuestbooksModule,
-    NotificationsModule,
     StoreitemsModule,
     PurchasesModule,
     GiftsModule,
