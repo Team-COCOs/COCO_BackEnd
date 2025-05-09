@@ -3,6 +3,7 @@ import { PurchasesService } from "./purchases.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { PurchaseItemDto } from "./dto/purchases.dto";
 
 @ApiTags("스토어 구매")
 @Controller("purchases")
@@ -12,9 +13,9 @@ export class PurchasesController {
 
   @Post()
   @ApiOperation({ summary: "스토어 아이템 구매" })
-  async buyItem(@Body("storeItemId") storeItemId: number, @Req() req: Request) {
+  async buyItem(@Body() body: PurchaseItemDto, @Req() req: Request) {
     const userId = (req.user as any).id;
-    return this.purchasesService.buyItem(userId, storeItemId);
+    return this.purchasesService.buyItem(userId, body.storeItemId);
   }
 
   @Get()
