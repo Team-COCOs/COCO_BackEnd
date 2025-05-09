@@ -21,9 +21,9 @@ export class MinihomepisController {
   ) {}
 
   // 파도타기
-  @Get("history")
+  @Get("history/:hostId")
   async getOtherProfile(
-    @Query("hostId") hostId: number
+    @Param("hostId") hostId: number
   ): Promise<OtherProfileDto> {
     const user = await this.usersService.findUserById(hostId);
     if (!user) throw new NotFoundException("유저 없음");
