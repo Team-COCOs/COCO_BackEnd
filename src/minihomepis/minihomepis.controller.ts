@@ -33,8 +33,6 @@ export class MinihomepisController {
     // 일촌 목록 확인
     const friends = await this.friendsService.getFriends(user.id);
 
-    console.log(friends);
-
     return {
       name: user.name,
       email: user.email,

@@ -90,9 +90,13 @@ export class FriendsController {
 
   // 일촌 상태
   @Get("status/:userId")
+  @UseGuards(AuthGuard("jwt"))
   async checkFollowStatus(@Param("userId") userId: string, @Req() req: any) {
     const receiverId = parseInt(userId, 10);
     const requesterId = req.user?.id;
+
+    console.log(receiverId, "asdfasd");
+    console.log(requesterId, "asdfasdfas");
 
     if (!requesterId) {
       return {
