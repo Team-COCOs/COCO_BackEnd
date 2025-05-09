@@ -29,6 +29,7 @@ export class MinihomepisService {
 
     return mini.visit_count;
   }
+
   // 제목 수정
   async updateTitle(userId: number, title: string): Promise<void> {
     await this.miniRepository.update({ user: { id: userId } }, { title });

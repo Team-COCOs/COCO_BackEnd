@@ -1,4 +1,10 @@
-import { Controller, Get, NotFoundException, Param } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+} from "@nestjs/common";
 import { FriendsService } from "src/friends/friends.service";
 import { UsersService } from "src/users/users.service";
 import { VisitService } from "src/visit/visit.service";
@@ -14,9 +20,10 @@ export class MinihomepisController {
     private readonly minihomepisService: MinihomepisService
   ) {}
 
+  // 파도타기
   @Get("history")
   async getOtherProfile(
-    @Param("hostId") hostId: number
+    @Query("hostId") hostId: number
   ): Promise<OtherProfileDto> {
     const user = await this.usersService.findUserById(hostId);
     if (!user) throw new NotFoundException("유저 없음");
