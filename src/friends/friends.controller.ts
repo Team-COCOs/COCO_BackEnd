@@ -95,9 +95,6 @@ export class FriendsController {
     const receiverId = parseInt(userId, 10);
     const requesterId = req.user?.id;
 
-    console.log(receiverId, "asdfasd");
-    console.log(requesterId, "asdfasdfas");
-
     if (!requesterId) {
       return {
         areFriends: false,
