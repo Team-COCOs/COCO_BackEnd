@@ -1,18 +1,24 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThanOrEqual } from "typeorm";
 import { Visit } from "./visit.entity";
 import { startOfToday } from "date-fns";
+import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class VisitService {
   constructor(
     @InjectRepository(Visit)
-    private readonly visitRepository: Repository<Visit>
+    private readonly visitRepository: Repository<Visit>,
+    private readonly usersService: UsersService
   ) {}
 
   // 방문자 수 (로그인/로그아웃)
   async visit(hostId: number, visitorId: number | null) {
+    const host = await this.usersService.findUserById(hostId);
+    if (!host) {
+      throw new NotFoundException("존재하지 않는 미니홈피입니다.");
+    }
     if (visitorId && hostId === visitorId) return;
 
     if (visitorId) {
