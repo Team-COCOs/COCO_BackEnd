@@ -8,9 +8,7 @@ import { UsersService } from "src/users/users.service";
 export class MinihomepisService {
   constructor(
     @InjectRepository(Minihomepi)
-    private readonly miniRepository: Repository<Minihomepi>,
-
-    private readonly usersService: UsersService
+    private readonly miniRepository: Repository<Minihomepi>
   ) {}
 
   // 총 방문자 수 업데이트

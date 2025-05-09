@@ -56,24 +56,6 @@ export class UsersController {
     };
   }
 
-  @Get("hostProfile")
-  async getOtherProfile(
-    @Param("hostId") hostId: number
-  ): Promise<OtherProfileDto> {
-    const user = await this.usersService.findUserById(hostId);
-    if (!user) throw new NotFoundException("유저 없음");
-
-    // 일촌 목록 확인
-    const friends = await this.friendsService.getMyFriends(hostId);
-
-    return {
-      name: user.name,
-      email: user.email,
-      gender: user.gender,
-      friends,
-    };
-  }
-
   // 메인화면 프로필
   @Get("mainProfile")
   @UseGuards(AuthGuard("jwt"))
