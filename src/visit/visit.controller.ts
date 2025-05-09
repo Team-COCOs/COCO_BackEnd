@@ -11,9 +11,8 @@ export class VisitController {
   ) {}
 
   @Post()
-  @UseGuards(AuthGuard("jwt"))
-  async createVisit(@Body("hostId") hostId: number, @Req() req: any) {
-    const visitorId = req.user.id;
-    return this.visitService.visitOncePerDay(visitorId, hostId);
+  async visit(@Body("hostId") hostId: number, @Req() req: any) {
+    const visitorId = req.user?.id ?? null;
+    return this.visitService.visit(hostId, visitorId);
   }
 }
