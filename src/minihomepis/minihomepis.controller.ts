@@ -14,7 +14,7 @@ export class MinihomepisController {
     private readonly minihomepisService: MinihomepisService
   ) {}
 
-  @Get("hostProfile")
+  @Get("history")
   async getOtherProfile(
     @Param("hostId") hostId: number
   ): Promise<OtherProfileDto> {
