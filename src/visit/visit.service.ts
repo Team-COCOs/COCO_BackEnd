@@ -56,7 +56,7 @@ export class VisitService {
 
     const raw = await this.visitRepository
       .createQueryBuilder("visit")
-      .select("COUNT(DISTINCT visit.visitor_id)", "count")
+      .select("COUNT(*)", "count")
       .where("visit.host_id = :hostId", { hostId })
       .andWhere("visit.visited_at >= :todayStart", { todayStart })
       .getRawOne<{ count: string }>();
