@@ -93,6 +93,7 @@ import { PhotoComment } from "./photos_comments/photos_comments.entity";
     PhotosCommentsModule,
     VisitModule,
     FriendCommentsModule,
+    MinihomepisModule,
   ],
 })
 export class AppModule {}

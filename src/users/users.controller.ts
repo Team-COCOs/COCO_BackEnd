@@ -19,6 +19,7 @@ import { NewPhotoDto } from "../photos/dto/photos.dto";
 import { VisitService } from "../visit/visit.service";
 import { UserProfileDto } from "./dto/userProfile.dto";
 import { UserIdNameDto } from "./dto/userIdName.dto";
+import { MinihomepisService } from "src/minihomepis/minihomepis.service";
 
 @Controller("users")
 export class UsersController {
@@ -27,7 +28,8 @@ export class UsersController {
     private readonly diaryService: DiaryService,
     private readonly photosService: PhotosService,
     private readonly friendsService: FriendsService,
-    private readonly visitService: VisitService
+    private readonly visitService: VisitService,
+    private readonly minihomepisService: MinihomepisService
   ) {}
 
   // 유저 프로필
@@ -116,5 +118,12 @@ export class UsersController {
     @Query("keyword") keyword: string
   ): Promise<SearchUserDto[]> {
     return this.usersService.searchUsers(keyword);
+  }
+
+  // 화재의 미니홈피
+  @Get("getPopularUser")
+  @ApiOperation({ summary: "화제의 미니홈피 Top 5" })
+  async getHotMinihomepis() {
+    return this.minihomepisService.getTop5HotMinihomepis();
   }
 }
