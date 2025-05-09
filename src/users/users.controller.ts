@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   NotFoundException,
+  Param,
   Query,
   Req,
   UseGuards,
@@ -56,10 +57,9 @@ export class UsersController {
   }
 
   @Get("hostProfile")
-  @UseGuards(AuthGuard("jwt"))
-  async getOtherProfile(@Req() req: Request): Promise<OtherProfileDto> {
-    const hostId = req.user["id"];
-
+  async getOtherProfile(
+    @Param("hostId") hostId: number
+  ): Promise<OtherProfileDto> {
     const user = await this.usersService.findUserById(hostId);
     if (!user) throw new NotFoundException("유저 없음");
 

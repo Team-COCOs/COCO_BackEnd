@@ -5,10 +5,7 @@ import { AuthGuard } from "@nestjs/passport";
 
 @Controller("visit")
 export class VisitController {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly visitService: VisitService
-  ) {}
+  constructor(private readonly visitService: VisitService) {}
 
   @Post()
   async visit(@Body("hostId") hostId: number, @Req() req: any) {
