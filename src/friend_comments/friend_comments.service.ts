@@ -82,6 +82,8 @@ export class FriendCommentsService {
 
       results.push({
         id: comment.id,
+        authorId: comment.author.id,
+        hostId: comment.host.id,
         authorRealName: comment.author.name,
         hostRealName: comment.host.name,
         authorName: isRequester
