@@ -90,6 +90,8 @@ export class UsersController {
     // 일촌 목록 확인
     const friends = await this.friendsService.getFriends(userId);
 
+    console.log();
+
     return {
       name: user.name,
       todayVisit,

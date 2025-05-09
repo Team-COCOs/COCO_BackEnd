@@ -66,20 +66,12 @@ export class VisitService {
 
   // 총 방문자 수
   async countTotalVisits(hostId: number): Promise<number> {
-    const loggedInRaw = await this.visitRepository
-      .createQueryBuilder("visit")
-      .select("COUNT(DISTINCT visit.visitor_id)", "count")
-      .where("visit.host_id = :hostId", { hostId })
-      .andWhere("visit.visitor_id IS NOT NULL")
-      .getRawOne<{ count: string }>();
-
-    const anonymousRaw = await this.visitRepository
+    const raw = await this.visitRepository
       .createQueryBuilder("visit")
       .select("COUNT(*)", "count")
       .where("visit.host_id = :hostId", { hostId })
-      .andWhere("visit.visitor_id IS NULL")
       .getRawOne<{ count: string }>();
 
-    return parseInt(loggedInRaw.count, 10) + parseInt(anonymousRaw.count, 10);
+    return parseInt(raw.count, 10);
   }
 }
