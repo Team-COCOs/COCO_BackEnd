@@ -51,47 +51,54 @@ export class FriendCommentsService {
   }
 
   // 조회
-  async getComment(authorId: number, hostId: number) {
-    const comment = await this.friendCommentsRepository.findOne({
-      where: { author: { id: authorId }, host: { id: hostId } },
-      order: { created_at: "DESC" },
+  async getComments(hostId: number) {
+    // 해당 호스트에 대해 작성된 모든 일촌평
+    const comments = await this.friendCommentsRepository.find({
+      where: { host: { id: hostId } },
       relations: ["author", "host"],
+      order: { created_at: "DESC" },
     });
 
-    if (!comment) return null;
+    // 작성자당 하나씩만 유지되도록 Map 사용
+    const uniqueByAuthor = new Map<number, (typeof comments)[0]>();
 
-    // 친구 관계 확인
-    const friendship = await this.friendsService.getFriendshipBetween(
-      authorId,
-      hostId
-    );
-
-    if (!friendship) {
-      throw new NotFoundException("친구 관계를 찾을 수 없습니다.");
+    for (const c of comments) {
+      if (!uniqueByAuthor.has(c.author.id)) {
+        uniqueByAuthor.set(c.author.id, c);
+      }
     }
 
-    const isRequester = friendship.requester.id === authorId;
+    const results = [];
 
-    const authorName = isRequester
-      ? friendship.requester_name
-      : friendship.receiver_name;
+    for (const comment of uniqueByAuthor.values()) {
+      const friendship = await this.friendsService.getFriendshipBetween(
+        comment.author.id,
+        comment.host.id
+      );
 
-    const hostName = isRequester
-      ? friendship.receiver_name
-      : friendship.requester_name;
+      if (!friendship) continue;
 
-    return {
-      id: comment.id,
-      authorRealName: comment.author.name,
-      hostRealName: comment.host.name,
-      authorName,
-      hostName,
-      content: comment.content,
-      createdAt: comment.created_at
-        .toISOString()
-        .replace("T", " ")
-        .substring(0, 16),
-    };
+      const isRequester = friendship.requester.id === comment.author.id;
+
+      results.push({
+        id: comment.id,
+        authorRealName: comment.author.name,
+        hostRealName: comment.host.name,
+        authorName: isRequester
+          ? friendship.requester_name
+          : friendship.receiver_name,
+        hostName: isRequester
+          ? friendship.receiver_name
+          : friendship.requester_name,
+        content: comment.content,
+        createdAt: comment.created_at
+          .toISOString()
+          .replace("T", " ")
+          .substring(0, 16),
+      });
+    }
+
+    return results;
   }
 
   // 삭제
