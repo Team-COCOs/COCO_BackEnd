@@ -12,8 +12,6 @@ import { StoreitemsModule } from "./storeitems/storeitems.module";
 import { PurchasesModule } from "./purchases/purchases.module";
 import { ChatbotmessagesModule } from "./chatbotmessages/chatbotmessages.module";
 import { BgmModule } from "./bgm/bgm.module";
-import { MinimiitemsModule } from "./minimiitems/minimiitems.module";
-import { MiniroomitemsModule } from "./miniroomitems/miniroomitems.module";
 import { UseritemsModule } from "./useritems/useritems.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { PhotosModule } from "./photos/photos.module";
@@ -26,7 +24,6 @@ import { Photo } from "./photos/photos.entity";
 import { Friend } from "./friends/friends.entity";
 import { ChatbotMessage } from "./chatbotmessages/chatbotmessages.entity";
 import { Diary } from "./diary/diary.entity";
-import { TapcolorModule } from "./tapcolor/tapcolor.module";
 import { PhotosCommentsModule } from "./photos_comments/photos_comments.module";
 import { StoreItems } from "./storeitems/storeitems.entity";
 import { Minihomepi } from "./minihomepis/minihomepis.entity";
@@ -38,6 +35,7 @@ import { UserItem } from "./useritems/useritems.entity";
 import { Purchase } from "./purchases/purchases.entity";
 import { FriendComment } from "./friend_comments/friend_comments.entity";
 import { PhotoComment } from "./photos_comments/photos_comments.entity";
+import { PhotoFolder } from "./photos/photoFolder.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -55,6 +53,7 @@ import { PhotoComment } from "./photos_comments/photos_comments.entity";
           User,
           BGM,
           Photo,
+          PhotoFolder,
           Payment,
           Friend,
           ChatbotMessage,
@@ -80,14 +79,11 @@ import { PhotoComment } from "./photos_comments/photos_comments.entity";
     PurchasesModule,
     ChatbotmessagesModule,
     BgmModule,
-    MinimiitemsModule,
-    MiniroomitemsModule,
     UseritemsModule,
     PaymentsModule,
     PhotosModule,
     DiaryModule,
     AuthModule,
-    TapcolorModule,
     PhotosCommentsModule,
     VisitModule,
     FriendCommentsModule,

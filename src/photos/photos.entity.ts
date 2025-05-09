@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 
 import { PhotoComment } from "../photos_comments/photos_comments.entity";
+import { PhotoFolder } from "./photoFolder.entity";
 
 @Entity("photos")
 export class Photo {
@@ -20,8 +21,12 @@ export class Photo {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Column({ type: "varchar", length: 100 })
-  folder_name: string;
+  @ManyToOne(() => PhotoFolder, (folder) => folder.photos, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  @JoinColumn({ name: "folder_id" })
+  folder: PhotoFolder;
 
   @Column({ type: "varchar", length: 255 })
   photo_url: string;

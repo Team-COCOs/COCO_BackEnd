@@ -3,12 +3,16 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThan } from "typeorm";
 import { Photo } from "./photos.entity";
 import { NewPhotoDto } from "./dto/photos.dto";
+import { PhotoFolder } from "./photoFolder.entity";
 
 @Injectable()
 export class PhotosService {
   constructor(
     @InjectRepository(Photo)
-    private readonly photoRepository: Repository<Photo>
+    private readonly photoRepository: Repository<Photo>,
+
+    @InjectRepository(PhotoFolder)
+    private readonly photoFolderRepository: Repository<PhotoFolder>
   ) {}
 
   async getNewPhotos(userId: number): Promise<NewPhotoDto[]> {
@@ -26,7 +30,7 @@ export class PhotosService {
 
     const mappedPhotos: NewPhotoDto[] = photos.map((p) => ({
       id: p.id,
-      folderName: p.folder_name,
+      folderName: p.folder?.title ?? "기타",
       photoUrl: p.photo_url,
       title: p.title,
       content: p.content,
