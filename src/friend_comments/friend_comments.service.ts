@@ -104,24 +104,25 @@ export class FriendCommentsService {
   // 삭제
   async delete(authorId: number, hostId: number) {
     const comment = await this.friendCommentsRepository.findOne({
-      where: {
-        author: { id: authorId },
-        host: { id: hostId },
-      },
+      where: { host: { id: hostId }, author: { id: authorId } },
+      relations: ["author", "host"],
     });
 
     if (!comment) {
-      throw new NotFoundException("삭제할 일촌평이 존재하지 않습니다.");
-    }
+      const hostComment = await this.friendCommentsRepository.findOne({
+        where: { host: { id: hostId } },
+        relations: ["author", "host"],
+      });
 
-    if (comment.author.id !== authorId) {
-      throw new ForbiddenException(
-        "본인이 작성한 일촌평만 삭제할 수 있습니다."
-      );
+      if (!hostComment || hostComment.host.id !== authorId) {
+        throw new NotFoundException("삭제할 일촌평이 존재하지 않습니다.");
+      }
+
+      await this.friendCommentsRepository.remove(hostComment);
+      return { message: "일촌평이 삭제되었습니다." };
     }
 
     await this.friendCommentsRepository.remove(comment);
-
     return { message: "일촌평이 삭제되었습니다." };
   }
 }

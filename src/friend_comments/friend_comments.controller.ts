@@ -52,7 +52,6 @@ export class FriendCommentsController {
   @UseGuards(AuthGuard("jwt"))
   async deleteComment(@Param("hostId") hostId: number, @Req() req: any) {
     const authorId = req.user.id;
-
     return this.friendCommentsService.delete(authorId, hostId);
   }
 }
