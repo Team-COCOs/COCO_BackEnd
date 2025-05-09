@@ -10,7 +10,6 @@ import { DiaryCommentsModule } from "./diary_comments/diary_comments.module";
 import { GuestbooksModule } from "./guestbooks/guestbooks.module";
 import { StoreitemsModule } from "./storeitems/storeitems.module";
 import { PurchasesModule } from "./purchases/purchases.module";
-import { GiftsModule } from "./gifts/gifts.module";
 import { ChatbotmessagesModule } from "./chatbotmessages/chatbotmessages.module";
 import { BgmModule } from "./bgm/bgm.module";
 import { MinimiitemsModule } from "./minimiitems/minimiitems.module";
@@ -79,7 +78,6 @@ import { PhotoComment } from "./photos_comments/photos_comments.entity";
     GuestbooksModule,
     StoreitemsModule,
     PurchasesModule,
-    GiftsModule,
     ChatbotmessagesModule,
     BgmModule,
     MinimiitemsModule,
