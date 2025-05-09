@@ -80,6 +80,9 @@ export class FriendCommentsService {
 
       const isRequester = friendship.requester.id === comment.author.id;
 
+      const createdAt = new Date(comment.created_at);
+      createdAt.setHours(createdAt.getHours() + 9);
+
       results.push({
         id: comment.id,
         authorId: comment.author.id,
