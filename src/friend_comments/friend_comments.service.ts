@@ -9,7 +9,6 @@ import { FriendComment } from "./friend_comments.entity";
 import { Repository } from "typeorm";
 import { FriendsService } from "../friends/friends.service";
 import { UsersService } from "../users/users.service";
-import { AuthGuard } from "@nestjs/passport";
 
 @Injectable()
 export class FriendCommentsService {
