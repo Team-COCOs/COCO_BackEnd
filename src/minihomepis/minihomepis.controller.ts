@@ -27,10 +27,13 @@ export class MinihomepisController {
     @Param("hostId") hostId: number
   ): Promise<OtherProfileDto> {
     const user = await this.usersService.findUserById(hostId);
+
     if (!user) throw new NotFoundException("유저 없음");
 
     // 일촌 목록 확인
-    const friends = await this.friendsService.getMyFriends(hostId);
+    const friends = await this.friendsService.getFriends(user.id);
+
+    console.log(friends);
 
     return {
       name: user.name,

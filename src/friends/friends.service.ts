@@ -9,7 +9,11 @@ import { Repository } from "typeorm";
 import { Friend, FriendStatus } from "./friends.entity";
 import { User } from "../users/users.entity";
 import { UsersService } from "../users/users.service";
-import { FriendListDto, NewFriendDto } from "./dto/friends.dto";
+import {
+  FriendListDto,
+  NewFriendDto,
+  TheirFriendListDto,
+} from "./dto/friends.dto";
 
 @Injectable()
 export class FriendsService {
@@ -187,7 +191,7 @@ export class FriendsService {
   }
 
   // 친구 목록
-  async getMyFriends(userId: number): Promise<FriendListDto[]> {
+  async getFriends(userId: number): Promise<FriendListDto[]> {
     const relations = ["requester", "receiver"];
     const friends = await this.friendsRepository.find({
       where: [

@@ -66,3 +66,35 @@ export class FriendListDto {
   })
   since: string;
 }
+
+export class TheirFriendListDto {
+  @ApiProperty({ example: 3, description: "친구 유저 ID" })
+  userId: number;
+
+  @ApiProperty({ example: "홍길동", description: "친구 이름" })
+  friend: string;
+
+  @ApiProperty({
+    example: "https://…/avatar.png",
+    description: "친구 프로필 이미지 URL",
+  })
+  profile_image: string;
+
+  @ApiProperty({
+    example: "나의 일촌명",
+    description: "내가 친구를 부르는 이름",
+  })
+  myNaming: string;
+
+  @ApiProperty({
+    example: "친구가 나를 부르는 이름",
+    description: "친구가 나를 부르는 이름",
+  })
+  theirNaming: string;
+
+  @ApiProperty({
+    example: "2025-05-01 14:22",
+    description: "친구가 된 날짜 (yyyy-MM-dd HH:mm)",
+  })
+  since: string;
+}

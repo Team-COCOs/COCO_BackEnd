@@ -88,7 +88,7 @@ export class UsersController {
       await this.friendsService.getNewFriendRequests(userId);
 
     // 일촌 목록 확인
-    const friends = await this.friendsService.getMyFriends(userId);
+    const friends = await this.friendsService.getFriends(userId);
 
     return {
       name: user.name,
