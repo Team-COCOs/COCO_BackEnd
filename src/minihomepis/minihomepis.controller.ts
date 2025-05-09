@@ -3,6 +3,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Query,
 } from "@nestjs/common";
 import { FriendsService } from "src/friends/friends.service";
@@ -39,5 +40,12 @@ export class MinihomepisController {
     };
   }
 
-  //
+  // 방문자 수 조회
+  @Get("count/:hostId")
+  async getTotalVisits(@Param("hostId", ParseIntPipe) hostId: number) {
+    const total = await this.visitService.countTotalVisits(hostId);
+    const today = await this.visitService.countTodayVisits(hostId);
+
+    return { hostId, total, today };
+  }
 }
