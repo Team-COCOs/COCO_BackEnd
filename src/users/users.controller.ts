@@ -20,6 +20,7 @@ import { VisitService } from "../visit/visit.service";
 import { UserProfileDto } from "./dto/userProfile.dto";
 import { UserIdNameDto } from "./dto/userIdName.dto";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
+import { OtherProfileDto } from "./dto/otherUsers.dto";
 
 @Controller("users")
 export class UsersController {
@@ -51,6 +52,25 @@ export class UsersController {
       role: user.role,
       dotoris: user.dotoris,
       birthday: user.birthday,
+    };
+  }
+
+  @Get("hostProfile")
+  @UseGuards(AuthGuard("jwt"))
+  async getOtherProfile(@Req() req: Request): Promise<OtherProfileDto> {
+    const hostId = req.user["id"];
+
+    const user = await this.usersService.findUserById(hostId);
+    if (!user) throw new NotFoundException("유저 없음");
+
+    // 일촌 목록 확인
+    const friends = await this.friendsService.getMyFriends(hostId);
+
+    return {
+      name: user.name,
+      email: user.email,
+      gender: user.gender,
+      friends,
     };
   }
 
