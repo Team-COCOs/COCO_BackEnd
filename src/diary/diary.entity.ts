@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { User } from "../users/users.entity";
 import { DiaryComment } from "../diary_comments/diary_comments.entity";
+import { DiaryFolder } from "./diaryFolder.entity";
 
 @Entity("diary")
 export class Diary {
@@ -19,6 +20,13 @@ export class Diary {
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @ManyToOne(() => DiaryFolder, (folder) => folder.diarys, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  @JoinColumn({ name: "folder_id" })
+  folder: DiaryFolder;
 
   @Column({ type: "varchar", length: 100 })
   title: string;

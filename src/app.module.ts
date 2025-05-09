@@ -36,6 +36,7 @@ import { Purchase } from "./purchases/purchases.entity";
 import { FriendComment } from "./friend_comments/friend_comments.entity";
 import { PhotoComment } from "./photos_comments/photos_comments.entity";
 import { PhotoFolder } from "./photos/photoFolder.entity";
+import { DiaryFolder } from "./diary/diaryFolder.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -66,6 +67,7 @@ import { PhotoFolder } from "./photos/photoFolder.entity";
           Purchase,
           FriendComment,
           PhotoComment,
+          DiaryFolder,
         ],
         synchronize: true,
       }),
