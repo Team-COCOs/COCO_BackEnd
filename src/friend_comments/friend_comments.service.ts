@@ -81,15 +81,16 @@ export class FriendCommentsService {
       : friendship.requester_name;
 
     return {
+      id: comment.id,
+      authorRealName: comment.author.name,
+      hostRealName: comment.host.name,
+      authorName,
+      hostName,
       content: comment.content,
       createdAt: comment.created_at
         .toISOString()
         .replace("T", " ")
         .substring(0, 16),
-      authorName,
-      hostName,
-      authorRealName: comment.author.name,
-      hostRealName: comment.host.name,
     };
   }
 
