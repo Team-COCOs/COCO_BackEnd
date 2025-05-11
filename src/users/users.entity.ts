@@ -1,9 +1,11 @@
+import { MiniRoom } from "../minirooms/minirooms.entity";
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from "typeorm";
 
 export enum Gender {
@@ -50,6 +52,9 @@ export class User {
 
   @Column({ nullable: true })
   birthday: string;
+
+  @OneToOne(() => MiniRoom, (miniroom) => miniroom.user, { cascade: true })
+  miniroom: MiniRoom;
 
   @CreateDateColumn()
   created_at: Date;

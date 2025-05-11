@@ -33,7 +33,4 @@ export class SpeechBubble {
   })
   @JoinColumn({ name: "miniroom_id" })
   miniroom: MiniRoom;
-
-  @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
-  storeItem: StoreItems;
 }
