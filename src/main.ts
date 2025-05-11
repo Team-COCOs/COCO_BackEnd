@@ -13,10 +13,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: [
-      "http://localhost:3000",
-      "https://tunnel.botpress.cloud/9ff7cc14-b8ca-419b-a08a-bea289e8a7be",
-    ],
+    origin: ["http://localhost:3000"],
     credentials: true,
   });
 
