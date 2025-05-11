@@ -6,15 +6,16 @@ import { PurchasesService } from "src/purchases/purchases.service";
 
 @Injectable()
 export class UseritemsService {
-  @InjectRepository(UserItem)
-  private readonly userItemRepository: Repository<UserItem>;
-  private readonly purchasesService: PurchasesService;
-
+  constructor(
+    @InjectRepository(UserItem)
+    private readonly userItemRepository: Repository<UserItem>,
+    private readonly purchasesService: PurchasesService
+  ) {}
   // 미니미 저장
-  async setMinimi(userId: number, storeItemId: number): Promise<number> {
+  async setMinimi(userId: number, purchaseId: number): Promise<number> {
     const purchase = await this.purchasesService.getPurchasesItems(
       userId,
-      storeItemId
+      purchaseId
     );
 
     if (!purchase) {
@@ -23,6 +24,7 @@ export class UseritemsService {
 
     const userItem = new UserItem();
     userItem.user = purchase.user;
+
     userItem.minimiItem = purchase.storeItems;
 
     const savedUserItem = await this.userItemRepository.save(userItem);
@@ -31,16 +33,16 @@ export class UseritemsService {
   }
 
   // 미니미 조회
-  async getMinimi(userId: number, minimiId: number): Promise<UserItem> {
-    const minimi = await this.userItemRepository.findOne({
-      where: { user: { id: userId }, minimiItem: { id: minimiId } },
-      relations: ["minimiItem"],
-    });
+  // async getMinimi(userId: number, minimiId: number): Promise<UserItem> {
+  //   const minimi = await this.userItemRepository.findOne({
+  //     where: { user: { id: userId }, minimiItem: { id: minimiId } },
+  //     relations: ["minimiItem"],
+  //   });
 
-    if (!minimi) {
-      throw new Error("선택한 미니미 아이템을 저장한 내역이 없습니다.");
-    }
+  //   if (!minimi) {
+  //     throw new Error("선택한 미니미 아이템을 저장한 내역이 없습니다.");
+  //   }
 
-    return minimi;
-  }
+  //   return minimi;
+  // }
 }

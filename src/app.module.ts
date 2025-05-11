@@ -37,6 +37,9 @@ import { FriendComment } from "./friend_comments/friend_comments.entity";
 import { PhotoComment } from "./photos_comments/photos_comments.entity";
 import { PhotoFolder } from "./photos/photoFolder.entity";
 import { DiaryFolder } from "./diary/diaryFolder.entity";
+import { MiniroomsModule } from "./minirooms/minirooms.module";
+import { MiniRoom } from "./minirooms/minirooms.entity";
+import { SpeechBubble } from "./minirooms/speechBubble.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -68,6 +71,8 @@ import { DiaryFolder } from "./diary/diaryFolder.entity";
           FriendComment,
           PhotoComment,
           DiaryFolder,
+          MiniRoom,
+          SpeechBubble,
         ],
         synchronize: true,
       }),
@@ -90,6 +95,7 @@ import { DiaryFolder } from "./diary/diaryFolder.entity";
     VisitModule,
     FriendCommentsModule,
     MinihomepisModule,
+    MiniroomsModule,
   ],
 })
 export class AppModule {}

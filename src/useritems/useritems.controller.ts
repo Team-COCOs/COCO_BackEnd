@@ -22,13 +22,10 @@ export class UseritemsController {
   @Patch("set-minimi")
   @ApiOperation({ summary: "미니미 아이템 저장" })
   @ApiResponse({ status: 200, description: "미니미 아이템이 저장되었습니다." })
-  async setMinimi(@Body() body: { storeItemId: string }, @Req() req: Request) {
-    const { storeItemId } = body;
-    const storeItemIdAsNumber = Number(storeItemId);
+  async setMinimi(@Body() body: { purchaseId: number }, @Req() req: Request) {
+    const { purchaseId } = body;
     const userId = (req.user as any).id;
-
-    console.log(userId, storeItemIdAsNumber, "sfasdfasdfasd");
-    return await this.useritemsService.setMinimi(userId, storeItemIdAsNumber);
+    return await this.useritemsService.setMinimi(userId, purchaseId);
   }
 }
 

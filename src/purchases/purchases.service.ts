@@ -51,11 +51,9 @@ export class PurchasesService {
   }
 
   // 아이템 찾기
-  async getPurchasesItems(userId: number, storeItemId: number) {
-    console.log("user:", userId, "storeItemId:", storeItemId);
-
+  async getPurchasesItems(userId: number, purchaseId: number) {
     const purchase = await this.purchaseRepository.findOne({
-      where: { user: { id: userId }, storeItems: { id: storeItemId } },
+      where: { user: { id: userId }, id: purchaseId },
       relations: ["storeItems"],
     });
 
