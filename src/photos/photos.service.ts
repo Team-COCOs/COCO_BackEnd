@@ -15,6 +15,7 @@ export class PhotosService {
     private readonly photoFolderRepository: Repository<PhotoFolder>
   ) {}
 
+  // 오늘 새로 올린 사진
   async getNewPhotos(userId: number): Promise<NewPhotoDto[]> {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);

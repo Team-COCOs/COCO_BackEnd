@@ -10,18 +10,18 @@ export class NewPhotoDto {
   @ApiProperty({ example: "https://…/photo.jpg", description: "사진 URL" })
   photoUrl: string;
 
-  @ApiProperty({ example: "제주도 바다", description: "제목" })
+  @ApiProperty({ example: "제주도 바다", description: "사진 제목" })
   title: string;
 
   @ApiProperty({
     example: "맑은 날의 제주 바다 사진입니다.",
-    description: "본문",
+    description: "사진 본문 내용",
   })
   content: string;
 
   @ApiProperty({
     example: "2025-05-07 15:20",
-    description: "작성 일시 (yyyy-MM-dd HH:mm)",
+    description: "작성 일시 (yyyy-MM-dd HH:mm 형식)",
   })
   createdAt: string;
 

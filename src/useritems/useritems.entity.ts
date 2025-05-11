@@ -4,6 +4,7 @@ import {
   OneToOne,
   JoinColumn,
   Column,
+  ManyToOne,
 } from "typeorm";
 import { User } from "../users/users.entity";
 import { Purchase } from "../purchases/purchases.entity";
@@ -15,6 +16,10 @@ export class UserItem {
   @OneToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @ManyToOne(() => Purchase, { nullable: true, onDelete: "SET NULL" })
+  @JoinColumn({ name: "purchase_id" })
+  purchase: Purchase;
 
   @Column({ nullable: true })
   skin_item_id: number;
