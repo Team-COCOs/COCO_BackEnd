@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
+  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -14,11 +16,11 @@ import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { DiaryFolder } from "./diaryFolder.entity";
 
 @Controller("diary")
-@UseGuards(AuthGuard("jwt"))
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   @Post("/saveTree")
+  @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SaveDiaryFolderDto[],
     @Req() req
@@ -40,9 +42,9 @@ export class DiaryController {
     description: "사용자의 폴더 트리가 조회되었습니다.",
     type: [DiaryFolder],
   })
-  async getFolderTree(@Req() req): Promise<DiaryFolder[]> {
-    const userId = req.user.id;
-
+  async getFolderTree(
+    @Query("userId", ParseIntPipe) userId: number
+  ): Promise<DiaryFolder[]> {
     return await this.diaryService.getFolder(userId);
   }
 }
