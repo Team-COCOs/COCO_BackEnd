@@ -23,7 +23,7 @@ export class NewPhotoDto {
     example: "2025-05-07 15:20",
     description: "작성 일시 (yyyy-MM-dd HH:mm 형식)",
   })
-  createdAt: string;
+  created_at: string;
 
   @ApiProperty({ example: "photo", description: "항목 타입 (항상 'photo')" })
   type: "photo";

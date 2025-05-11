@@ -80,8 +80,8 @@ export class FriendCommentsService {
 
       const isRequester = friendship.requester.id === comment.author.id;
 
-      const createdAt = new Date(comment.created_at);
-      createdAt.setHours(createdAt.getHours() + 9);
+      const created_at = new Date(comment.created_at);
+      created_at.setHours(created_at.getHours() + 9);
 
       results.push({
         id: comment.id,
@@ -96,7 +96,7 @@ export class FriendCommentsService {
           ? friendship.receiver_name
           : friendship.requester_name,
         content: comment.content,
-        createdAt: comment.created_at
+        created_at: comment.created_at
           .toISOString()
           .replace("T", " ")
           .substring(0, 16),

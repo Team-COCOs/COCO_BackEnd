@@ -14,7 +14,7 @@ export class NewDiaryDto {
     example: "2025-05-07 10:30",
     description: "작성 일시 (yyyy-MM-dd HH:mm)",
   })
-  createdAt: string;
+  created_at: string;
 
   @ApiProperty({ example: "diary", description: "항목 타입 (항상 'diary')" })
   type: "diary";

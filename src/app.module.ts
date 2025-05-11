@@ -40,6 +40,7 @@ import { DiaryFolder } from "./diary/diaryFolder.entity";
 import { MiniroomsModule } from "./minirooms/minirooms.module";
 import { MiniRoom } from "./minirooms/minirooms.entity";
 import { SpeechBubble } from "./minirooms/speechBubble.entity";
+import { Minimi } from "./minirooms/minimi.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -73,6 +74,7 @@ import { SpeechBubble } from "./minirooms/speechBubble.entity";
           DiaryFolder,
           MiniRoom,
           SpeechBubble,
+          Minimi,
         ],
         synchronize: true,
       }),
@@ -94,7 +96,6 @@ import { SpeechBubble } from "./minirooms/speechBubble.entity";
     PhotosCommentsModule,
     VisitModule,
     FriendCommentsModule,
-    MinihomepisModule,
     MiniroomsModule,
   ],
 })

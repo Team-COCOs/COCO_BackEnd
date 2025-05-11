@@ -12,5 +12,6 @@ import { PhotosModule } from "../photos/photos.module";
   ],
   providers: [PhotosCommentsService],
   controllers: [PhotosCommentsController],
+  exports: [PhotosCommentsService],
 })
 export class PhotosCommentsModule {}

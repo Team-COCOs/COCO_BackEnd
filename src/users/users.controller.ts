@@ -21,7 +21,6 @@ import { VisitService } from "../visit/visit.service";
 import { UserProfileDto } from "./dto/userProfile.dto";
 import { UserIdNameDto } from "./dto/userIdName.dto";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
-import { OtherProfileDto } from "./dto/otherUsers.dto";
 
 @Controller("users")
 export class UsersController {
@@ -80,7 +79,7 @@ export class UsersController {
       ...newPhoto,
     ].sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
     // 일촌 요청 확인

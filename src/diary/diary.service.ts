@@ -28,7 +28,7 @@ export class DiaryService {
       id: d.id,
       title: d.title,
       content: d.content,
-      createdAt: d.created_at.toISOString().slice(0, 16).replace("T", " "),
+      created_at: d.created_at.toISOString().slice(0, 16).replace("T", " "),
       type: "diary" as const,
     }));
 
