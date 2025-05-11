@@ -50,6 +50,18 @@ export class PurchasesService {
     return this.purchaseRepository.save(purchase);
   }
 
+  // 아이템 찾기
+  async getPurchasesItems(userId: number, storeItemId: number) {
+    console.log("user:", userId, "storeItemId:", storeItemId);
+
+    const purchase = await this.purchaseRepository.findOne({
+      where: { user: { id: userId }, storeItems: { id: storeItemId } },
+      relations: ["storeItems"],
+    });
+
+    return purchase;
+  }
+
   // 구매한 유저 확인
   async getUserPurchases(userId: number) {
     return this.purchaseRepository.find({
