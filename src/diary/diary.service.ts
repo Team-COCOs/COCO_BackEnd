@@ -3,14 +3,23 @@ import { Diary } from "./diary.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { NewDiaryDto } from "./dto/diary.dto";
+import { DiaryFolder } from "./diaryFolder.entity";
+import { UsersService } from "src/users/users.service";
+import { SaveDiaryFolderDto } from "./dto/diaryFolder.dto";
 
 @Injectable()
 export class DiaryService {
   constructor(
     @InjectRepository(Diary)
-    private readonly diaryRepository: Repository<Diary>
+    private readonly diaryRepository: Repository<Diary>,
+
+    @InjectRepository(DiaryFolder)
+    private readonly diaryFolderRepository: Repository<DiaryFolder>,
+
+    private readonly usersService: UsersService
   ) {}
 
+  // 오늘 새 게시물
   async getNewDiarys(userId: number): Promise<NewDiaryDto[]> {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
@@ -33,5 +42,38 @@ export class DiaryService {
     }));
 
     return mappedDiaries;
+  }
+
+  // 다이어리 폴더 저장 및 조회
+  async saveFolderTree(folders: SaveDiaryFolderDto[], userId: number) {
+    const user = await this.usersService.findUserById(userId);
+
+    if (!user) throw new Error("User not found");
+
+    await this.diaryFolderRepository.delete({ user });
+
+    const keyToEntityMap = new Map<string, DiaryFolder>();
+
+    for (const dto of folders) {
+      const folder = new DiaryFolder();
+      folder.title = dto.title;
+      folder.user = user;
+
+      if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
+        folder.parent = keyToEntityMap.get(dto.parent_id)!;
+      }
+
+      const saved = await this.diaryFolderRepository.save(folder);
+      keyToEntityMap.set(dto.key, saved);
+    }
+
+    return {
+      message: "폴더 트리 저장 완료",
+      folders: Array.from(keyToEntityMap.values()).map((f) => ({
+        id: f.id,
+        title: f.title,
+        parent_id: f.parent?.id ?? null,
+      })),
+    };
   }
 }

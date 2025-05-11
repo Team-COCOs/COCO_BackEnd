@@ -5,11 +5,13 @@ import { Diary } from "./diary.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { DiaryCommentsModule } from "src/diary_comments/diary_comments.module";
 import { DiaryFolder } from "./diaryFolder.entity";
+import { UsersModule } from "../users/users.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Diary, DiaryFolder]),
     forwardRef(() => DiaryCommentsModule),
+    forwardRef(() => UsersModule),
   ],
   providers: [DiaryService],
   controllers: [DiaryController],
