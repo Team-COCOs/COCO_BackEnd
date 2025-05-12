@@ -12,7 +12,7 @@ export class UseritemsService {
     private readonly purchasesService: PurchasesService
   ) {}
 
-  // 미니미 저장
+  // 대표 미니미 저장
   async setMinimi(userId: number, purchaseId: number): Promise<number> {
     const purchase = await this.purchasesService.getPurchasesItems(
       userId,
@@ -33,6 +33,7 @@ export class UseritemsService {
     return savedUserItem.minimiItem.id;
   }
 
+  // 대표 미니미 조회
   async getUserMinimi(userId: number): Promise<string | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
