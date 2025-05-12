@@ -43,13 +43,21 @@ export class UseritemsService {
   }
 
   // 대표 미니미 조회
-  async getUserMinimi(userId: number): Promise<string | null> {
+  async getUserMinimi(
+    userId: number
+  ): Promise<{ id: number; file: string } | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
       relations: ["minimiItem"],
     });
 
-    if (!userItem?.minimiItem) return null;
-    return userItem.minimiItem.file;
+    const minimiItem = userItem?.minimiItem;
+    if (!minimiItem) return null;
+
+    return {
+      id: minimiItem.id,
+      // store_items 테이블의 id
+      file: minimiItem.file,
+    };
   }
 }

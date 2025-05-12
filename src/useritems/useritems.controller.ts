@@ -34,9 +34,12 @@ export class UseritemsController {
   @ApiResponse({ status: 200, description: "대표 미니미 이미지 경로 반환" })
   async getMinimiProfileImage(
     @Req() req: Request
-  ): Promise<{ minimi: string | null }> {
+  ): Promise<{ id: number; file: string }> {
     const userId = (req.user as any).id;
     const minimi = await this.useritemsService.getUserMinimi(userId);
-    return { minimi };
+    return {
+      id: minimi.id,
+      file: minimi.file,
+    };
   }
 }
