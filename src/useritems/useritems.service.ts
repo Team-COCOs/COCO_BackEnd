@@ -32,10 +32,15 @@ export class UseritemsService {
       userId,
       purchaseId
     );
-    if (!purchase)
-      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
-
     const userItem = await this.getOrCreateUserItem(userId);
+
+    if (!purchaseId || purchaseId === 0) {
+      userItem.minimiItem = null;
+      await this.usersService.updateMinimiImage(userId, null);
+      await this.userItemRepository.save(userItem);
+      return null;
+    }
+
     userItem.minimiItem = purchase.storeItems;
 
     if (userItem.minimiItem.file) {
@@ -57,7 +62,9 @@ export class UseritemsService {
       where: { user: { id: userId } },
       relations: ["minimiItem"],
     });
+
     if (!userItem?.minimiItem) return null;
+
     return {
       id: userItem.minimiItem.id,
       file: userItem.minimiItem.file,
