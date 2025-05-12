@@ -14,12 +14,12 @@ import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 @Controller("useritems")
-@UseGuards(AuthGuard("jwt"))
 export class UseritemsController {
   constructor(private readonly useritemsService: UseritemsService) {}
 
   // 대표 미니미 저장
   @Patch("set-minimi")
+  @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "미니미 아이템 저장" })
   @ApiResponse({ status: 200, description: "미니미 아이템이 저장되었습니다." })
   async setMinimi(@Body() body: { purchaseId: number }, @Req() req: Request) {
@@ -29,13 +29,12 @@ export class UseritemsController {
   }
 
   // 대표 미니미 조회
-  @Get("minimi/profile-image")
+  @Get("minimi/profile-image/:userId")
   @ApiOperation({ summary: "대표 미니미 이미지 조회" })
   @ApiResponse({ status: 200, description: "대표 미니미 이미지 경로 반환" })
   async getMinimiProfileImage(
-    @Req() req: Request
+    @Param("userId") userId: number
   ): Promise<{ id: number; file: string }> {
-    const userId = (req.user as any).id;
     const minimi = await this.useritemsService.getUserMinimi(userId);
     return {
       id: minimi.id,
