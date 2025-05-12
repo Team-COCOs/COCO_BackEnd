@@ -46,6 +46,14 @@ export class MinihomepisService {
 
     if (!user) throw new Error("유저가 존재하지 않습니다.");
 
+    const existingMini = await this.miniRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (existingMini) {
+      await this.miniRepository.delete({ id: existingMini.id });
+    }
+
     const mini = this.miniRepository.create({
       user,
       title,
