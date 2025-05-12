@@ -38,7 +38,10 @@ export class UseritemsController {
     const minimi = await this.useritemsService.getUserMinimi(userId);
 
     if (!minimi) {
-      throw new NotFoundException("대표 미니미가 설정되지 않았습니다.");
+      return {
+        id: null,
+        file: null,
+      };
     }
 
     return {
