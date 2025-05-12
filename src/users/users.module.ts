@@ -9,10 +9,12 @@ import { DiaryModule } from "src/diary/diary.module";
 import { FriendsModule } from "src/friends/friends.module";
 import { VisitModule } from "src/visit/visit.module";
 import { MinihomepisModule } from "src/minihomepis/minihomepis.module";
+import { UseritemsModule } from "src/useritems/useritems.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+    forwardRef(() => UseritemsModule),
     forwardRef(() => AuthModule),
     forwardRef(() => PhotosModule),
     forwardRef(() => DiaryModule),

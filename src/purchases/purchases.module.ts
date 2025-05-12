@@ -11,8 +11,8 @@ import { StoreitemsModule } from "src/storeitems/storeitems.module";
   imports: [
     TypeOrmModule.forFeature([Purchase]),
     forwardRef(() => UseritemsModule),
-    StoreitemsModule,
-    UsersModule,
+    forwardRef(() => StoreitemsModule),
+    forwardRef(() => UsersModule),
   ],
   providers: [PurchasesService],
   controllers: [PurchasesController],

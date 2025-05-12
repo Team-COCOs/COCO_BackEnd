@@ -11,6 +11,7 @@ export class UseritemsService {
     private readonly userItemRepository: Repository<UserItem>,
     private readonly purchasesService: PurchasesService
   ) {}
+
   // 미니미 저장
   async setMinimi(userId: number, purchaseId: number): Promise<number> {
     const purchase = await this.purchasesService.getPurchasesItems(
@@ -32,17 +33,13 @@ export class UseritemsService {
     return savedUserItem.minimiItem.id;
   }
 
-  // 미니미 조회
-  // async getMinimi(userId: number, minimiId: number): Promise<UserItem> {
-  //   const minimi = await this.userItemRepository.findOne({
-  //     where: { user: { id: userId }, minimiItem: { id: minimiId } },
-  //     relations: ["minimiItem"],
-  //   });
+  async getUserMinimi(userId: number): Promise<string | null> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["minimiItem"],
+    });
 
-  //   if (!minimi) {
-  //     throw new Error("선택한 미니미 아이템을 저장한 내역이 없습니다.");
-  //   }
-
-  //   return minimi;
-  // }
+    if (!userItem?.minimiItem) return null;
+    return userItem.minimiItem.file;
+  }
 }

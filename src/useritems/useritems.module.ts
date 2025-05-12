@@ -4,11 +4,13 @@ import { UseritemsController } from "./useritems.controller";
 import { UserItem } from "./useritems.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { PurchasesModule } from "src/purchases/purchases.module";
+import { UsersModule } from "src/users/users.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserItem]),
     forwardRef(() => PurchasesModule),
+    forwardRef(() => UsersModule),
   ],
   providers: [UseritemsService],
   controllers: [UseritemsController],

@@ -21,6 +21,7 @@ import { VisitService } from "../visit/visit.service";
 import { UserProfileDto } from "./dto/userProfile.dto";
 import { UserIdNameDto } from "./dto/userIdName.dto";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
+import { UseritemsService } from "src/useritems/useritems.service";
 
 @Controller("users")
 export class UsersController {
@@ -30,7 +31,8 @@ export class UsersController {
     private readonly photosService: PhotosService,
     private readonly friendsService: FriendsService,
     private readonly visitService: VisitService,
-    private readonly minihomepisService: MinihomepisService
+    private readonly minihomepisService: MinihomepisService,
+    private readonly useritemsService: UseritemsService
   ) {}
 
   // 유저 프로필
@@ -42,13 +44,16 @@ export class UsersController {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
 
+    const minimiProfileImage =
+      await this.useritemsService.getUserMinimi(userId);
+
     return {
       id: user.id,
       email: user.email,
       name: user.name,
       phone: user.phone,
       gender: user.gender,
-      profile_image: user.profile_image ?? "/avatarImg/default.png",
+      profile_image: minimiProfileImage ?? null,
       role: user.role,
       dotoris: user.dotoris,
       birthday: user.birthday,
@@ -63,6 +68,9 @@ export class UsersController {
 
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
+
+    const minimiProfileImage =
+      await this.useritemsService.getUserMinimi(userId);
 
     // 오늘 방문자 수
     const todayVisit = await this.visitService.countTodayVisits(userId);
@@ -98,7 +106,7 @@ export class UsersController {
       newPostCount: newPost.length,
       friendRequest,
       friendRequestCount: friendRequest.length,
-      profile_image: user.profile_image ?? "/avatarImg/default.png",
+      profile_image: minimiProfileImage ?? null,
       dotoris: user.dotoris,
       friends,
     };

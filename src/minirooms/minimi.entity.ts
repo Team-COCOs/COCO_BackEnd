@@ -8,11 +8,16 @@ import {
 } from "typeorm";
 import { StoreItems } from "../storeitems/storeitems.entity";
 import { MiniRoom } from "./minirooms.entity";
+import { User } from "src/users/users.entity";
 
 @Entity("minimis")
 export class Minimi {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "user_id" })
+  user: User;
 
   @ManyToOne(() => StoreItems, { onDelete: "SET NULL", nullable: true })
   @JoinColumn({ name: "store_item_id" })
