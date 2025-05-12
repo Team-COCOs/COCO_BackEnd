@@ -29,6 +29,7 @@ export class UsersService {
       name,
       phone,
       gender,
+      dotoris: 50,
       birthday,
     });
     return await this.userRepository.save(user);
