@@ -1,4 +1,4 @@
-export class UpdateMinihomepiDto {
+export class MinihomepiInfoDto {
   minihompi_image?: string;
   mood?: string;
   introduction?: string;

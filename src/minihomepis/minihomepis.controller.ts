@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Patch,
+  Post,
   Query,
   Req,
   UseGuards,
@@ -20,7 +21,10 @@ import { MinihomepisService } from "./minihomepis.service";
 import { OtherProfileDto } from "src/users/dto/otherUsers.dto";
 import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
-import { MinihomepiStatusDto, UpdateMinihomepiDto } from "./dto/updateInfo.dto";
+import {
+  MinihomepiInfoDto,
+  MinihomepiStatusDto,
+} from "./dto/minihomepiInfo.dto";
 
 @Controller("minihomepis")
 export class MinihomepisController {
@@ -61,12 +65,12 @@ export class MinihomepisController {
   }
 
   // 미니홈피 정보 저장
-  @Patch("info")
+  @Post("info")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "내 미니홈피 상태 저장 (무드/소개글/제목/이미지)" })
   async updateMyMinihomepi(
     @Req() req: Request,
-    @Body() dto: UpdateMinihomepiDto
+    @Body() dto: MinihomepiInfoDto
   ) {
     const userId = req.user["id"];
     return await this.minihomepisService.updateMinihomepiStatus(userId, dto);

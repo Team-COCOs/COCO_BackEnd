@@ -3,7 +3,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Minihomepi } from "./minihomepis.entity";
 import { UsersService } from "src/users/users.service";
-import { MinihomepiStatusDto, UpdateMinihomepiDto } from "./dto/updateInfo.dto";
+import {
+  MinihomepiStatusDto,
+  MinihomepiInfoDto,
+} from "./dto/minihomepiInfo.dto";
 
 @Injectable()
 export class MinihomepisService {
@@ -34,7 +37,7 @@ export class MinihomepisService {
   // 미니홈피 정보 저장
   async updateMinihomepiStatus(
     userId: number,
-    dto: UpdateMinihomepiDto
+    dto: MinihomepiInfoDto
   ): Promise<void> {
     const { mood, title, introduction, minihompi_image } = dto;
 
