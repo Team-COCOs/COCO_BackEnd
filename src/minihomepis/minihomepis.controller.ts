@@ -9,7 +9,9 @@ import {
   Post,
   Query,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
 
 import { Request } from "express";
@@ -19,12 +21,13 @@ import { UsersService } from "src/users/users.service";
 import { VisitService } from "src/visit/visit.service";
 import { MinihomepisService } from "./minihomepis.service";
 import { OtherProfileDto } from "src/users/dto/otherUsers.dto";
-import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { ApiConsumes, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import {
   MinihomepiInfoDto,
   MinihomepiStatusDto,
 } from "./dto/minihomepiInfo.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller("minihomepis")
 export class MinihomepisController {
@@ -67,13 +70,32 @@ export class MinihomepisController {
   // 미니홈피 정보 저장
   @Post("info")
   @UseGuards(AuthGuard("jwt"))
+  @UseInterceptors(FileInterceptor("profileImage"))
+  @ApiConsumes("multipart/form-data")
   @ApiOperation({ summary: "내 미니홈피 상태 저장 (무드/소개글/제목/이미지)" })
   async updateMyMinihomepi(
-    @Req() req: Request,
-    @Body() dto: MinihomepiInfoDto
+    @UploadedFile() file: Express.Multer.File,
+    @Body()
+    body: {
+      name: string;
+      status: string;
+      introduction: string;
+    },
+    @Req() req: Request
   ) {
     const userId = req.user["id"];
-    return await this.minihomepisService.updateMinihomepiStatus(userId, dto);
+    const imageUrl = file
+      ? `http://localhost:5000/uploads/${file.filename}`
+      : undefined;
+
+    await this.minihomepisService.saveMinihomepiInfo(userId, {
+      title: body.name,
+      mood: body.status,
+      introduction: body.introduction,
+      minihompi_image: imageUrl,
+    });
+
+    return { message: "저장 완료" };
   }
 
   // 미니홈피 조회

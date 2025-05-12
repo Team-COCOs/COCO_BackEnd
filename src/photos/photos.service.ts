@@ -46,7 +46,7 @@ export class PhotosService {
     return mappedPhotos;
   }
 
-  // 사진쳡 폴더 저장 및 조회
+  // 사진쳡 폴더 저장
   async saveFolderTree(folders: SavePhotoFolderDto[], userId: number) {
     const user = await this.usersService.findUserById(userId);
 

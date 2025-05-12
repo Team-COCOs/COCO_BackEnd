@@ -12,7 +12,8 @@ import {
 export class MinihomepisService {
   constructor(
     @InjectRepository(Minihomepi)
-    private readonly miniRepository: Repository<Minihomepi>
+    private readonly miniRepository: Repository<Minihomepi>,
+    private readonly usersService: UsersService
   ) {}
 
   // 총 방문자 수 업데이트
@@ -35,23 +36,23 @@ export class MinihomepisService {
   }
 
   // 미니홈피 정보 저장
-  async updateMinihomepiStatus(
+  async saveMinihomepiInfo(
     userId: number,
     dto: MinihomepiInfoDto
   ): Promise<void> {
     const { mood, title, introduction, minihompi_image } = dto;
 
-    const mini = await this.miniRepository.findOne({
-      where: { user: { id: userId } },
-      relations: ["user"],
+    const user = await this.usersService.findUserById(userId);
+
+    if (!user) throw new Error("유저가 존재하지 않습니다.");
+
+    const mini = this.miniRepository.create({
+      user,
+      title,
+      mood,
+      introduction,
+      minihompi_image,
     });
-
-    if (!mini) throw new Error("미니홈피가 존재하지 않습니다.");
-
-    if (mood !== undefined) mini.mood = mood;
-    if (title !== undefined) mini.title = title;
-    if (introduction !== undefined) mini.introduction = introduction;
-    if (minihompi_image !== undefined) mini.minihompi_image = minihompi_image;
 
     await this.miniRepository.save(mini);
   }
