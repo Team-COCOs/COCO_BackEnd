@@ -18,10 +18,6 @@ export class UserItem {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Purchase, { nullable: true, onDelete: "SET NULL" })
-  @JoinColumn({ name: "purchase_id" })
-  purchase: Purchase;
-
   @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "skin_item_id" })
   skinItem: StoreItems;

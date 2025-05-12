@@ -14,64 +14,28 @@ export class UseritemsService {
     private readonly usersService: UsersService
   ) {}
 
-  // 미니룸 스킨 저장
-  async setMiniRoomBack(userId: number, purchaseId: number): Promise<number> {
-    const purchase = await this.purchasesService.getPurchasesItems(
-      userId,
-      purchaseId
-    );
-
-    if (!purchase) {
-      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
-    }
-
-    const userItem = new UserItem();
-    userItem.user = purchase.user;
-
-    userItem.skinItem = purchase.storeItems;
-
-    if (userItem.skinItem.file) {
-      await this.usersService.updateMinimiImage(userId, userItem.skinItem.file);
-    }
-
-    const savedUserItem = await this.userItemRepository.save(userItem);
-
-    return savedUserItem.skinItem.id;
-  }
-
-  // 미니룸 조회
-  async getUserMiniRoom(
-    userId: number
-  ): Promise<{ id: number; file: string } | null> {
-    const userItem = await this.userItemRepository.findOne({
+  // db 저장 및 수정
+  async getOrCreateUserItem(userId: number): Promise<UserItem> {
+    let userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
-      relations: ["skinItem"],
     });
-
-    const skinItem = userItem?.skinItem;
-    if (!skinItem) return null;
-
-    return {
-      id: skinItem.id,
-      // store_items 테이블의 id
-      file: skinItem.file,
-    };
+    if (!userItem) {
+      const user = await this.usersService.findUserById(userId);
+      userItem = this.userItemRepository.create({ user });
+    }
+    return userItem;
   }
 
-  // 대표 미니미 저장
+  // 대표 미니미 설정
   async setMinimi(userId: number, purchaseId: number): Promise<number> {
     const purchase = await this.purchasesService.getPurchasesItems(
       userId,
       purchaseId
     );
-
-    if (!purchase) {
+    if (!purchase)
       throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
-    }
 
-    const userItem = new UserItem();
-    userItem.user = purchase.user;
-
+    const userItem = await this.getOrCreateUserItem(userId);
     userItem.minimiItem = purchase.storeItems;
 
     if (userItem.minimiItem.file) {
@@ -81,9 +45,8 @@ export class UseritemsService {
       );
     }
 
-    const savedUserItem = await this.userItemRepository.save(userItem);
-
-    return savedUserItem.minimiItem.id;
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.minimiItem.id;
   }
 
   // 대표 미니미 조회
@@ -94,14 +57,45 @@ export class UseritemsService {
       where: { user: { id: userId } },
       relations: ["minimiItem"],
     });
-
-    const minimiItem = userItem?.minimiItem;
-    if (!minimiItem) return null;
-
+    if (!userItem?.minimiItem) return null;
     return {
-      id: minimiItem.id,
-      // store_items 테이블의 id
-      file: minimiItem.file,
+      id: userItem.minimiItem.id,
+      file: userItem.minimiItem.file,
+    };
+  }
+
+  // 미니룸 배경 설정
+  async setMiniRoomBack(userId: number, purchaseId: number): Promise<number> {
+    const purchase = await this.purchasesService.getPurchasesItems(
+      userId,
+      purchaseId
+    );
+    if (!purchase)
+      throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
+
+    const userItem = await this.getOrCreateUserItem(userId);
+    userItem.skinItem = purchase.storeItems;
+
+    if (userItem.skinItem.file) {
+      await this.usersService.updateMinimiImage(userId, userItem.skinItem.file);
+    }
+
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.skinItem.id;
+  }
+
+  // 미니룸 배경 조회
+  async getUserMiniRoom(
+    userId: number
+  ): Promise<{ id: number; file: string } | null> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["skinItem"],
+    });
+    if (!userItem?.skinItem) return null;
+    return {
+      id: userItem.skinItem.id,
+      file: userItem.skinItem.file,
     };
   }
 }
