@@ -54,6 +54,7 @@ export class StoreitemsService {
     return this.storeItemRepository.find();
   }
 
+  // 아이디로 아이템 찾기
   async findItemById(id: number) {
     const item = await this.storeItemRepository.findOne({
       where: { id },
