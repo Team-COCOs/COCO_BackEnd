@@ -78,7 +78,7 @@ export class UsersService {
     }
 
     return this.userRepository.find({
-      select: ["id", "name", "profile_image", "gender", "birthday"],
+      select: ["id", "name", "minimi_image", "gender", "birthday"],
       where: {
         name: ILike(`%${keyword}%`),
         // 대소문자 무시 LIKE

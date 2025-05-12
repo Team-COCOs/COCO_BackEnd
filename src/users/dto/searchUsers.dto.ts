@@ -11,7 +11,7 @@ export class SearchUserDto {
     example: "https://…/avatar.png",
     description: "프로필 이미지 URL",
   })
-  profile_image: string;
+  minimi_image: string;
 
   @ApiProperty({ example: "male", description: "성별" })
   gender: string;

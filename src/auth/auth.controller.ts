@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Request, Response } from "express";
+import { Request } from "express";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
 import * as jwt from "jsonwebtoken";

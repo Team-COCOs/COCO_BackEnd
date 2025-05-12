@@ -39,7 +39,7 @@ export class User {
   gender: Gender | null;
 
   @Column({ type: "varchar", nullable: true })
-  profile_image: string;
+  minimi_image: string;
 
   @Column({ type: "enum", enum: UserRole, default: UserRole.USER })
   role: UserRole;

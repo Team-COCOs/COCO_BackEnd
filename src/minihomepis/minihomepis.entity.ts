@@ -27,6 +27,12 @@ export class Minihomepi {
   @Column({ type: "int", default: 0 })
   visit_count: number;
 
+  @Column({ type: "varchar", length: 100, nullable: true })
+  introduction: string;
+
+  @Column({ type: "varchar", nullable: true })
+  minihompi_image: string;
+
   @CreateDateColumn()
   created_at: Date;
 

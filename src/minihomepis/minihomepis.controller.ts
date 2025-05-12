@@ -1,16 +1,26 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
+  Patch,
   Query,
+  Req,
+  UseGuards,
 } from "@nestjs/common";
+
+import { Request } from "express";
+
 import { FriendsService } from "src/friends/friends.service";
 import { UsersService } from "src/users/users.service";
 import { VisitService } from "src/visit/visit.service";
 import { MinihomepisService } from "./minihomepis.service";
 import { OtherProfileDto } from "src/users/dto/otherUsers.dto";
+import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { AuthGuard } from "@nestjs/passport";
+import { MinihomepiStatusDto, UpdateMinihomepiDto } from "./dto/updateInfo.dto";
 
 @Controller("minihomepis")
 export class MinihomepisController {
@@ -48,5 +58,27 @@ export class MinihomepisController {
     const today = await this.visitService.countTodayVisits(hostId);
 
     return { hostId, total, today };
+  }
+
+  // 미니홈피 정보 저장
+  @Patch("info")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "내 미니홈피 상태 저장 (무드/소개글/제목/이미지)" })
+  async updateMyMinihomepi(
+    @Req() req: Request,
+    @Body() dto: UpdateMinihomepiDto
+  ) {
+    const userId = req.user["id"];
+    return await this.minihomepisService.updateMinihomepiStatus(userId, dto);
+  }
+
+  // 미니홈피 조회
+  @Get(":userId/my-status")
+  @ApiOperation({ summary: "내 미니홈피 상태 정보 조회" })
+  @ApiOkResponse({ type: MinihomepiStatusDto })
+  async getMyMinihomepi(
+    @Param("userId") userId: number
+  ): Promise<MinihomepiStatusDto> {
+    return this.minihomepisService.getMinihomepiStatus(userId);
   }
 }

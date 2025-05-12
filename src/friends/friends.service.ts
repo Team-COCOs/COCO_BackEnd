@@ -139,7 +139,7 @@ export class FriendsService {
       requester_name: r.requester_name,
       receiver_name: r.receiver_name,
       message: r.message,
-      profileImg: r.requester.profile_image,
+      profileImg: r.requester.minimi_image,
       receivedAt: r.created_at.toISOString().substring(0, 10),
     }));
   }
@@ -210,7 +210,7 @@ export class FriendsService {
         id: f.id,
         userId: friend.id,
         friend: friend.name,
-        profile_image: friend.profile_image ?? "/avatarImg/default.png",
+        profile_image: friend.minimi_image ?? "/avatarImg/default.png",
         myNaming: isRequester ? f.requester_name : f.receiver_name,
         theirNaming: isRequester ? f.receiver_name : f.requester_name,
         since: f.created_at.toISOString().replace("T", " ").substring(0, 16),

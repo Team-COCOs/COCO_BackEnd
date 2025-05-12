@@ -84,7 +84,7 @@ export class AuthService {
       name: user.name,
       phone: user.phone,
       gender: user.gender,
-      profile_image: user.profile_image,
+      profile_image: user.minimi_image,
       role: user.role,
       dotoris: user.dotoris,
       birthday: user.birthday,

@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Minihomepi } from "./minihomepis.entity";
 import { UsersService } from "src/users/users.service";
+import { MinihomepiStatusDto, UpdateMinihomepiDto } from "./dto/updateInfo.dto";
 
 @Injectable()
 export class MinihomepisService {
@@ -28,6 +29,44 @@ export class MinihomepisService {
     if (!mini) throw new NotFoundException("미니홈피가 존재하지 않습니다.");
 
     return mini.visit_count;
+  }
+
+  // 미니홈피 정보 저장
+  async updateMinihomepiStatus(
+    userId: number,
+    dto: UpdateMinihomepiDto
+  ): Promise<void> {
+    const { mood, title, introduction, minihompi_image } = dto;
+
+    const mini = await this.miniRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["user"],
+    });
+
+    if (!mini) throw new Error("미니홈피가 존재하지 않습니다.");
+
+    if (mood !== undefined) mini.mood = mood;
+    if (title !== undefined) mini.title = title;
+    if (introduction !== undefined) mini.introduction = introduction;
+    if (minihompi_image !== undefined) mini.minihompi_image = minihompi_image;
+
+    await this.miniRepository.save(mini);
+  }
+
+  // 미니홈피 정보 조회
+  async getMinihomepiStatus(userId: number): Promise<MinihomepiStatusDto> {
+    const mini = await this.miniRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (!mini) throw new Error("미니홈피가 존재하지 않습니다.");
+
+    return {
+      title: mini.title,
+      mood: mini.mood,
+      introduction: mini.introduction,
+      minihompi_image: mini.minihompi_image,
+    };
   }
 
   // 제목 수정
