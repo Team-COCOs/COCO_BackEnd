@@ -71,6 +71,15 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
+  // 유저 프로필 수정
+  async updateMinimiImage(userId: number, imageUrl: string): Promise<void> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException("유저를 찾을 수 없습니다.");
+
+    user.minimi_image = imageUrl;
+    await this.userRepository.save(user);
+  }
+
   // 유저 검색
   async searchUsers(keyword: string): Promise<SearchUserDto[]> {
     if (!keyword.trim()) {

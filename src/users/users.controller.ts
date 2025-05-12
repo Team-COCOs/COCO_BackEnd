@@ -44,16 +44,13 @@ export class UsersController {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
 
-    const minimiProfileImage =
-      await this.useritemsService.getUserMinimi(userId);
-
     return {
       id: user.id,
       email: user.email,
       name: user.name,
       phone: user.phone,
       gender: user.gender,
-      profile_image: minimiProfileImage ?? null,
+      profile_image: user.minimi_image ?? null,
       role: user.role,
       dotoris: user.dotoris,
       birthday: user.birthday,
@@ -68,9 +65,6 @@ export class UsersController {
 
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
-
-    const minimiProfileImage =
-      await this.useritemsService.getUserMinimi(userId);
 
     // 오늘 방문자 수
     const todayVisit = await this.visitService.countTodayVisits(userId);
@@ -97,8 +91,6 @@ export class UsersController {
     // 일촌 목록 확인
     const friends = await this.friendsService.getFriends(userId);
 
-    console.log();
-
     return {
       name: user.name,
       todayVisit,
@@ -106,7 +98,7 @@ export class UsersController {
       newPostCount: newPost.length,
       friendRequest,
       friendRequestCount: friendRequest.length,
-      profile_image: minimiProfileImage ?? null,
+      profile_image: user.minimi_image ?? null,
       dotoris: user.dotoris,
       friends,
     };

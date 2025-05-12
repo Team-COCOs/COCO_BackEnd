@@ -3,13 +3,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserItem } from "./useritems.entity";
 import { PurchasesService } from "src/purchases/purchases.service";
+import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class UseritemsService {
   constructor(
     @InjectRepository(UserItem)
     private readonly userItemRepository: Repository<UserItem>,
-    private readonly purchasesService: PurchasesService
+    private readonly purchasesService: PurchasesService,
+    private readonly usersService: UsersService
   ) {}
 
   // 대표 미니미 저장
@@ -27,6 +29,13 @@ export class UseritemsService {
     userItem.user = purchase.user;
 
     userItem.minimiItem = purchase.storeItems;
+
+    if (userItem.minimiItem.file) {
+      await this.usersService.updateMinimiImage(
+        userId,
+        userItem.minimiItem.file
+      );
+    }
 
     const savedUserItem = await this.userItemRepository.save(userItem);
 
