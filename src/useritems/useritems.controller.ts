@@ -7,9 +7,9 @@ import {
   UseGuards,
   Req,
   Patch,
+  NotFoundException,
 } from "@nestjs/common";
 import { UseritemsService } from "./useritems.service";
-import { UserItem } from "./useritems.entity";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
@@ -36,6 +36,11 @@ export class UseritemsController {
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string }> {
     const minimi = await this.useritemsService.getUserMinimi(userId);
+
+    if (!minimi) {
+      throw new NotFoundException("대표 미니미가 설정되지 않았습니다.");
+    }
+
     return {
       id: minimi.id,
       file: minimi.file,

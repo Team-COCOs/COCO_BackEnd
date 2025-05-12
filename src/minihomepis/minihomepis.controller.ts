@@ -28,6 +28,8 @@ import {
   MinihomepiStatusDto,
 } from "./dto/minihomepiInfo.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { extname } from "path";
 
 @Controller("minihomepis")
 export class MinihomepisController {
@@ -67,10 +69,21 @@ export class MinihomepisController {
     return { hostId, total, today };
   }
 
-  // 미니홈피 정보 저장
   @Post("info")
   @UseGuards(AuthGuard("jwt"))
-  @UseInterceptors(FileInterceptor("profileImage"))
+  @UseInterceptors(
+    FileInterceptor("minihompi_image", {
+      storage: diskStorage({
+        destination: "./uploads",
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    })
+  )
   @ApiConsumes("multipart/form-data")
   @ApiOperation({ summary: "내 미니홈피 상태 저장 (무드/소개글/제목/이미지)" })
   async updateMyMinihomepi(
@@ -84,8 +97,9 @@ export class MinihomepisController {
     @Req() req: Request
   ) {
     const userId = req.user["id"];
+
     const imageUrl = file
-      ? `http://localhost:5000/uploads/${file.filename}`
+      ? `http://localhost:5001/uploads/${file.filename}`
       : undefined;
 
     await this.minihomepisService.saveMinihomepiInfo(userId, {
