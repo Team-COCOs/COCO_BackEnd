@@ -12,6 +12,12 @@ import { User } from "../users/users.entity";
 import { DiaryComment } from "../diary_comments/diary_comments.entity";
 import { DiaryFolder } from "./diaryFolder.entity";
 
+export enum VisibilityType {
+  PUBLIC = "public",
+  PRIVATE = "private",
+  FRIENDS_ONLY = "friends",
+}
+
 @Entity("diary")
 export class Diary {
   @PrimaryGeneratedColumn()
@@ -31,11 +37,21 @@ export class Diary {
   @Column({ type: "varchar", length: 100 })
   title: string;
 
+  @Column({ type: "varchar", length: 100 })
+  mood: string;
+
+  @Column({ type: "varchar", length: 100 })
+  weather: string;
+
   @Column({ type: "text" })
   content: string;
 
-  @Column({ type: "boolean", default: true })
-  public: boolean;
+  @Column({
+    type: "enum",
+    enum: VisibilityType,
+    default: VisibilityType.PUBLIC,
+  })
+  visibility: VisibilityType;
 
   @OneToMany(() => DiaryComment, (comment) => comment.diary)
   comments: DiaryComment[];

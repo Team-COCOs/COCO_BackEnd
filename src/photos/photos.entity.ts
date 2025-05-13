@@ -12,6 +12,12 @@ import {
 import { PhotoComment } from "../photos_comments/photos_comments.entity";
 import { PhotoFolder } from "./photoFolder.entity";
 
+export enum VisibilityType {
+  PUBLIC = "public",
+  PRIVATE = "private",
+  FRIENDS_ONLY = "friends",
+}
+
 @Entity("photos")
 export class Photo {
   @PrimaryGeneratedColumn()
@@ -46,8 +52,12 @@ export class Photo {
   @Column({ type: "int", default: 0 })
   use_count: number;
 
-  @Column({ type: "boolean", default: true })
-  public: boolean;
+  @Column({
+    type: "enum",
+    enum: VisibilityType,
+    default: VisibilityType.PUBLIC,
+  })
+  visibility: VisibilityType;
 
   @CreateDateColumn()
   created_at: Date;
