@@ -34,6 +34,13 @@ export class MiniroomsController {
     return { message: "미니룸 배경 저장 완료" };
   }
 
+  // 미니룸 배경 조회
+  @Get(":userId/background")
+  @ApiOperation({ summary: "유저 ID로 미니룸 배치 조회" })
+  async getMiniroomBackByUserId(@Param("userId") userId: number) {
+    return await this.userItemsService.getUserMiniRoom(userId);
+  }
+
   // 미니룸 이름 저장
   @Patch("title")
   @UseGuards(AuthGuard("jwt"))
