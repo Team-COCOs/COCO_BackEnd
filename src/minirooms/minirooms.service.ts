@@ -46,7 +46,7 @@ export class MiniroomsService {
 
   // 미니룸 타이틀 저장
   async saveMiniroomName(userId: number, title: string): Promise<void> {
-    const miniroom = await this.miniRoomRepository.findOne({
+    let miniroom = await this.miniRoomRepository.findOne({
       where: { user: { id: userId } },
     });
 
@@ -67,7 +67,9 @@ export class MiniroomsService {
     });
 
     if (!miniroom) {
-      throw new NotFoundException("미니룸이 존재하지 않습니다.");
+      return {
+        title: null,
+      };
     }
 
     return {
@@ -77,12 +79,14 @@ export class MiniroomsService {
 
   // 미니룸 레이아웃 저장 (미니미, 말풍선)
   async saveMiniroomLayoutByUser(userId: number, items: any[]): Promise<void> {
-    const miniroom = await this.miniRoomRepository.findOne({
+    let miniroom = await this.miniRoomRepository.findOne({
       where: { user: { id: userId } },
     });
 
     if (!miniroom) {
-      throw new NotFoundException("미니룸이 존재하지 않습니다.");
+      const user = await this.usersService.findUserById(userId);
+      miniroom = this.miniRoomRepository.create({ user });
+      miniroom = await this.miniRoomRepository.save(miniroom);
     }
 
     // 기존 데이터 삭제
@@ -142,10 +146,7 @@ export class MiniroomsService {
       relations: ["minimis", "speechBubbles"],
     });
 
-    if (!miniroom) {
-      throw new NotFoundException("미니룸이 존재하지 않습니다.");
-    }
-
+    if (!miniroom) return [];
     const minimis = miniroom.minimis.map((minimi) => ({
       id: minimi.storeItem.id,
       type: "minimi" as const,

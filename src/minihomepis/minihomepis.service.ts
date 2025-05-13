@@ -92,7 +92,14 @@ export class MinihomepisService {
       where: { user: { id: userId } },
     });
 
-    if (!mini) throw new NotFoundException("미니홈피가 존재하지 않습니다.");
+    if (!mini) {
+      return {
+        title: null,
+        mood: null,
+        introduction: null,
+        minihompi_image: null,
+      };
+    }
 
     return {
       title: mini.title,
