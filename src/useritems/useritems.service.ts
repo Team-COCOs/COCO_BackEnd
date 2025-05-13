@@ -70,7 +70,25 @@ export class UseritemsService {
   }
 
   // 미니룸 배경 설정
-  async setMiniRoomBack(userId: number, purchaseId: number): Promise<number> {
+  async setMiniRoomBack(
+    userId: number,
+    purchaseId: number | "default-miniroom"
+  ): Promise<number | null> {
+    // 기본 배경으로 되돌릴 경우
+    if (purchaseId === "default-miniroom") {
+      const userItem = await this.getOrCreateUserItem(userId);
+      userItem.miniroomItem = null;
+      await this.userItemRepository.save(userItem);
+
+      await this.miniroomService.updateMiniroomBackground(
+        userId,
+        "default-miniroom"
+      );
+
+      return null;
+    }
+
+    // 유저가 구매한 아이템인지 검증
     const purchase = await this.purchasesService.getPurchasesItems(
       userId,
       purchaseId
