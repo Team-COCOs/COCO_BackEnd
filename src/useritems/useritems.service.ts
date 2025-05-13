@@ -29,15 +29,31 @@ export class UseritemsService {
   }
 
   // 대표 미니미 설정
-  async setMinimi(userId: number, purchaseId: number): Promise<number> {
+  async setMinimi(
+    userId: number,
+    purchaseId: number | "default-minimi"
+  ): Promise<number> {
+    const userItem = await this.getOrCreateUserItem(userId);
+
+    // 기본 미니미로 설정할 경우
+    if (purchaseId === "default-minimi") {
+      userItem.minimiItem = null;
+
+      // 유저 이미지 초기화 (선택사항, 기본 이미지로 되돌리려면 여기에 처리)
+      await this.usersService.updateMinimiImage(userId, null);
+
+      await this.userItemRepository.save(userItem);
+      return null;
+    }
+
     const purchase = await this.purchasesService.getPurchasesItems(
       userId,
       purchaseId
     );
-    const userItem = await this.getOrCreateUserItem(userId);
 
-    if (!purchase)
-      throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
+    if (!purchase) {
+      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+    }
 
     userItem.minimiItem = purchase.storeItems;
 
@@ -118,7 +134,6 @@ export class UseritemsService {
       relations: ["miniroomItem"],
     });
     if (!userItem?.miniroomItem) return null;
-    console.log(userItem.miniroomItem);
     return {
       id: userItem.miniroomItem.id,
       file: userItem.miniroomItem.file,
