@@ -11,14 +11,12 @@ import { GuestbooksModule } from "./guestbooks/guestbooks.module";
 import { StoreitemsModule } from "./storeitems/storeitems.module";
 import { PurchasesModule } from "./purchases/purchases.module";
 import { ChatbotmessagesModule } from "./chatbotmessages/chatbotmessages.module";
-import { BgmModule } from "./bgm/bgm.module";
 import { UseritemsModule } from "./useritems/useritems.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { PhotosModule } from "./photos/photos.module";
 import { DiaryModule } from "./diary/diary.module";
 import { AuthModule } from "./auth/auth.module";
 import { User } from "./users/users.entity";
-import { BGM } from "./bgm/bgm.entity";
 import { Payment } from "./payments/payments.entity";
 import { Photo } from "./photos/photos.entity";
 import { Friend } from "./friends/friends.entity";
@@ -56,7 +54,6 @@ import { Minimi } from "./minirooms/minimi.entity";
         database: config.get<string>("DB_NAME"),
         entities: [
           User,
-          BGM,
           Photo,
           PhotoFolder,
           Payment,
@@ -87,7 +84,6 @@ import { Minimi } from "./minirooms/minimi.entity";
     StoreitemsModule,
     PurchasesModule,
     ChatbotmessagesModule,
-    BgmModule,
     UseritemsModule,
     PaymentsModule,
     PhotosModule,
