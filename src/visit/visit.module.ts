@@ -4,6 +4,7 @@ import { VisitController } from "./visit.controller";
 import { UsersModule } from "../users/users.module";
 import { Visit } from "./visit.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { MinihomepisModule } from "src/minihomepis/minihomepis.module";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Visit]), forwardRef(() => UsersModule)],

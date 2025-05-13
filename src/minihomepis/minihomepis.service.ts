@@ -12,6 +12,7 @@ import {
   MinihomepiStatusDto,
   MinihomepiInfoDto,
 } from "./dto/minihomepiInfo.dto";
+import { VisitService } from "src/visit/visit.service";
 
 @Injectable()
 export class MinihomepisService {
@@ -20,7 +21,9 @@ export class MinihomepisService {
     private readonly miniRepository: Repository<Minihomepi>,
 
     @Inject(forwardRef(() => UsersService))
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+
+    private readonly visitService: VisitService
   ) {}
 
   // 미니홈피 생성
@@ -111,16 +114,25 @@ export class MinihomepisService {
 
   // 화재의 미니홈피
   async getTop5HotMinihomepis() {
-    const top = await this.miniRepository.find({
+    const allMinihomepis = await this.miniRepository.find({
       relations: ["user"],
-      order: { visit_count: "DESC" },
-      take: 5,
     });
 
-    return top.map((m) => ({
-      userId: m.user.id,
-      name: m.user.name,
-      visit_count: m.visit_count,
-    }));
+    const results = await Promise.all(
+      allMinihomepis.map(async (m) => {
+        const todayVisitCount = await this.visitService.countTodayVisits(
+          m.user.id
+        );
+        return {
+          userId: m.user.id,
+          name: m.user.name,
+          todayVisitCount,
+        };
+      })
+    );
+
+    return results
+      .sort((a, b) => b.todayVisitCount - a.todayVisitCount)
+      .slice(0, 5);
   }
 }
