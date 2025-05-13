@@ -168,20 +168,30 @@ export class MiniroomsService {
   // 미니룸 배경 저장
   async updateMiniroomBackground(
     userId: number,
-    storeItemId: number
+    storeItemId: number | "default-miniroom"
   ): Promise<void> {
     const miniroom = await this.miniRoomRepository.findOne({
       where: { user: { id: userId } },
       relations: ["storeItem"],
     });
 
-    if (!miniroom) throw new NotFoundException("미니룸이 존재하지 않습니다.");
+    if (!miniroom) {
+      throw new NotFoundException("미니룸이 존재하지 않습니다.");
+    }
 
-    const storeItem = await this.storeItemService.findItemById(storeItemId);
-    if (!storeItem)
-      throw new NotFoundException("해당 아이템이 존재하지 않습니다.");
+    // 기본 배경으로 설정할 경우 null 저장
+    if (storeItemId === "default-miniroom") {
+      miniroom.storeItem = null;
+    } else {
+      const storeItem = await this.storeItemService.findItemById(
+        Number(storeItemId)
+      );
+      if (!storeItem) {
+        throw new NotFoundException("해당 아이템이 존재하지 않습니다.");
+      }
+      miniroom.storeItem = storeItem;
+    }
 
-    miniroom.storeItem = storeItem;
     await this.miniRoomRepository.save(miniroom);
   }
 }

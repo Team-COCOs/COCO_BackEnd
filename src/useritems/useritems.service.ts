@@ -100,6 +100,7 @@ export class UseritemsService {
       relations: ["miniroomItem"],
     });
     if (!userItem?.miniroomItem) return null;
+    console.log(userItem.miniroomItem);
     return {
       id: userItem.miniroomItem.id,
       file: userItem.miniroomItem.file,
