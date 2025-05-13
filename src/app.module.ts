@@ -39,6 +39,7 @@ import { MiniroomsModule } from "./minirooms/minirooms.module";
 import { MiniRoom } from "./minirooms/minirooms.entity";
 import { SpeechBubble } from "./minirooms/speechBubble.entity";
 import { Minimi } from "./minirooms/minimi.entity";
+import { ManagementModule } from './management/management.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -93,6 +94,7 @@ import { Minimi } from "./minirooms/minimi.entity";
     VisitModule,
     FriendCommentsModule,
     MiniroomsModule,
+    ManagementModule,
   ],
 })
 export class AppModule {}

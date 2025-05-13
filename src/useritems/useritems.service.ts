@@ -81,13 +81,6 @@ export class UseritemsService {
     const userItem = await this.getOrCreateUserItem(userId);
     userItem.miniroomItem = purchase.storeItems;
 
-    if (userItem.miniroomItem.file) {
-      await this.usersService.updateMinimiImage(
-        userId,
-        userItem.miniroomItem.file
-      );
-    }
-
     await this.userItemRepository.save(userItem);
 
     await this.miniroomService.updateMiniroomBackground(
