@@ -21,6 +21,9 @@ export class MiniRoom {
   @JoinColumn({ name: "user_id" })
   user: User;
 
+  @Column({ type: "varchar", length: 100, nullable: true })
+  title: string;
+
   @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "store_item_id" })
   storeItem: StoreItems;

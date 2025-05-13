@@ -11,7 +11,7 @@ import {
 import { MiniroomsService } from "./minirooms.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
-import { ApiOperation } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { UseritemsService } from "src/useritems/useritems.service";
 
 @Controller("minirooms")
@@ -30,7 +30,26 @@ export class MiniroomsController {
     @Req() req: Request
   ) {
     const userId = req.user["id"];
-    return await this.userItemsService.setMiniRoomBack(userId, body.purchaseId);
+    await this.userItemsService.setMiniRoomBack(userId, body.purchaseId);
+    return { message: "미니룸 배경 저장 완료" };
+  }
+
+  // 미니룸 이름 저장
+  @Patch("title")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "미니룸 타이틀 저장" })
+  @ApiResponse({ status: 200, description: "미니룸 이름 저장 완료" })
+  async saveMiniroomName(@Body() body: { title: string }, @Req() req: Request) {
+    const userId = req.user["id"];
+    await this.miniRoomService.saveMiniroomName(userId, body.title);
+    return { message: "미니룸 이름 저장 완료" };
+  }
+
+  // 미니룸 이름 조회
+  @Get(":userId/title")
+  @ApiOperation({ summary: "유저 ID로 미니룸 배치 조회 (JWT 없음)" })
+  async getMiniroomNameByUserId(@Param("userId") userId: number) {
+    return await this.miniRoomService.getMiniroomName(userId);
   }
 
   // 미니미/말풍선 layout 저장
@@ -40,10 +59,8 @@ export class MiniroomsController {
   async saveLayout(@Body() body: { items: any[] }, @Req() req: Request) {
     const userId = req.user["id"];
     console.log(body.items, "sfasdfsadfasdf");
-    return await this.miniRoomService.saveMiniroomLayoutByUser(
-      userId,
-      body.items
-    );
+    await this.miniRoomService.saveMiniroomLayoutByUser(userId, body.items);
+    return { message: "미니미/말풍선 위치 저장 완료" };
   }
 
   // 미니미/말풍선 layout 조회

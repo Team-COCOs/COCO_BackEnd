@@ -2,10 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { SpeechBubble } from "./speechBubble.entity";
-import { CreateSpeechBubbleDto } from "./dto/speech-bubbles.dto";
-import { User } from "../users/users.entity";
 import { MiniRoom } from "../minirooms/minirooms.entity";
-import { StoreItems } from "../storeitems/storeitems.entity";
 import { StoreitemsService } from "src/storeitems/storeitems.service";
 import { Minimi } from "./minimi.entity";
 
@@ -21,6 +18,29 @@ export class MiniroomsService {
 
     private readonly storeItemService: StoreitemsService
   ) {}
+
+  // 미니룸 타이틀 저장
+  async saveMiniroomName(userId: number, title: string): Promise<void> {
+    const miniroom = await this.miniRoomRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (!miniroom) return;
+
+    miniroom.title = title;
+    await this.miniRoomRepository.save(miniroom);
+  }
+
+  // 미니룸 타이틀 조회
+  async getMiniroomName(userId: number): Promise<string | null> {
+    const miniroom = await this.miniRoomRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (!miniroom) return;
+
+    return miniroom.title;
+  }
 
   // 미니룸 레이아웃 저장 (미니미, 말풍선)
   async saveMiniroomLayoutByUser(userId: number, items: any[]): Promise<void> {
