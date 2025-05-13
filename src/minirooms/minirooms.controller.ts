@@ -46,9 +46,10 @@ export class MiniroomsController {
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "미니룸 타이틀 저장" })
   @ApiResponse({ status: 200, description: "미니룸 이름 저장 완료" })
-  async saveMiniroomName(@Body() body: { title: string }, @Req() req: Request) {
+  async saveMiniroomName(@Body() body: { name: string }, @Req() req: Request) {
     const userId = req.user["id"];
-    await this.miniRoomService.saveMiniroomName(userId, body.title);
+    console.log(body.name, "sdfsdfsdfasdfsdf");
+    await this.miniRoomService.saveMiniroomName(userId, body.name);
     return { message: "미니룸 이름 저장 완료" };
   }
 

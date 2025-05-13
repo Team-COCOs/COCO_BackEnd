@@ -33,14 +33,6 @@ export class MiniRoom {
   minimis: Minimi[];
   // 미니미
 
-  @Column({ type: "int" })
-  minimi_position_left: number;
-  // 미니미 X좌표
-
-  @Column({ type: "int" })
-  minimi_position_top: number;
-  // 미니미 Y좌표
-
   @OneToMany(() => SpeechBubble, (bubble) => bubble.miniroom)
   speechBubbles: SpeechBubble[];
   // 말풍선

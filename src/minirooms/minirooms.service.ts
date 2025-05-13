@@ -5,6 +5,7 @@ import { SpeechBubble } from "./speechBubble.entity";
 import { MiniRoom } from "../minirooms/minirooms.entity";
 import { StoreitemsService } from "src/storeitems/storeitems.service";
 import { Minimi } from "./minimi.entity";
+import { UsersService } from "../users/users.service";
 
 @Injectable()
 export class MiniroomsService {
@@ -15,40 +16,56 @@ export class MiniroomsService {
     private readonly miniRoomRepository: Repository<MiniRoom>,
     @InjectRepository(Minimi)
     private readonly MinimiRepository: Repository<Minimi>,
-
+    private readonly usersService: UsersService,
     private readonly storeItemService: StoreitemsService
   ) {}
 
   // 미니룸 타이틀 저장
   async saveMiniroomName(userId: number, title: string): Promise<void> {
-    const miniroom = await this.miniRoomRepository.findOne({
+    let miniroom = await this.miniRoomRepository.findOne({
       where: { user: { id: userId } },
     });
 
-    if (!miniroom) return;
+    if (!miniroom) {
+      const user = await this.usersService.findUserById(userId);
+      miniroom = this.miniRoomRepository.create({ user });
+      await this.miniRoomRepository.save(miniroom);
+    } else {
+      miniroom.title = title;
+    }
 
     miniroom.title = title;
     await this.miniRoomRepository.save(miniroom);
   }
 
   // 미니룸 타이틀 조회
-  async getMiniroomName(userId: number): Promise<string | null> {
+  async getMiniroomName(userId: number): Promise<{ title: string | null }> {
     const miniroom = await this.miniRoomRepository.findOne({
       where: { user: { id: userId } },
     });
 
-    if (!miniroom) return;
+    if (!miniroom) {
+      return {
+        title: null,
+      };
+    }
 
-    return miniroom.title;
+    return {
+      title: miniroom.title,
+    };
   }
 
   // 미니룸 레이아웃 저장 (미니미, 말풍선)
   async saveMiniroomLayoutByUser(userId: number, items: any[]): Promise<void> {
-    const miniroom = await this.miniRoomRepository.findOne({
+    let miniroom = await this.miniRoomRepository.findOne({
       where: { user: { id: userId } },
     });
 
-    if (!miniroom) return;
+    if (!miniroom) {
+      const user = await this.usersService.findUserById(userId);
+      miniroom = this.miniRoomRepository.create({ user });
+      miniroom = await this.miniRoomRepository.save(miniroom);
+    }
 
     // 기존 데이터 삭제
     await this.MinimiRepository.delete({ miniroom: { id: miniroom.id } });
@@ -68,19 +85,23 @@ export class MiniroomsService {
             miniroom,
           })
         );
-      } else {
-        const storeItem = await this.storeItemService.findItemById(item.id);
-        if (!storeItem) continue;
+      } else if (item.type === "minimi") {
+        const minimi = this.MinimiRepository.create({
+          user: { id: userId },
+          left: Math.round(item.left),
+          top: Math.round(item.top),
+          miniroom,
+        });
 
-        newMinimis.push(
-          this.MinimiRepository.create({
-            user: { id: userId },
-            storeItem,
-            left: Math.round(item.left),
-            top: Math.round(item.top),
-            miniroom,
-          })
-        );
+        if (item.id !== "default-minimi") {
+          const storeItem = await this.storeItemService.findItemById(
+            Number(item.id)
+          );
+          if (!storeItem) continue;
+          minimi.storeItem = storeItem;
+        }
+
+        newMinimis.push(minimi);
       }
     }
 
