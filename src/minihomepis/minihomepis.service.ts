@@ -92,14 +92,7 @@ export class MinihomepisService {
       where: { user: { id: userId } },
     });
 
-    if (!mini) {
-      return {
-        title: null,
-        mood: null,
-        introduction: null,
-        minihompi_image: null,
-      };
-    }
+    if (!mini) throw new NotFoundException("미니홈피가 존재하지 않습니다.");
 
     return {
       title: mini.title,
@@ -107,16 +100,6 @@ export class MinihomepisService {
       introduction: mini.introduction,
       minihompi_image: mini.minihompi_image,
     };
-  }
-
-  // 제목 수정
-  async updateTitle(userId: number, title: string): Promise<void> {
-    await this.miniRepository.update({ user: { id: userId } }, { title });
-  }
-
-  // 무드 수정
-  async updateMood(userId: number, mood: string): Promise<void> {
-    await this.miniRepository.update({ user: { id: userId } }, { mood });
   }
 
   // 화재의 미니홈피
