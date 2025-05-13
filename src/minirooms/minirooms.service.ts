@@ -11,7 +11,6 @@ import { MiniRoom } from "../minirooms/minirooms.entity";
 import { StoreitemsService } from "src/storeitems/storeitems.service";
 import { Minimi } from "./minimi.entity";
 import { UsersService } from "../users/users.service";
-import { User } from "src/users/users.entity";
 
 @Injectable()
 export class MiniroomsService {
@@ -167,5 +166,25 @@ export class MiniroomsService {
     }));
 
     return [...minimis, ...bubbles];
+  }
+
+  // 미니룸 배경 저장
+  async updateMiniroomBackground(
+    userId: number,
+    storeItemId: number
+  ): Promise<void> {
+    const miniroom = await this.miniRoomRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["storeItem"],
+    });
+
+    if (!miniroom) throw new NotFoundException("미니룸이 존재하지 않습니다.");
+
+    const storeItem = await this.storeItemService.findItemById(storeItemId);
+    if (!storeItem)
+      throw new NotFoundException("해당 아이템이 존재하지 않습니다.");
+
+    miniroom.storeItem = storeItem;
+    await this.miniRoomRepository.save(miniroom);
   }
 }

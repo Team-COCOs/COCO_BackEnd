@@ -13,7 +13,7 @@ import { UsersModule } from "src/users/users.module";
   imports: [
     TypeOrmModule.forFeature([SpeechBubble, MiniRoom, Minimi]),
     StoreitemsModule,
-    UseritemsModule,
+    forwardRef(() => UseritemsModule),
     forwardRef(() => UsersModule),
   ],
   providers: [MiniroomsService],

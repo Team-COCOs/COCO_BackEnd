@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { UserItem } from "./useritems.entity";
 import { PurchasesService } from "src/purchases/purchases.service";
 import { UsersService } from "src/users/users.service";
+import { MiniroomsService } from "src/minirooms/minirooms.service";
 
 @Injectable()
 export class UseritemsService {
@@ -11,7 +12,8 @@ export class UseritemsService {
     @InjectRepository(UserItem)
     private readonly userItemRepository: Repository<UserItem>,
     private readonly purchasesService: PurchasesService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly miniroomService: MiniroomsService
   ) {}
 
   // db 저장 및 수정
@@ -90,8 +92,14 @@ export class UseritemsService {
       );
     }
 
-    const saved = await this.userItemRepository.save(userItem);
-    return saved.miniroomItem.id;
+    await this.userItemRepository.save(userItem);
+
+    await this.miniroomService.updateMiniroomBackground(
+      userId,
+      purchase.storeItems.id
+    );
+
+    return purchase.storeItems.id;
   }
 
   // 미니룸 배경 조회
