@@ -26,11 +26,11 @@ export class MiniroomsController {
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "미니룸 배경(스킨) 설정" })
   async saveBackground(
-    @Body() body: { purchaseId: number },
+    @Body() body: { storeItemId: number },
     @Req() req: Request
   ) {
     const userId = req.user["id"];
-    await this.userItemsService.setMiniRoomBack(userId, body.purchaseId);
+    await this.userItemsService.setMiniRoomBack(userId, body.storeItemId);
     return { message: "미니룸 배경 저장 완료" };
   }
 
