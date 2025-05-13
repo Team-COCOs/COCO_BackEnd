@@ -26,7 +26,7 @@ export class MiniroomsController {
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "미니룸 배경(스킨) 설정" })
   async saveBackground(
-    @Body() body: { storeItemId: number },
+    @Body() body: { storeItemId: number | "default-miniroom" },
     @Req() req: Request
   ) {
     const userId = req.user["id"];

@@ -67,19 +67,13 @@ export class UseritemsController {
   @ApiResponse({ status: 200, description: "대표 미니미 이미지 경로 반환" })
   async getMainBGM(
     @Param("userId") userId: number
-  ): Promise<{ id: number; file: string }> {
-    const minimi = await this.useritemsService.getUserBGM(userId);
+  ): Promise<{ id: number; file: string }[]> {
+    const bgms = await this.useritemsService.getUserBGM(userId);
 
-    if (!minimi) {
-      return {
-        id: null,
-        file: null,
-      };
+    if (!bgms || bgms.length === 0) {
+      return [];
     }
 
-    return {
-      id: minimi.id,
-      file: minimi.file,
-    };
+    return bgms;
   }
 }

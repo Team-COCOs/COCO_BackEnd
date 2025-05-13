@@ -159,17 +159,21 @@ export class UseritemsService {
   // 대표 bgm 조회
   async getUserBGM(
     userId: number
-  ): Promise<{ id: number; file: string } | null> {
+  ): Promise<{ id: number; file: string; name: string; artist: string }[]> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
       relations: ["bgmItem"],
     });
 
-    if (!userItem?.bgmItem) return null;
+    if (!userItem?.bgmItem) return [];
 
-    return {
-      id: userItem.bgmItem.id,
-      file: userItem.bgmItem.file,
-    };
+    return [
+      {
+        id: userItem.bgmItem.id,
+        file: userItem.bgmItem.file,
+        name: userItem.bgmItem.name,
+        artist: userItem.bgmItem.artist,
+      },
+    ];
   }
 }
