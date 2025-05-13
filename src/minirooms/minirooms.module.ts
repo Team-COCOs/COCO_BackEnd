@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { MiniroomsService } from "./minirooms.service";
 import { MiniroomsController } from "./minirooms.controller";
 import { SpeechBubble } from "./speechBubble.entity";
@@ -14,9 +14,10 @@ import { UsersModule } from "src/users/users.module";
     TypeOrmModule.forFeature([SpeechBubble, MiniRoom, Minimi]),
     StoreitemsModule,
     UseritemsModule,
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
   providers: [MiniroomsService],
   controllers: [MiniroomsController],
+  exports: [MiniroomsService],
 })
 export class MiniroomsModule {}

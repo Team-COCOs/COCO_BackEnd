@@ -1,3 +1,4 @@
+import { Minihomepi } from "src/minihomepis/minihomepis.entity";
 import { MiniRoom } from "../minirooms/minirooms.entity";
 import {
   Entity,
@@ -52,6 +53,11 @@ export class User {
 
   @Column({ nullable: true })
   birthday: string;
+
+  @OneToOne(() => Minihomepi, (minihomepi) => minihomepi.user, {
+    cascade: true,
+  })
+  minihomepi: Minihomepi;
 
   @OneToOne(() => MiniRoom, (miniroom) => miniroom.user, { cascade: true })
   miniroom: MiniRoom;

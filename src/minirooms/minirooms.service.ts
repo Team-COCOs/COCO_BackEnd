@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { SpeechBubble } from "./speechBubble.entity";
@@ -6,19 +11,39 @@ import { MiniRoom } from "../minirooms/minirooms.entity";
 import { StoreitemsService } from "src/storeitems/storeitems.service";
 import { Minimi } from "./minimi.entity";
 import { UsersService } from "../users/users.service";
+import { User } from "src/users/users.entity";
 
 @Injectable()
 export class MiniroomsService {
   constructor(
     @InjectRepository(SpeechBubble)
     private readonly bubbleRepository: Repository<SpeechBubble>,
+
     @InjectRepository(MiniRoom)
     private readonly miniRoomRepository: Repository<MiniRoom>,
+
     @InjectRepository(Minimi)
     private readonly MinimiRepository: Repository<Minimi>,
+
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+
     private readonly storeItemService: StoreitemsService
   ) {}
+
+  // 미니룸 생성
+  async saveMiniroom(userId: number): Promise<MiniRoom> {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) {
+      throw new NotFoundException("유저를 찾을 수 없습니다.");
+    }
+
+    const miniroom = this.miniRoomRepository.create({
+      user,
+    });
+
+    return await this.miniRoomRepository.save(miniroom);
+  }
 
   // 미니룸 타이틀 저장
   async saveMiniroomName(userId: number, title: string): Promise<void> {

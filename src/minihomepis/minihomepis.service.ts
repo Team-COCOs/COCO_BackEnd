@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Minihomepi } from "./minihomepis.entity";
@@ -13,8 +18,24 @@ export class MinihomepisService {
   constructor(
     @InjectRepository(Minihomepi)
     private readonly miniRepository: Repository<Minihomepi>,
+
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService
   ) {}
+
+  // 미니홈피 생성
+  async saveMinihomepi(userId: number): Promise<Minihomepi> {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) {
+      throw new NotFoundException("유저를 찾을 수 없습니다.");
+    }
+
+    const minihomepi = this.miniRepository.create({
+      user,
+    });
+
+    return await this.miniRepository.save(minihomepi);
+  }
 
   // 총 방문자 수 업데이트
   async setTotalVisitCount(userId: number, count: number): Promise<void> {

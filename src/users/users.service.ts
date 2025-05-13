@@ -7,11 +7,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, ILike } from "typeorm";
 import { User, Gender } from "./users.entity";
 import { SearchUserDto } from "./dto/searchUsers.dto";
+import { MiniroomsService } from "src/minirooms/minirooms.service";
+import { MinihomepisService } from "src/minihomepis/minihomepis.service";
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly miniroomService: MiniroomsService,
+    private readonly minihomepiService: MinihomepisService
   ) {}
 
   // 유저 정보 저장
@@ -32,7 +36,16 @@ export class UsersService {
       dotoris: 50,
       birthday,
     });
-    return await this.userRepository.save(user);
+
+    const savedUser = await this.userRepository.save(user);
+
+    // 미니홈피 생성
+    await this.minihomepiService.saveMinihomepi(savedUser.id);
+
+    // 미니룸 생성
+    await this.miniroomService.saveMiniroom(savedUser.id);
+
+    return savedUser;
   }
 
   // 이름이랑 전화번호로 유저 찾기

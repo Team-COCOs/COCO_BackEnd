@@ -81,14 +81,17 @@ export class UseritemsService {
       throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
 
     const userItem = await this.getOrCreateUserItem(userId);
-    userItem.skinItem = purchase.storeItems;
+    userItem.miniroomItem = purchase.storeItems;
 
-    if (userItem.skinItem.file) {
-      await this.usersService.updateMinimiImage(userId, userItem.skinItem.file);
+    if (userItem.miniroomItem.file) {
+      await this.usersService.updateMinimiImage(
+        userId,
+        userItem.miniroomItem.file
+      );
     }
 
     const saved = await this.userItemRepository.save(userItem);
-    return saved.skinItem.id;
+    return saved.miniroomItem.id;
   }
 
   // 미니룸 배경 조회
@@ -97,12 +100,12 @@ export class UseritemsService {
   ): Promise<{ id: number; file: string } | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
-      relations: ["skinItem"],
+      relations: ["miniroomItem"],
     });
-    if (!userItem?.skinItem) return null;
+    if (!userItem?.miniroomItem) return null;
     return {
-      id: userItem.skinItem.id,
-      file: userItem.skinItem.file,
+      id: userItem.miniroomItem.id,
+      file: userItem.miniroomItem.file,
     };
   }
 }

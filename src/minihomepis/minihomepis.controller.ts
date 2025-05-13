@@ -23,10 +23,7 @@ import { MinihomepisService } from "./minihomepis.service";
 import { OtherProfileDto } from "src/users/dto/otherUsers.dto";
 import { ApiConsumes, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
-import {
-  MinihomepiInfoDto,
-  MinihomepiStatusDto,
-} from "./dto/minihomepiInfo.dto";
+import { MinihomepiStatusDto } from "./dto/minihomepiInfo.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";

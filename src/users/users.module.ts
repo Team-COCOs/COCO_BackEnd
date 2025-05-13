@@ -10,6 +10,7 @@ import { FriendsModule } from "src/friends/friends.module";
 import { VisitModule } from "src/visit/visit.module";
 import { MinihomepisModule } from "src/minihomepis/minihomepis.module";
 import { UseritemsModule } from "src/useritems/useritems.module";
+import { MiniroomsModule } from "src/minirooms/minirooms.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UseritemsModule } from "src/useritems/useritems.module";
     forwardRef(() => FriendsModule),
     forwardRef(() => VisitModule),
     forwardRef(() => MinihomepisModule),
+    forwardRef(() => MiniroomsModule),
   ],
   providers: [UsersService],
   controllers: [UsersController],
