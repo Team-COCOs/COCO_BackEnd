@@ -18,6 +18,7 @@ export enum Gender {
 export enum UserRole {
   USER = "user",
   ADMIN = "admin",
+  WITHDRAWN = "withdrawn",
 }
 
 @Entity("users")

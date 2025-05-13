@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, ILike } from "typeorm";
-import { User, Gender } from "./users.entity";
+import { User, Gender, UserRole } from "./users.entity";
 import { SearchUserDto } from "./dto/searchUsers.dto";
 import { MiniroomsService } from "src/minirooms/minirooms.service";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
@@ -122,5 +122,16 @@ export class UsersService {
       select: ["id", "name"],
     });
     return users;
+  }
+
+  // 탈퇴 유저 역할 변경
+  async withdrawUser(userId: number) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) throw new NotFoundException("유저가 존재하지 않습니다.");
+
+    user.role = UserRole.WITHDRAWN;
+    user.email = `withdrawn_${user.email}`;
+    user.password = "";
+    await this.userRepository.save(user);
   }
 }
