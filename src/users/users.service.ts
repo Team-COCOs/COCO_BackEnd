@@ -40,12 +40,18 @@ export class UsersService {
     const savedUser = await this.userRepository.save(user);
 
     // 미니홈피 생성
-    await this.minihomepiService.saveMinihomepi(savedUser.id);
+    const minihomepi = await this.minihomepiService.saveMinihomepi(
+      savedUser.id
+    );
 
     // 미니룸 생성
-    await this.miniroomService.saveMiniroom(savedUser.id);
+    const miniroom = await this.miniroomService.saveMiniroom(savedUser.id);
 
-    return savedUser;
+    savedUser.minihomepi = minihomepi;
+    savedUser.miniroom = miniroom;
+
+    // 5. 관계 반영하여 다시 저장
+    return await this.userRepository.save(savedUser);
   }
 
   // 이름이랑 전화번호로 유저 찾기

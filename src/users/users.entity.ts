@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
+  JoinColumn,
 } from "typeorm";
 
 export enum Gender {
@@ -57,9 +58,11 @@ export class User {
   @OneToOne(() => Minihomepi, (minihomepi) => minihomepi.user, {
     cascade: true,
   })
+  @JoinColumn({ name: "minihomepi_id" })
   minihomepi: Minihomepi;
 
   @OneToOne(() => MiniRoom, (miniroom) => miniroom.user, { cascade: true })
+  @JoinColumn({ name: "miniroom_id" })
   miniroom: MiniRoom;
 
   @CreateDateColumn()
