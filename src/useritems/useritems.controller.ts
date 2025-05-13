@@ -22,10 +22,10 @@ export class UseritemsController {
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "미니미 아이템 저장" })
   @ApiResponse({ status: 200, description: "미니미 아이템이 저장되었습니다." })
-  async setMinimi(@Body() body: { purchaseId: number }, @Req() req: Request) {
-    const { purchaseId } = body;
+  async setMinimi(@Body() body: { storeItemId: number }, @Req() req: Request) {
+    const { storeItemId } = body;
     const userId = (req.user as any).id;
-    return await this.useritemsService.setMinimi(userId, purchaseId);
+    return await this.useritemsService.setMinimi(userId, storeItemId);
   }
 
   // 대표 미니미 조회
@@ -36,6 +36,39 @@ export class UseritemsController {
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string }> {
     const minimi = await this.useritemsService.getUserMinimi(userId);
+
+    if (!minimi) {
+      return {
+        id: null,
+        file: null,
+      };
+    }
+
+    return {
+      id: minimi.id,
+      file: minimi.file,
+    };
+  }
+
+  // 대표 bgm 저장
+  @Patch("set-bgm")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "bgm 아이템 저장" })
+  @ApiResponse({ status: 200, description: "bgm 아이템이 저장되었습니다." })
+  async setBGM(@Body() body: { storeItemId: number }, @Req() req: Request) {
+    const { storeItemId } = body;
+    const userId = (req.user as any).id;
+    return await this.useritemsService.setBGM(userId, storeItemId);
+  }
+
+  // 대표 bgm 조회
+  @Get("bgm/:userId")
+  @ApiOperation({ summary: "대표 미니미 이미지 조회" })
+  @ApiResponse({ status: 200, description: "대표 미니미 이미지 경로 반환" })
+  async getMainBGM(
+    @Param("userId") userId: number
+  ): Promise<{ id: number; file: string }> {
+    const minimi = await this.useritemsService.getUserBGM(userId);
 
     if (!minimi) {
       return {

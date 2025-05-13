@@ -36,12 +36,8 @@ export class UseritemsService {
     );
     const userItem = await this.getOrCreateUserItem(userId);
 
-    if (!purchaseId || purchaseId === 0) {
-      userItem.minimiItem = null;
-      await this.usersService.updateMinimiImage(userId, null);
-      await this.userItemRepository.save(userItem);
-      return null;
-    }
+    if (!purchase)
+      throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
 
     userItem.minimiItem = purchase.storeItems;
 
@@ -114,6 +110,44 @@ export class UseritemsService {
     return {
       id: userItem.miniroomItem.id,
       file: userItem.miniroomItem.file,
+    };
+  }
+
+  // 대표 bgm 설정
+  async setBGM(userId: number, purchaseId: number): Promise<number> {
+    const purchase = await this.purchasesService.getPurchasesItems(
+      userId,
+      purchaseId
+    );
+    const userItem = await this.getOrCreateUserItem(userId);
+
+    if (!purchase)
+      throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
+
+    userItem.bgmItem = purchase.storeItems;
+
+    if (userItem.bgmItem.file) {
+      await this.usersService.updateMinimiImage(userId, userItem.bgmItem.file);
+    }
+
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.bgmItem.id;
+  }
+
+  // 대표 bgm 조회
+  async getUserBGM(
+    userId: number
+  ): Promise<{ id: number; file: string } | null> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["bgmItem"],
+    });
+
+    if (!userItem?.bgmItem) return null;
+
+    return {
+      id: userItem.bgmItem.id,
+      file: userItem.bgmItem.file,
     };
   }
 }

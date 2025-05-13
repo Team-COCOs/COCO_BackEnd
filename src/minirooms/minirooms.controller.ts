@@ -48,7 +48,6 @@ export class MiniroomsController {
   @ApiResponse({ status: 200, description: "미니룸 이름 저장 완료" })
   async saveMiniroomName(@Body() body: { name: string }, @Req() req: Request) {
     const userId = req.user["id"];
-    console.log(body.name, "sdfsdfsdfasdfsdf");
     await this.miniRoomService.saveMiniroomName(userId, body.name);
     return { message: "미니룸 이름 저장 완료" };
   }
@@ -66,7 +65,6 @@ export class MiniroomsController {
   @ApiOperation({ summary: "미니룸에 미니미/말풍선 저장 (유저 기준)" })
   async saveLayout(@Body() body: { items: any[] }, @Req() req: Request) {
     const userId = req.user["id"];
-    console.log(body.items, "sfasdfsadfasdf");
     await this.miniRoomService.saveMiniroomLayoutByUser(userId, body.items);
     return { message: "미니미/말풍선 위치 저장 완료" };
   }
