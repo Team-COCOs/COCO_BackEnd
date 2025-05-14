@@ -30,6 +30,9 @@ export class PhotoFolder {
   @OneToMany(() => PhotoFolder, (folder) => folder.parent)
   children: PhotoFolder[];
 
-  @OneToMany(() => Photo, (photo) => photo.folder)
+  @OneToMany(() => Photo, (photo) => photo.folder, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   photos: Photo[];
 }
