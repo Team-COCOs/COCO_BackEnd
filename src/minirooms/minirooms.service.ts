@@ -155,11 +155,12 @@ export class MiniroomsService {
       left: number;
       top: number;
       text?: string;
+      file?: string;
     }[]
   > {
     const miniroom = await this.miniRoomRepository.findOne({
       where: { user: { id: userId } },
-      relations: ["minimis", "speechBubbles"],
+      relations: ["minimis", "minimis.storeItem", "speechBubbles"],
     });
 
     if (!miniroom) return [];
@@ -168,6 +169,7 @@ export class MiniroomsService {
       type: "minimi" as const,
       left: minimi.left,
       top: minimi.top,
+      file: minimi.storeItem?.file ?? null,
     }));
 
     const bubbles = miniroom.speechBubbles.map((bubble) => ({
