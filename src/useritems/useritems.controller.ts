@@ -22,10 +22,15 @@ export class UseritemsController {
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "미니미 아이템 저장" })
   @ApiResponse({ status: 200, description: "미니미 아이템이 저장되었습니다." })
-  async setMinimi(@Body() body: { storeItemId: number }, @Req() req: Request) {
-    const { storeItemId } = body;
+  async setMinimi(
+    @Body() body: { purchaseId: number | "default-minimi" },
+    @Req() req: Request
+  ) {
+    const { purchaseId } = body;
     const userId = (req.user as any).id;
-    return await this.useritemsService.setMinimi(userId, storeItemId);
+
+    console.log(purchaseId, "sdfsd");
+    return await this.useritemsService.setMinimi(userId, purchaseId);
   }
 
   // 대표 미니미 조회
@@ -56,6 +61,7 @@ export class UseritemsController {
   @ApiOperation({ summary: "bgm 아이템 저장" })
   @ApiResponse({ status: 200, description: "bgm 아이템이 저장되었습니다." })
   async setBGM(@Body() body: { bgmId: number }, @Req() req: Request) {
+    // store_item_id
     const { bgmId } = body;
     const userId = (req.user as any).id;
 

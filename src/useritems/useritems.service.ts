@@ -44,7 +44,7 @@ export class UseritemsService {
       return null;
     }
 
-    const purchase = await this.purchasesService.getPurchasesItems(
+    const purchase = await this.purchasesService.getPurchaseById(
       userId,
       purchaseId
     );

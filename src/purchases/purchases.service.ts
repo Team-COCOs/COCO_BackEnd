@@ -66,6 +66,20 @@ export class PurchasesService {
     return purchase;
   }
 
+  // 구매한 아이템 찾기
+  async getPurchaseById(
+    userId: number,
+    purchaseId: number
+  ): Promise<Purchase | null> {
+    return await this.purchaseRepository.findOne({
+      where: {
+        id: purchaseId,
+        user: { id: userId },
+      },
+      relations: ["storeItems"],
+    });
+  }
+
   // 구매한 유저 확인
   async getUserPurchases(userId: number) {
     return this.purchaseRepository.find({
