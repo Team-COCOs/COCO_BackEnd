@@ -19,7 +19,7 @@ export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
 
   // 폴더 생성
-  @Post("/saveTree")
+  @Post("saveTree")
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SavePhotoFolderDto[],

@@ -19,7 +19,8 @@ import { DiaryFolder } from "./diaryFolder.entity";
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
-  @Post("/saveTree")
+  // 폴더 구조 생성
+  @Post("saveTree")
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SaveDiaryFolderDto[],
@@ -35,6 +36,7 @@ export class DiaryController {
     };
   }
 
+  // 폴더 조회
   @Get("folderList")
   @ApiOperation({ summary: "사용자의 폴더 트리 조회" })
   @ApiResponse({
