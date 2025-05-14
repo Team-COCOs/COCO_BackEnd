@@ -66,7 +66,7 @@ export class PhotosController {
   }
 
   // 사진 조회
-  @Get("my-photos/:hostId")
+  @Get(":hostId")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "내 사진첩 목록 조회" })
   @ApiResponse({

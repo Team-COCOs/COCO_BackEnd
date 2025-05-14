@@ -41,7 +41,7 @@ export class SavePhotoDto {
   content: string;
 
   @ApiProperty()
-  folderId?: number; // nullable
+  folderId?: number;
 
   @ApiProperty({ enum: VisibilityType, default: VisibilityType.PUBLIC })
   visibility: VisibilityType;
