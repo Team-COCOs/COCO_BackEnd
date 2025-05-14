@@ -110,22 +110,33 @@ export class MiniroomsService {
           })
         );
       } else if (item.type === "minimi") {
-        const minimi = this.MinimiRepository.create({
-          user: { id: userId },
-          left: Math.round(item.left),
-          top: Math.round(item.top),
-          miniroom,
-        });
+        let minimi: Minimi;
 
-        if (item.id !== "default-minimi") {
+        if (item.id === "default-minimi") {
+          minimi = this.MinimiRepository.create({
+            user: { id: userId },
+            left: Math.round(item.left),
+            top: Math.round(item.top),
+            miniroom,
+          });
+        } else {
           const purchase = await this.purchasesService.getPurchaseById(
             userId,
             Number(item.id)
           );
+
           if (!purchase) {
             throw new NotFoundException(`Purchase ${item.id} not found`);
           }
-          minimi.storeItem = purchase.storeItems;
+
+          minimi = this.MinimiRepository.create({
+            user: { id: userId },
+            left: Math.round(item.left),
+            top: Math.round(item.top),
+            miniroom,
+            storeItem: purchase.storeItems,
+            purchase: purchase,
+          });
         }
 
         newMinimis.push(minimi);

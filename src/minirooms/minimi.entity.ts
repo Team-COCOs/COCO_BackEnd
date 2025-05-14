@@ -26,6 +26,7 @@ export class Minimi {
   // 미니미 아이템
 
   @ManyToOne(() => Purchase, { nullable: true, eager: true })
+  @JoinColumn({ name: "purchase_id" })
   purchase: Purchase;
 
   @Column({ type: "int" })
