@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, MoreThan } from "typeorm";
-import { Photo } from "./photos.entity";
-import { NewPhotoDto } from "./dto/photos.dto";
+import { Repository, MoreThan, In } from "typeorm";
+import { Photo, VisibilityType } from "./photos.entity";
+import { NewPhotoDto, SavePhotoDto } from "./dto/photos.dto";
 import { PhotoFolder } from "./photoFolder.entity";
 import { UsersService } from "../users/users.service";
 import { SavePhotoFolderDto } from "./dto/photoFolder.dto";
+import { FriendsService } from "src/friends/friends.service";
 
 @Injectable()
 export class PhotosService {
@@ -16,6 +17,7 @@ export class PhotosService {
     @InjectRepository(PhotoFolder)
     private readonly photoFolderRepository: Repository<PhotoFolder>,
 
+    private readonly friendsService: FriendsService,
     private readonly usersService: UsersService
   ) {}
 
@@ -114,5 +116,63 @@ export class PhotosService {
     });
 
     return tree;
+  }
+
+  // 사진 저장
+  async savePhoto(userId: number, dto: SavePhotoDto): Promise<Photo> {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new Error("User not found");
+
+    const photo = new Photo();
+    photo.user = user;
+    photo.photo_url = dto.photo_url;
+    photo.title = dto.title;
+    photo.content = dto.content;
+    photo.visibility = dto.visibility;
+
+    if (dto.folderId) {
+      const folder = await this.photoFolderRepository.findOne({
+        where: { id: dto.folderId },
+      });
+      if (!folder) throw new Error("Folder not found");
+      photo.folder = folder;
+    }
+
+    return await this.photoRepository.save(photo);
+  }
+
+  // 사진 조회
+  async getPhotosByUser(hostId: number, viewId: number): Promise<Photo[]> {
+    const targetUser = await this.usersService.findUserById(hostId);
+    if (!targetUser) throw new Error("Target user not found");
+
+    const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
+
+    if (hostId === viewId) {
+      // 내 프로필 → 모든 사진 조회
+      visibilityFilters.push(
+        VisibilityType.PRIVATE,
+        VisibilityType.FRIENDS_ONLY
+      );
+    } else {
+      // 다른 사람 → 일촌인지 확인
+      const friendStatus = await this.friendsService.friendStatus(
+        hostId,
+        viewId
+      );
+      if (friendStatus.areFriends) {
+        visibilityFilters.push(VisibilityType.FRIENDS_ONLY);
+      }
+      // 비일촌이거나 비로그인 사용자는 PUBLIC만 유지
+    }
+
+    return await this.photoRepository.find({
+      where: {
+        user: { id: hostId },
+        visibility: In(visibilityFilters),
+      },
+      relations: ["folder"],
+      order: { created_at: "DESC" },
+    });
   }
 }

@@ -65,7 +65,6 @@ export class MiniroomsController {
   @ApiOperation({ summary: "미니룸에 미니미/말풍선 저장 (유저 기준)" })
   async saveLayout(@Body() body: { items: any[] }, @Req() req: Request) {
     const userId = req.user["id"];
-    console.log(userId, "sdf");
     await this.miniRoomService.saveMiniroomLayoutByUser(userId, body.items);
     return { message: "미니미/말풍선 위치 저장 완료" };
   }

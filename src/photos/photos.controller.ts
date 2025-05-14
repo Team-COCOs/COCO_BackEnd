@@ -14,6 +14,8 @@ import { SavePhotoFolderDto } from "./dto/photoFolder.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { PhotoFolder } from "./photoFolder.entity";
+import { SavePhotoDto } from "./dto/photos.dto";
+import { Photo } from "./photos.entity";
 @Controller("photos")
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
@@ -47,5 +49,36 @@ export class PhotosController {
     @Query("userId", ParseIntPipe) userId: number
   ): Promise<PhotoFolder[]> {
     return await this.photosService.getFolder(userId);
+  }
+
+  // 사진 저장
+  @Post("save")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "사진 저장" })
+  @ApiResponse({
+    status: 201,
+    description: "사진이 저장되었습니다.",
+    type: Photo,
+  })
+  async savePhoto(@Body() dto: SavePhotoDto, @Req() req): Promise<Photo> {
+    const userId = req.user.id;
+    return await this.photosService.savePhoto(userId, dto);
+  }
+
+  // 사진 조회
+  @Get("my-photos/:hostId")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "내 사진첩 목록 조회" })
+  @ApiResponse({
+    status: 200,
+    description: "사용자 사진 목록 반환",
+    type: [Photo],
+  })
+  async getMyPhotos(
+    @Param("hostId", ParseIntPipe) hostId: number,
+    @Req() req: any
+  ): Promise<Photo[]> {
+    const viewerId = req.user?.id;
+    return await this.photosService.getPhotosByUser(hostId, viewerId);
   }
 }

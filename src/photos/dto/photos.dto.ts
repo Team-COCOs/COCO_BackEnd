@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { VisibilityType } from "../photos.entity";
 
 export class NewPhotoDto {
   @ApiProperty({ example: 123, description: "사진 게시물 고유 ID" })
@@ -27,4 +28,21 @@ export class NewPhotoDto {
 
   @ApiProperty({ example: "photo", description: "항목 타입 (항상 'photo')" })
   type: "photo";
+}
+
+export class SavePhotoDto {
+  @ApiProperty()
+  photo_url: string;
+
+  @ApiProperty()
+  title: string;
+
+  @ApiProperty()
+  content: string;
+
+  @ApiProperty()
+  folderId?: number; // nullable
+
+  @ApiProperty({ enum: VisibilityType, default: VisibilityType.PUBLIC })
+  visibility: VisibilityType;
 }

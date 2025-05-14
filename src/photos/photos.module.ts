@@ -6,12 +6,14 @@ import { PhotosService } from "./photos.service";
 import { PhotosController } from "./photos.controller";
 import { PhotoFolder } from "./photoFolder.entity";
 import { UsersModule } from "src/users/users.module";
+import { FriendsModule } from "src/friends/friends.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Photo, PhotoFolder]),
     forwardRef(() => PhotosCommentsModule),
     forwardRef(() => UsersModule),
+    FriendsModule,
   ],
   providers: [PhotosService],
   controllers: [PhotosController],

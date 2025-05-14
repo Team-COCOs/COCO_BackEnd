@@ -7,13 +7,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Friend, FriendStatus } from "./friends.entity";
-import { User } from "../users/users.entity";
 import { UsersService } from "../users/users.service";
-import {
-  FriendListDto,
-  NewFriendDto,
-  TheirFriendListDto,
-} from "./dto/friends.dto";
+import { FriendListDto, NewFriendDto } from "./dto/friends.dto";
 
 @Injectable()
 export class FriendsService {

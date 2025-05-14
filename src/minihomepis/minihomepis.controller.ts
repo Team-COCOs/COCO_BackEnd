@@ -109,8 +109,6 @@ export class MinihomepisController {
       imageUrl = null;
     }
 
-    console.log(imageUrl, "sdfsdfsdfsd");
-
     await this.minihomepisService.saveMinihomepiInfo(userId, {
       title: body.name,
       mood: body.status,
