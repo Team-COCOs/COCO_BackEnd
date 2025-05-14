@@ -90,14 +90,26 @@ export class MinihomepisController {
       name: string;
       status: string;
       introduction: string;
+      minihompi_image_url: string | null;
     },
     @Req() req: Request
   ) {
     const userId = req.user["id"];
 
-    const imageUrl = file
-      ? `http://localhost:5001/uploads/${file.filename}`
-      : undefined;
+    let imageUrl: string | null = null;
+
+    if (file) {
+      imageUrl = `http://localhost:5001/uploads/${file.filename}`;
+    } else if (
+      body.minihompi_image_url &&
+      typeof body.minihompi_image_url === "string"
+    ) {
+      imageUrl = body.minihompi_image_url;
+    } else {
+      imageUrl = null;
+    }
+
+    console.log(imageUrl, "sdfsdfsdfsd");
 
     await this.minihomepisService.saveMinihomepiInfo(userId, {
       title: body.name,
@@ -105,7 +117,6 @@ export class MinihomepisController {
       introduction: body.introduction,
       minihompi_image: imageUrl,
     });
-
     return { message: "저장 완료" };
   }
 
