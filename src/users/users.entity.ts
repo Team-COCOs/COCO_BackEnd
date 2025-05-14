@@ -58,6 +58,8 @@ export class User {
 
   @OneToOne(() => Minihomepi, (minihomepi) => minihomepi.user, {
     cascade: true,
+    onDelete: "SET NULL",
+    nullable: true,
   })
   @JoinColumn({ name: "minihomepi_id" })
   minihomepi: Minihomepi;
