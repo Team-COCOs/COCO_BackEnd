@@ -9,6 +9,7 @@ import {
 import { StoreItems } from "../storeitems/storeitems.entity";
 import { MiniRoom } from "./minirooms.entity";
 import { User } from "src/users/users.entity";
+import { Purchase } from "src/purchases/purchases.entity";
 
 @Entity("minimis")
 export class Minimi {
@@ -23,6 +24,9 @@ export class Minimi {
   @JoinColumn({ name: "store_item_id" })
   storeItem: StoreItems;
   // 미니미 아이템
+
+  @ManyToOne(() => Purchase, { nullable: true, eager: true })
+  purchase: Purchase;
 
   @Column({ type: "int" })
   left: number;

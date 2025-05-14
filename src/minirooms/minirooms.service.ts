@@ -8,10 +8,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { SpeechBubble } from "./speechBubble.entity";
 import { MiniRoom } from "../minirooms/minirooms.entity";
-import { StoreitemsService } from "src/storeitems/storeitems.service";
+import { StoreitemsService } from "../storeitems/storeitems.service";
 import { Minimi } from "./minimi.entity";
 import { UsersService } from "../users/users.service";
-import { UseritemsService } from "src/useritems/useritems.service";
+import { PurchasesService } from "../purchases/purchases.service";
 
 @Injectable()
 export class MiniroomsService {
@@ -29,7 +29,7 @@ export class MiniroomsService {
     private readonly usersService: UsersService,
 
     private readonly storeItemService: StoreitemsService,
-    private readonly useritemsService: UseritemsService
+    private readonly purchasesService: PurchasesService
   ) {}
 
   // 미니룸 생성
@@ -118,11 +118,14 @@ export class MiniroomsService {
         });
 
         if (item.id !== "default-minimi") {
-          const storeItem = await this.storeItemService.findItemById(
+          const purchase = await this.purchasesService.getPurchaseById(
+            userId,
             Number(item.id)
           );
-          if (!storeItem) continue;
-          minimi.storeItem = storeItem;
+          if (!purchase) {
+            throw new NotFoundException(`Purchase ${item.id} not found`);
+          }
+          minimi.storeItem = purchase.storeItems;
         }
 
         newMinimis.push(minimi);
@@ -136,7 +139,7 @@ export class MiniroomsService {
   // 미니룸 조회
   async getMiniroomLayoutByUser(userId: number): Promise<
     {
-      id: number;
+      id: number | "default-minimi";
       type: "minimi" | "speechBubble";
       left: number;
       top: number;
@@ -150,7 +153,7 @@ export class MiniroomsService {
 
     if (!miniroom) return [];
     const minimis = miniroom.minimis.map((minimi) => ({
-      id: minimi.storeItem.id,
+      id: minimi.purchase ? minimi.purchase.id : ("default-minimi" as const),
       type: "minimi" as const,
       left: minimi.left,
       top: minimi.top,

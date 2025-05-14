@@ -6,6 +6,7 @@ import { Purchase } from "./purchases.entity";
 import { UsersModule } from "src/users/users.module";
 import { UseritemsModule } from "src/useritems/useritems.module";
 import { StoreitemsModule } from "src/storeitems/storeitems.module";
+import { MiniroomsModule } from "src/minirooms/minirooms.module";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { StoreitemsModule } from "src/storeitems/storeitems.module";
     forwardRef(() => UseritemsModule),
     forwardRef(() => StoreitemsModule),
     forwardRef(() => UsersModule),
+    forwardRef(() => MiniroomsModule),
   ],
   providers: [PurchasesService],
   controllers: [PurchasesController],
