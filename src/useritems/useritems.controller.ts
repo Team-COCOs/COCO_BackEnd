@@ -55,10 +55,11 @@ export class UseritemsController {
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "bgm 아이템 저장" })
   @ApiResponse({ status: 200, description: "bgm 아이템이 저장되었습니다." })
-  async setBGM(@Body() body: { storeItemId: number }, @Req() req: Request) {
-    const { storeItemId } = body;
+  async setBGM(@Body() body: { bgmId: number }, @Req() req: Request) {
+    const { bgmId } = body;
     const userId = (req.user as any).id;
-    return await this.useritemsService.setBGM(userId, storeItemId);
+
+    return await this.useritemsService.setBGM(userId, bgmId);
   }
 
   // 대표 bgm 조회
