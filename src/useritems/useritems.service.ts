@@ -130,14 +130,23 @@ export class UseritemsService {
   // 미니룸 배경 조회
   async getUserMiniRoom(
     userId: number
-  ): Promise<{ id: number; file: string } | null> {
+  ): Promise<{ id: number | null; file: string } | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
       relations: ["miniroomItem"],
     });
+
     if (!userItem?.miniroomItem) return null;
+
+    const purchase = await this.purchasesService.getPurchasesItems(
+      userId,
+      userItem.miniroomItem.id
+    );
+
+    console.log("구매 아이디", purchase.id);
+
     return {
-      id: userItem.miniroomItem.id,
+      id: purchase ? purchase.id : null,
       file: userItem.miniroomItem.file,
     };
   }

@@ -30,6 +30,8 @@ export class MiniroomsController {
     @Req() req: Request
   ) {
     const userId = req.user["id"];
+
+    console.log(body.purchaseId);
     await this.userItemsService.setMiniRoomBack(userId, body.purchaseId);
     return { message: "미니룸 배경 저장 완료" };
   }
