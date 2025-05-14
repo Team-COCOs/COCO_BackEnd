@@ -29,7 +29,6 @@ export class UseritemsController {
     const { purchaseId } = body;
     const userId = (req.user as any).id;
 
-    console.log(purchaseId, "sdfsd");
     return await this.useritemsService.setMinimi(userId, purchaseId);
   }
 

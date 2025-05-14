@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserItem } from "./useritems.entity";
@@ -12,8 +12,12 @@ export class UseritemsService {
     @InjectRepository(UserItem)
     private readonly userItemRepository: Repository<UserItem>,
     private readonly purchasesService: PurchasesService,
-    private readonly usersService: UsersService,
-    private readonly miniroomService: MiniroomsService
+
+    @Inject(forwardRef(() => MiniroomsService))
+    private readonly miniroomService: MiniroomsService,
+
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService
   ) {}
 
   // db 저장 및 수정
@@ -86,10 +90,10 @@ export class UseritemsService {
   // 미니룸 배경 설정
   async setMiniRoomBack(
     userId: number,
-    storeItemId: number | "default-miniroom"
+    purchaseId: number | "default-miniroom"
   ): Promise<number | null> {
     // 기본 배경으로 되돌릴 경우
-    if (storeItemId === "default-miniroom") {
+    if (purchaseId === "default-miniroom") {
       const userItem = await this.getOrCreateUserItem(userId);
       userItem.miniroomItem = null;
       await this.userItemRepository.save(userItem);
@@ -103,9 +107,9 @@ export class UseritemsService {
     }
 
     // 유저가 구매한 아이템인지 검증
-    const purchase = await this.purchasesService.getPurchasesItems(
+    const purchase = await this.purchasesService.getPurchaseById(
       userId,
-      storeItemId
+      purchaseId
     );
     if (!purchase)
       throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
@@ -132,7 +136,6 @@ export class UseritemsService {
       relations: ["miniroomItem"],
     });
     if (!userItem?.miniroomItem) return null;
-    console.log(userItem.miniroomItem);
     return {
       id: userItem.miniroomItem.id,
       file: userItem.miniroomItem.file,
