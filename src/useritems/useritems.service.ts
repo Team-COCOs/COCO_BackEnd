@@ -81,8 +81,13 @@ export class UseritemsService {
 
     if (!userItem?.minimiItem) return null;
 
+    const purchase = await this.purchasesService.getPurchasesItems(
+      userId,
+      userItem.minimiItem.id
+    );
+
     return {
-      id: userItem.minimiItem.id,
+      id: purchase ? purchase.id : null,
       file: userItem.minimiItem.file,
     };
   }
