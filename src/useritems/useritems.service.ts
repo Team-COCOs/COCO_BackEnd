@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserItem } from "./useritems.entity";
+import { LanguageType, UserItem } from "./useritems.entity";
 import { PurchasesService } from "src/purchases/purchases.service";
 import { UsersService } from "src/users/users.service";
 import { MiniroomsService } from "src/minirooms/minirooms.service";
@@ -148,8 +148,6 @@ export class UseritemsService {
       userItem.miniroomItem.id
     );
 
-    console.log("구매 아이디", purchase.id);
-
     return {
       id: purchase ? purchase.id : null,
       file: userItem.miniroomItem.file,
@@ -192,5 +190,41 @@ export class UseritemsService {
         artist: userItem.bgmItem.artist,
       },
     ];
+  }
+
+  // 탭 설정
+  async setTabs(userId: number, tabs: string[]): Promise<string[]> {
+    const userItem = await this.getOrCreateUserItem(userId);
+    userItem.tabs = tabs;
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.tabs;
+  }
+
+  // 탭 조회
+  async getTabs(userId: number): Promise<string[]> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    return userItem?.tabs ?? [];
+  }
+
+  // 언어 설정
+  async setLanguage(
+    userId: number,
+    language: LanguageType
+  ): Promise<LanguageType> {
+    const userItem = await this.getOrCreateUserItem(userId);
+    userItem.language = language;
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.language;
+  }
+
+  // 언어 조회
+  async getUserLanguage(userId: number): Promise<LanguageType> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+    });
+    return userItem?.language ?? LanguageType.KO;
   }
 }

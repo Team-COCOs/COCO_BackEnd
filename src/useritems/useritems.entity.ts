@@ -7,8 +7,13 @@ import {
   ManyToOne,
 } from "typeorm";
 import { User } from "../users/users.entity";
-import { Purchase } from "../purchases/purchases.entity";
 import { StoreItems } from "src/storeitems/storeitems.entity";
+
+export enum LanguageType {
+  KO = "ko",
+  ENG = "en",
+}
+
 @Entity("useritem")
 export class UserItem {
   @PrimaryGeneratedColumn()
@@ -17,6 +22,11 @@ export class UserItem {
   @OneToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
+  @JoinColumn({ name: "diary_background_id" })
+  diaryBackgroundItem: StoreItems;
+  // 배경 아이템
 
   @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "skin_item_id" })
@@ -34,11 +44,6 @@ export class UserItem {
   // 미니미 아이템
 
   @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
-  @JoinColumn({ name: "diary_background_id" })
-  diaryBackgroundItem: StoreItems;
-  // 다이어리 배경
-
-  @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "tab_color_id" })
   tabColorItem: StoreItems;
   // tab 아이템
@@ -48,9 +53,10 @@ export class UserItem {
   bgmItem: StoreItems;
   // BGM 아이템
 
-  @Column({ type: "varchar", nullable: true })
-  font: string;
+  @Column("json", { nullable: true })
+  tabs: string[];
+  // 탭
 
-  @Column({ type: "varchar", length: 5, default: "ko" })
-  language: string;
+  @Column({ type: "enum", enum: LanguageType, default: "ko" })
+  language: LanguageType;
 }

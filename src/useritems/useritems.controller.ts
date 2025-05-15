@@ -8,11 +8,13 @@ import {
   Req,
   Patch,
   NotFoundException,
+  ParseIntPipe,
 } from "@nestjs/common";
 import { UseritemsService } from "./useritems.service";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
+import { LanguageType } from "./useritems.entity";
 @Controller("useritems")
 export class UseritemsController {
   constructor(private readonly useritemsService: UseritemsService) {}
@@ -81,5 +83,37 @@ export class UseritemsController {
     }
 
     return bgms;
+  }
+
+  // 언어 저장
+  @Post("set-language")
+  @UseGuards(AuthGuard("jwt"))
+  async setLanguage(
+    @Body("language") language: LanguageType,
+    @Req() req: Request
+  ) {
+    const userId = (req.user as any).id;
+    return this.useritemsService.setLanguage(userId, language);
+  }
+
+  // 언어 조회
+  @Get("language/:userId")
+  async getLanguage(@Param("userId", ParseIntPipe) userId: number) {
+    return this.useritemsService.getUserLanguage(userId);
+  }
+
+  // 탭 저장
+  @Post("set-tabs")
+  @UseGuards(AuthGuard("jwt"))
+  async setTabs(@Body("tabs") tabs: string[], @Req() req: Request) {
+    const userId = (req.user as any).id;
+
+    return this.useritemsService.setTabs(userId, tabs);
+  }
+
+  // 탭 조회
+  @Get("tabs/:userId")
+  async getTabs(@Param("userId", ParseIntPipe) userId: number) {
+    return this.useritemsService.getTabs(userId);
   }
 }
