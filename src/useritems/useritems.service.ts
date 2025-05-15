@@ -257,7 +257,7 @@ export class UseritemsService {
     );
 
     if (!purchase) {
-      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+      throw new Error("선택한 미니홈피 아이템을 구매한 내역이 없습니다.");
     }
 
     userItem.skinItem = purchase.storeItems;
@@ -310,7 +310,7 @@ export class UseritemsService {
     );
 
     if (!purchase) {
-      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+      throw new Error("선택한 탭 컬러를 구매한 내역이 없습니다.");
     }
 
     userItem.tapColorItem = purchase.storeItems;
@@ -344,11 +344,11 @@ export class UseritemsService {
   // 다이어리 배경 저장
   async setDK(
     userId: number,
-    purchaseId: number | "default-dk"
+    purchaseId: number | "default-bk"
   ): Promise<number | null> {
     const userItem = await this.getOrCreateUserItem(userId);
 
-    if (purchaseId === "default-dk") {
+    if (purchaseId === "default-bk") {
       userItem.diaryBackgroundItem = null;
 
       await this.usersService.updateMinimiImage(userId, null);
@@ -363,7 +363,7 @@ export class UseritemsService {
     );
 
     if (!purchase) {
-      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+      throw new Error("선택한 배경을 구매한 내역이 없습니다.");
     }
 
     userItem.diaryBackgroundItem = purchase.storeItems;
