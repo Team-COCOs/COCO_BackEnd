@@ -16,6 +16,8 @@ import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { PhotoFolder } from "./photoFolder.entity";
 import { SavePhotoDto } from "./dto/photos.dto";
 import { Photo } from "./photos.entity";
+import { Request } from "express";
+
 @Controller("photos")
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
@@ -76,9 +78,9 @@ export class PhotosController {
   })
   async getMyPhotos(
     @Param("hostId", ParseIntPipe) hostId: number,
-    @Req() req: any
+    @Req() req: Request
   ): Promise<Photo[]> {
-    const viewerId = req.user?.id;
+    const viewerId = req.user["id"];
     return await this.photosService.getPhotosByUser(hostId, viewerId);
   }
 }

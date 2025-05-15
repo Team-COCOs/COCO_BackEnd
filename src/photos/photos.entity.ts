@@ -59,6 +59,9 @@ export class Photo {
   })
   visibility: VisibilityType;
 
+  @Column({ type: "boolean", default: false })
+  isScripted: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 }

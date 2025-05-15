@@ -10,6 +10,7 @@ import {
 } from "@nestjs/common";
 import { FriendCommentsService } from "./friend_comments.service";
 import { AuthGuard } from "@nestjs/passport";
+import { Request } from "express";
 
 @Controller("friend-comments")
 export class FriendCommentsController {
@@ -21,9 +22,9 @@ export class FriendCommentsController {
   async createFriendComment(
     @Body("hostId") hostId: number,
     @Body("content") content: string,
-    @Req() req: any
+    @Req() req: Request
   ) {
-    const authorId = req.user.id;
+    const authorId = req.user["id"];
 
     const result = await this.friendCommentsService.create(
       authorId,
@@ -50,8 +51,8 @@ export class FriendCommentsController {
   // 삭제
   @Delete(":hostId")
   @UseGuards(AuthGuard("jwt"))
-  async deleteComment(@Param("hostId") hostId: number, @Req() req: any) {
-    const authorId = req.user.id;
+  async deleteComment(@Param("hostId") hostId: number, @Req() req: Request) {
+    const authorId = req.user["id"];
     return this.friendCommentsService.delete(authorId, hostId);
   }
 }

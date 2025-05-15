@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
-import { UsersService } from "src/users/users.service";
 import { VisitService } from "./visit.service";
 import { AuthGuard } from "@nestjs/passport";
+import { Request } from "express";
 
 @Controller("visit")
 export class VisitController {
@@ -10,8 +10,8 @@ export class VisitController {
   // 로그인 유저
   @Post("auth")
   @UseGuards(AuthGuard("jwt"))
-  async visitAuth(@Body("hostId") hostId: number, @Req() req: any) {
-    const visitorId = req.user.id;
+  async visitAuth(@Body("hostId") hostId: number, @Req() req: Request) {
+    const visitorId = req.user["id"];
     return this.visitService.visit(hostId, visitorId);
   }
 

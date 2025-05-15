@@ -234,4 +234,32 @@ export class FriendsService {
       relations: ["requester", "receiver"],
     });
   }
+
+  // 친구 관리
+  async deleteFriend(
+    userIdA: number,
+    userIdB: number
+  ): Promise<{ ok: boolean }> {
+    const friendship = await this.friendsRepository.findOne({
+      where: [
+        {
+          requester: { id: userIdA },
+          receiver: { id: userIdB },
+          status: FriendStatus.ACCEPTED,
+        },
+        {
+          requester: { id: userIdB },
+          receiver: { id: userIdA },
+          status: FriendStatus.ACCEPTED,
+        },
+      ],
+    });
+
+    if (!friendship) {
+      throw new NotFoundException("일촌 관계가 존재하지 않습니다.");
+    }
+
+    await this.friendsRepository.remove(friendship);
+    return { ok: true };
+  }
 }
