@@ -62,7 +62,7 @@ export class StoreitemsController {
   @Post()
   @UseGuards(AuthGuard("jwt"), AdminGuard)
   @UseInterceptors(
-    FileInterceptor("file", {
+    FileInterceptor("storeItem", {
       storage: diskStorage({
         destination: "./uploads",
         filename: (req, file, cb) => {

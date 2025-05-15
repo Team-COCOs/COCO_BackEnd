@@ -52,6 +52,7 @@ import { Minimi } from "./minirooms/minimi.entity";
         username: config.get<string>("DB_USER"),
         password: config.get<string>("DB_PASSWORD"),
         database: config.get<string>("DB_NAME"),
+        timezone: "+09:00",
         entities: [
           User,
           Photo,

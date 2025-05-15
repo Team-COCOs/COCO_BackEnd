@@ -66,6 +66,7 @@ export class MinihomepisController {
     return { hostId, total, today };
   }
 
+  // 미니홈피 정보 저장
   @Post("info")
   @UseGuards(AuthGuard("jwt"))
   @UseInterceptors(

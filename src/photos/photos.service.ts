@@ -130,6 +130,7 @@ export class PhotosService {
     photo.content = dto.content;
     photo.visibility = dto.visibility;
     photo.isScripted = dto.isScripted;
+
     if (dto.folderId) {
       const folder = await this.photoFolderRepository.findOne({
         where: { id: dto.folderId },

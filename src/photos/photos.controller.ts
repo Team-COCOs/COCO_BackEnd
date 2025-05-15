@@ -7,16 +7,21 @@ import {
   Post,
   Query,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
 import { PhotosService } from "./photos.service";
 import { SavePhotoFolderDto } from "./dto/photoFolder.dto";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiConsumes, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { PhotoFolder } from "./photoFolder.entity";
 import { SavePhotoDto } from "./dto/photos.dto";
 import { Photo } from "./photos.entity";
 import { Request } from "express";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { extname } from "path";
 
 @Controller("photos")
 export class PhotosController {
@@ -27,9 +32,9 @@ export class PhotosController {
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SavePhotoFolderDto[],
-    @Req() req
+    @Req() req: Request
   ) {
-    const userId = req.user.id;
+    const userId = req.user["id"];
 
     const result = await this.photosService.saveFolderTree(folders, userId);
 
@@ -56,14 +61,37 @@ export class PhotosController {
   // 사진 저장
   @Post("save")
   @UseGuards(AuthGuard("jwt"))
+  @UseInterceptors(
+    FileInterceptor("photo", {
+      storage: diskStorage({
+        destination: "./uploads",
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    })
+  )
+  @ApiConsumes("multipart/form-data")
   @ApiOperation({ summary: "사진 저장" })
   @ApiResponse({
     status: 201,
     description: "사진이 저장되었습니다.",
     type: Photo,
   })
-  async savePhoto(@Body() dto: SavePhotoDto, @Req() req): Promise<Photo> {
-    const userId = req.user.id;
+  async savePhoto(
+    @Body() dto: SavePhotoDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request
+  ): Promise<Photo> {
+    const userId = req.user["id"];
+
+    if (file) {
+      dto.photo_url = `/uploads/${file.filename}`;
+    }
+
     return await this.photosService.savePhoto(userId, dto);
   }
 
