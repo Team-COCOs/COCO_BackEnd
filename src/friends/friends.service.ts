@@ -9,6 +9,7 @@ import { Repository } from "typeorm";
 import { Friend, FriendStatus } from "./friends.entity";
 import { UsersService } from "../users/users.service";
 import { FriendListDto, NewFriendDto } from "./dto/friends.dto";
+import { Gender } from "src/users/users.entity";
 
 @Injectable()
 export class FriendsService {
@@ -27,6 +28,7 @@ export class FriendsService {
     receiverName: string;
     requesterImage: string;
     receiverImage: string;
+    requesterGender: Gender;
   }> {
     if (requesterId === receiverId) {
       throw new BadRequestException("자기 자신은 선택할 수 없습니다.");
@@ -44,6 +46,7 @@ export class FriendsService {
       requesterImage: requester.minimi_image,
       receiverName: receiver.name,
       receiverImage: receiver.minimi_image,
+      requesterGender: requester.gender,
     };
   }
 
