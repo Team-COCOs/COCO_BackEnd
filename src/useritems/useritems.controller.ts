@@ -157,7 +157,7 @@ export class UseritemsController {
   }
 
   // 다이어리 배경 저장
-  @Patch("set-DK")
+  @Patch("set-BK")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "다이어리 배경 저장" })
   @ApiResponse({
@@ -175,14 +175,14 @@ export class UseritemsController {
   }
 
   // 다이어리 배경 조회
-  @Get("dk/:userId")
+  @Get("bk/:userId")
   @ApiOperation({ summary: "다이어리 배경 조회" })
   async getDK(
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string }> {
-    const dk = await this.useritemsService.getUserDK(userId);
+    const bk = await this.useritemsService.getUserDK(userId);
 
-    if (!dk) {
+    if (!bk) {
       return {
         id: null,
         file: null,
@@ -190,8 +190,8 @@ export class UseritemsController {
     }
 
     return {
-      id: dk.id,
-      file: dk.file,
+      id: bk.id,
+      file: bk.file,
     };
   }
 
