@@ -15,7 +15,7 @@ export class PhotoComment {
   id: number;
 
   @ManyToOne(() => Photo, (photo) => photo.comments, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "diary_id" })
+  @JoinColumn({ name: "photo_id" })
   photo: Photo;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
@@ -23,10 +23,10 @@ export class PhotoComment {
   user: User;
 
   @Column({ type: "text" })
-  content: string;
+  comment: string;
 
   @ManyToOne(() => PhotoComment, { nullable: true, onDelete: "CASCADE" })
-  @JoinColumn({ name: "parent_comment_id" })
+  @JoinColumn({ name: "parent_id" })
   parentComment: PhotoComment;
 
   @CreateDateColumn()
