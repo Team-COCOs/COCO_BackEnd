@@ -342,7 +342,7 @@ export class UseritemsService {
   }
 
   // 다이어리 배경 저장
-  async setDK(
+  async setBK(
     userId: number,
     purchaseId: number | "default-bk"
   ): Promise<number | null> {
@@ -373,7 +373,7 @@ export class UseritemsService {
   }
 
   // 미니홈피 스킨 조회
-  async getUserDK(
+  async getUserBK(
     userId: number
   ): Promise<{ id: number; file: string } | null> {
     const userItem = await this.userItemRepository.findOne({

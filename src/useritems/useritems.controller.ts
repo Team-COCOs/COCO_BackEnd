@@ -164,23 +164,24 @@ export class UseritemsController {
     status: 200,
     description: "다이어리 배경 아이템이 저장되었습니다.",
   })
-  async setDK(
+  async setBK(
     @Body() body: { purchaseId: number | "default-bk" },
     @Req() req: Request
   ) {
     const { purchaseId } = body;
     const userId = (req.user as any).id;
+    console.log(purchaseId, "sdfasdfasdfa");
 
-    return await this.useritemsService.setDK(userId, purchaseId);
+    return await this.useritemsService.setBK(userId, purchaseId);
   }
 
   // 다이어리 배경 조회
   @Get("bk/:userId")
   @ApiOperation({ summary: "다이어리 배경 조회" })
-  async getDK(
+  async getBK(
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string }> {
-    const bk = await this.useritemsService.getUserDK(userId);
+    const bk = await this.useritemsService.getUserBK(userId);
 
     if (!bk) {
       return {
