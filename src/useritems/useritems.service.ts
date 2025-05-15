@@ -378,7 +378,7 @@ export class UseritemsService {
   ): Promise<{ id: number; file: string } | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
-      relations: ["skinItem"],
+      relations: ["diaryBackgroundItem"],
     });
 
     if (!userItem?.diaryBackgroundItem) return null;

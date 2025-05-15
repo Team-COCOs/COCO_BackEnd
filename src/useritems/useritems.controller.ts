@@ -131,7 +131,6 @@ export class UseritemsController {
   ) {
     const { purchaseId } = body;
     const userId = (req.user as any).id;
-    console.log(purchaseId, "sdfasdfasdfa");
     return await this.useritemsService.setMinihomepis(userId, purchaseId);
   }
 
@@ -170,7 +169,6 @@ export class UseritemsController {
   ) {
     const { purchaseId } = body;
     const userId = (req.user as any).id;
-    console.log(purchaseId, "sdfasdfasdfa");
 
     return await this.useritemsService.setBK(userId, purchaseId);
   }
