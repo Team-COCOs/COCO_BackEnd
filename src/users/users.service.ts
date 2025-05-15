@@ -9,13 +9,15 @@ import { User, Gender, UserRole } from "./users.entity";
 import { SearchUserDto } from "./dto/searchUsers.dto";
 import { MiniroomsService } from "src/minirooms/minirooms.service";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
+import { UseritemsService } from "src/useritems/useritems.service";
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly miniroomService: MiniroomsService,
-    private readonly minihomepiService: MinihomepisService
+    private readonly minihomepiService: MinihomepisService,
+    private readonly useritemsService: UseritemsService
   ) {}
 
   // 유저 정보 저장
@@ -47,10 +49,14 @@ export class UsersService {
     // 미니룸 생성
     const miniroom = await this.miniroomService.saveMiniroom(savedUser.id);
 
+    // 유저 아이템 생성 (탭 기본값 포함)
+    const createdItem = await this.useritemsService.getOrCreateUserItem(
+      savedUser.id
+    );
+
     savedUser.minihomepi = minihomepi;
     savedUser.miniroom = miniroom;
 
-    // 5. 관계 반영하여 다시 저장
     return await this.userRepository.save(savedUser);
   }
 

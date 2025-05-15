@@ -54,7 +54,7 @@ export class UserItem {
   // BGM 아이템
 
   @Column("json", { nullable: true })
-  tabs: string[];
+  taps: string[];
   // 탭
 
   @Column({ type: "enum", enum: LanguageType, default: "ko" })

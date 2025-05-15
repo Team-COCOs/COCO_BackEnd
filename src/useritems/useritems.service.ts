@@ -29,8 +29,12 @@ export class UseritemsService {
       const user = await this.usersService.findUserById(userId);
       userItem = this.userItemRepository.create({
         user,
-        tabs: ["diary", "visitor", "photo", "coco"],
+        taps: ["diary", "visitor", "photo", "coco"],
       });
+      userItem = await this.userItemRepository.save(userItem);
+    } else if (!userItem.taps || userItem.taps.length === 0) {
+      userItem.taps = ["diary", "visitor", "photo", "coco"];
+      await this.userItemRepository.save(userItem);
     }
     return userItem;
   }
@@ -196,11 +200,11 @@ export class UseritemsService {
   }
 
   // 탭 설정
-  async setTabs(userId: number, tabs: string[]): Promise<string[]> {
+  async setTabs(userId: number, taps: string[]): Promise<string[]> {
     const userItem = await this.getOrCreateUserItem(userId);
-    userItem.tabs = tabs;
+    userItem.taps = taps;
     const saved = await this.userItemRepository.save(userItem);
-    return saved.tabs;
+    return saved.taps;
   }
 
   // 탭 조회
@@ -209,7 +213,7 @@ export class UseritemsService {
       where: { user: { id: userId } },
     });
 
-    return userItem?.tabs ?? [];
+    return userItem?.taps ?? [];
   }
 
   // 언어 설정

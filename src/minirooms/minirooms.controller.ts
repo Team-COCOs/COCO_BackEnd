@@ -31,7 +31,6 @@ export class MiniroomsController {
   ) {
     const userId = req.user["id"];
 
-    console.log(body.purchaseId);
     await this.userItemsService.setMiniRoomBack(userId, body.purchaseId);
     return { message: "미니룸 배경 저장 완료" };
   }
@@ -68,7 +67,6 @@ export class MiniroomsController {
   async saveLayout(@Body() body: { items: any[] }, @Req() req: Request) {
     const userId = req.user["id"];
     await this.miniRoomService.saveMiniroomLayoutByUser(userId, body.items);
-    console.log(body.items);
     return { message: "미니미/말풍선 위치 저장 완료" };
   }
 
