@@ -119,7 +119,7 @@ export class FriendsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: "일촌 삭제" })
   async unfriend(@Req() req: Request, @Param("targetId") targetId: number) {
-    const myId = req.user["id"];
-    return await this.friendsService.deleteFriend(myId, targetId);
+    const userId = req.user["id"];
+    return await this.friendsService.deleteFriend(userId, targetId);
   }
 }

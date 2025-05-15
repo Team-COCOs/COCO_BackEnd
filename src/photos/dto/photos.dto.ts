@@ -43,6 +43,9 @@ export class SavePhotoDto {
   @ApiProperty()
   folderId?: number;
 
+  @ApiProperty()
+  isScripted: boolean;
+
   @ApiProperty({ enum: VisibilityType, default: VisibilityType.PUBLIC })
   visibility: VisibilityType;
 }
