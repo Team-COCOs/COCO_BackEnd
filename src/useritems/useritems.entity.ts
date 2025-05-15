@@ -34,6 +34,11 @@ export class UserItem {
   // 미니홈피 스킨 아이템
 
   @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
+  @JoinColumn({ name: "tap_color_id" })
+  tapColorItem: StoreItems;
+  // tap 아이템
+
+  @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "miniroom_item_id" })
   miniroomItem: StoreItems;
   // 미니룸 아이템
@@ -42,11 +47,6 @@ export class UserItem {
   @JoinColumn({ name: "minimi_item_id" })
   minimiItem: StoreItems;
   // 미니미 아이템
-
-  @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
-  @JoinColumn({ name: "tab_color_id" })
-  tabColorItem: StoreItems;
-  // tab 아이템
 
   @ManyToOne(() => StoreItems, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn({ name: "bgm_id" })

@@ -27,7 +27,10 @@ export class UseritemsService {
     });
     if (!userItem) {
       const user = await this.usersService.findUserById(userId);
-      userItem = this.userItemRepository.create({ user });
+      userItem = this.userItemRepository.create({
+        user,
+        tabs: ["diary", "visitor", "photo", "coco"],
+      });
     }
     return userItem;
   }
@@ -226,5 +229,164 @@ export class UseritemsService {
       where: { user: { id: userId } },
     });
     return userItem?.language ?? LanguageType.KO;
+  }
+
+  // 미니홈피 스킨 저장
+  async setMinihomepis(
+    userId: number,
+    purchaseId: number | "default-minihomepis"
+  ): Promise<number | null> {
+    const userItem = await this.getOrCreateUserItem(userId);
+
+    if (purchaseId === "default-minihomepis") {
+      userItem.skinItem = null;
+
+      await this.usersService.updateMinimiImage(userId, null);
+
+      await this.userItemRepository.save(userItem);
+      return null;
+    }
+
+    const purchase = await this.purchasesService.getPurchaseById(
+      userId,
+      purchaseId
+    );
+
+    if (!purchase) {
+      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+    }
+
+    userItem.skinItem = purchase.storeItems;
+
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.skinItem.id;
+  }
+
+  // 미니홈피 스킨 조회
+  async getUserMinihomepis(
+    userId: number
+  ): Promise<{ id: number; file: string } | null> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["skinItem"],
+    });
+
+    if (!userItem?.skinItem) return null;
+
+    const purchase = await this.purchasesService.getPurchasesItems(
+      userId,
+      userItem.skinItem.id
+    );
+
+    return {
+      id: purchase ? purchase.id : null,
+      file: userItem.skinItem.file,
+    };
+  }
+
+  // 미니홈피 탭 컬러 저장
+  async setTapColor(
+    userId: number,
+    purchaseId: number | "default-tapcolor"
+  ): Promise<number | null> {
+    const userItem = await this.getOrCreateUserItem(userId);
+
+    if (purchaseId === "default-tapcolor") {
+      userItem.tapColorItem = null;
+
+      await this.usersService.updateMinimiImage(userId, null);
+
+      await this.userItemRepository.save(userItem);
+      return null;
+    }
+
+    const purchase = await this.purchasesService.getPurchaseById(
+      userId,
+      purchaseId
+    );
+
+    if (!purchase) {
+      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+    }
+
+    userItem.tapColorItem = purchase.storeItems;
+
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.tapColorItem.id;
+  }
+
+  // 미니홈피 탭 컬러 조회
+  async getUserTapColor(
+    userId: number
+  ): Promise<{ id: number; file: string } | null> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["tapColorItem"],
+    });
+
+    if (!userItem?.tapColorItem) return null;
+
+    const purchase = await this.purchasesService.getPurchasesItems(
+      userId,
+      userItem.tapColorItem.id
+    );
+
+    return {
+      id: purchase ? purchase.id : null,
+      file: userItem.tapColorItem.file,
+    };
+  }
+
+  // 다이어리 배경 저장
+  async setDK(
+    userId: number,
+    purchaseId: number | "default-dk"
+  ): Promise<number | null> {
+    const userItem = await this.getOrCreateUserItem(userId);
+
+    if (purchaseId === "default-dk") {
+      userItem.diaryBackgroundItem = null;
+
+      await this.usersService.updateMinimiImage(userId, null);
+
+      await this.userItemRepository.save(userItem);
+      return null;
+    }
+
+    const purchase = await this.purchasesService.getPurchaseById(
+      userId,
+      purchaseId
+    );
+
+    if (!purchase) {
+      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+    }
+
+    userItem.diaryBackgroundItem = purchase.storeItems;
+
+    const saved = await this.userItemRepository.save(userItem);
+    return saved.diaryBackgroundItem.id;
+  }
+
+  // 미니홈피 스킨 조회
+  async getUserDK(
+    userId: number
+  ): Promise<{ id: number; file: string } | null> {
+    const userItem = await this.userItemRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ["skinItem"],
+    });
+
+    if (!userItem?.diaryBackgroundItem) return null;
+
+    const purchase = await this.purchasesService.getPurchasesItems(
+      userId,
+      userItem.diaryBackgroundItem.id
+    );
+
+    return {
+      id: purchase ? purchase.id : null,
+      file: userItem.diaryBackgroundItem.file,
+    };
   }
 }

@@ -8,9 +8,9 @@ import {
 export enum StoreItemType {
   TAPCOLOR = "tapcolor",
   MINIHOMEPIS = "minihomepis",
+  DIARY_BG = "diary_background",
   MINIROOM = "miniroom",
   MINIMI = "minimi",
-  DIARY_BG = "diary_background",
   BGM = "bgm",
 }
 @Entity("store_items")

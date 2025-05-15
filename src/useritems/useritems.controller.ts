@@ -86,7 +86,7 @@ export class UseritemsController {
   }
 
   // 언어 저장
-  @Post("set-language")
+  @Patch("set-language")
   @UseGuards(AuthGuard("jwt"))
   async setLanguage(
     @Body("language") language: LanguageType,
@@ -103,7 +103,7 @@ export class UseritemsController {
   }
 
   // 탭 저장
-  @Post("set-tabs")
+  @Patch("set-tabs")
   @UseGuards(AuthGuard("jwt"))
   async setTabs(@Body("tabs") tabs: string[], @Req() req: Request) {
     const userId = (req.user as any).id;
@@ -115,5 +115,122 @@ export class UseritemsController {
   @Get("tabs/:userId")
   async getTabs(@Param("userId", ParseIntPipe) userId: number) {
     return this.useritemsService.getTabs(userId);
+  }
+
+  // 미니홈피 배경 저장
+  @Patch("set-minihomepis")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "미니홈피 스킨 저장" })
+  @ApiResponse({
+    status: 200,
+    description: "미니홈피 아이템이 저장되었습니다.",
+  })
+  async setMinihomepis(
+    @Body() body: { purchaseId: number | "default-minihomepis" },
+    @Req() req: Request
+  ) {
+    const { purchaseId } = body;
+    const userId = (req.user as any).id;
+
+    return await this.useritemsService.setMinihomepis(userId, purchaseId);
+  }
+
+  // 미니홈피 배경 조회
+  @Get("minihomepis/:userId")
+  @ApiOperation({ summary: "대표 미니미 이미지 조회" })
+  async getMinihomepis(
+    @Param("userId") userId: number
+  ): Promise<{ id: number; file: string }> {
+    const minihomepis = await this.useritemsService.getUserMinihomepis(userId);
+
+    if (!minihomepis) {
+      return {
+        id: null,
+        file: null,
+      };
+    }
+
+    return {
+      id: minihomepis.id,
+      file: minihomepis.file,
+    };
+  }
+
+  // 다이어리 배경 저장
+  @Patch("set-DK")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "다이어리 배경 저장" })
+  @ApiResponse({
+    status: 200,
+    description: "다이어리 배경 아이템이 저장되었습니다.",
+  })
+  async setDK(
+    @Body() body: { purchaseId: number | "default-dk" },
+    @Req() req: Request
+  ) {
+    const { purchaseId } = body;
+    const userId = (req.user as any).id;
+
+    return await this.useritemsService.setDK(userId, purchaseId);
+  }
+
+  // 다이어리 배경 조회
+  @Get("dk/:userId")
+  @ApiOperation({ summary: "다이어리 배경 조회" })
+  async getDK(
+    @Param("userId") userId: number
+  ): Promise<{ id: number; file: string }> {
+    const dk = await this.useritemsService.getUserDK(userId);
+
+    if (!dk) {
+      return {
+        id: null,
+        file: null,
+      };
+    }
+
+    return {
+      id: dk.id,
+      file: dk.file,
+    };
+  }
+
+  // 탭 컬러 저장
+  @Patch("set-tapcolor")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "탭 색깔 저장" })
+  @ApiResponse({
+    status: 200,
+    description: "탭 컬러 아이템이 저장되었습니다.",
+  })
+  async settapcolor(
+    @Body() body: { purchaseId: number | "default-tapcolor" },
+    @Req() req: Request
+  ) {
+    const { purchaseId } = body;
+    const userId = (req.user as any).id;
+
+    return await this.useritemsService.setTapColor(userId, purchaseId);
+  }
+
+  // 탭 컬러 조회
+  @Get("tapcolor/:userId")
+  @ApiOperation({ summary: "탭 컬러 조회" })
+  async getTapColor(
+    @Param("userId") userId: number
+  ): Promise<{ id: number; file: string }> {
+    const tapcolor = await this.useritemsService.getUserTapColor(userId);
+
+    if (!tapcolor) {
+      return {
+        id: null,
+        file: null,
+      };
+    }
+
+    return {
+      id: tapcolor.id,
+      file: tapcolor.file,
+    };
   }
 }
