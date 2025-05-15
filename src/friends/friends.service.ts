@@ -142,6 +142,7 @@ export class FriendsService {
       requester: r.requester.name,
       receiver: r.receiver.name,
       requester_name: r.requester_name,
+      requester_gender: r.requester.gender,
       receiver_name: r.receiver_name,
       message: r.message,
       profileImg: r.requester.minimi_image,

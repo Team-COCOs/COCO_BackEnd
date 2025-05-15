@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Gender } from "src/users/users.entity";
 
 export class NewFriendDto {
   @ApiProperty({ example: 42, description: "친구 요청 레코드 ID" })
@@ -9,6 +10,9 @@ export class NewFriendDto {
 
   @ApiProperty({ example: "도도", description: "요청자가 설정한 내 별명" })
   requester_name: string;
+
+  @ApiProperty({ example: "man", description: "요청자 성별" })
+  requester_gender: Gender;
 
   @ApiProperty({ example: "나나", description: "요청자가 설정한 본인 별명" })
   receiver_name: string;
