@@ -22,7 +22,12 @@ export class FriendsService {
   async getNames(
     requesterId: number,
     receiverId: number
-  ): Promise<{ requesterName: string; receiverName: string }> {
+  ): Promise<{
+    requesterName: string;
+    receiverName: string;
+    requesterImage: string;
+    receiverImage: string;
+  }> {
     if (requesterId === receiverId) {
       throw new BadRequestException("자기 자신은 선택할 수 없습니다.");
     }
@@ -36,7 +41,9 @@ export class FriendsService {
 
     return {
       requesterName: requester.name,
+      requesterImage: requester.minimi_image,
       receiverName: receiver.name,
+      receiverImage: receiver.minimi_image,
     };
   }
 
