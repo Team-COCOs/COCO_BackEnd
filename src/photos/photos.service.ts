@@ -31,21 +31,25 @@ export class PhotosService {
         user: { id: userId },
         created_at: MoreThan(todayStart),
       },
-      relations: ["folder"],
+      relations: ["folder", "user"],
       order: { created_at: "DESC" },
       take: 10,
     });
 
-    const mappedPhotos: NewPhotoDto[] = photos.map((p) => ({
-      id: p.id,
-      author: p.user.name,
-      folderName: p.folder?.title ?? "기타",
-      photoUrl: p.photo_url,
-      title: p.title,
-      content: p.content,
-      created_at: p.created_at.toISOString().replace("T", " ").substring(0, 16),
-      type: "photo",
-    }));
+    const mappedPhotos: NewPhotoDto[] = photos.map((p) => {
+      const koreaTime = new Date(p.created_at.getTime() + 9 * 60 * 60 * 1000);
+      return {
+        id: p.id,
+        author: p.user.name,
+        folderName: p.folder?.title ?? "기타",
+        photoUrl: p.photo_url,
+        title: p.title,
+        content: p.content,
+        created_at: koreaTime.toISOString().replace("T", " ").substring(0, 16),
+        type: "photo",
+      };
+    });
+
     return mappedPhotos;
   }
 
