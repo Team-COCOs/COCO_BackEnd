@@ -223,6 +223,7 @@ export class FriendsService {
         profile_image: friend.minimi_image ?? "/avatarImg/default.png",
         myNaming: isRequester ? f.requester_name : f.receiver_name,
         theirNaming: isRequester ? f.receiver_name : f.requester_name,
+        friend_gender: friend.gender,
         since: f.created_at.toISOString().replace("T", " ").substring(0, 16),
       };
     });

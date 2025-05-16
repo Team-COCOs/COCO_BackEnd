@@ -92,7 +92,7 @@ export class PhotosController {
     if (file) {
       dto.photo_url = `/uploads/${file.filename}`;
     }
-
+    console.log(dto.folderId, "sdfsd");
     return await this.photosService.savePhoto(userId, dto);
   }
 
