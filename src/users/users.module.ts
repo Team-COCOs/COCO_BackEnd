@@ -23,6 +23,7 @@ import { MiniroomsModule } from "src/minirooms/minirooms.module";
     forwardRef(() => VisitModule),
     forwardRef(() => MinihomepisModule),
     forwardRef(() => MiniroomsModule),
+    forwardRef(() => PhotosModule),
   ],
   providers: [UsersService],
   controllers: [UsersController],

@@ -10,6 +10,7 @@ import { SearchUserDto } from "./dto/searchUsers.dto";
 import { MiniroomsService } from "src/minirooms/minirooms.service";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
 import { UseritemsService } from "src/useritems/useritems.service";
+import { PhotosService } from "src/photos/photos.service";
 @Injectable()
 export class UsersService {
   constructor(
@@ -17,7 +18,9 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     private readonly miniroomService: MiniroomsService,
     private readonly minihomepiService: MinihomepisService,
-    private readonly useritemsService: UseritemsService
+    private readonly useritemsService: UseritemsService,
+
+    private readonly photosService: PhotosService
   ) {}
 
   // 유저 정보 저장
@@ -51,6 +54,11 @@ export class UsersService {
 
     // 유저 아이템 생성 (탭 기본값 포함)
     const createdItem = await this.useritemsService.getOrCreateUserItem(
+      savedUser.id
+    );
+
+    // 폴더 생성
+    const photoFolder = await this.photosService.createDefaultFolders(
       savedUser.id
     );
 

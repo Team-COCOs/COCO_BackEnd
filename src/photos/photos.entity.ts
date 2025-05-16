@@ -59,6 +59,9 @@ export class Photo {
   @Column({ type: "boolean", default: false })
   isScripted: boolean;
 
+  @Column({ type: "varchar", length: 100, nullable: true })
+  origin_author: string;
+
   @CreateDateColumn()
   created_at: Date;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThan, In } from "typeorm";
 import { Photo, VisibilityType } from "./photos.entity";
@@ -18,6 +18,8 @@ export class PhotosService {
     private readonly photoFolderRepository: Repository<PhotoFolder>,
 
     private readonly friendsService: FriendsService,
+
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService
   ) {}
 
@@ -53,11 +55,28 @@ export class PhotosService {
     return mappedPhotos;
   }
 
+  // 회원가입 -> 기본 폴더 생성
+  async createDefaultFolders(userId: number): Promise<void> {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new Error("유저 정보가 없습니다");
+
+    const existing = await this.photoFolderRepository.find({ where: { user } });
+    if (existing.length > 0) return;
+
+    const defaultFolders = ["새 폴더", "스크랩"];
+    for (const title of defaultFolders) {
+      const folder = new PhotoFolder();
+      folder.title = title;
+      folder.user = user;
+      await this.photoFolderRepository.save(folder);
+    }
+  }
+
   // 사진쳡 폴더 저장
   async saveFolderTree(folders: SavePhotoFolderDto[], userId: number) {
     const user = await this.usersService.findUserById(userId);
 
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error("유저 정보가 없습니다");
 
     await this.photoFolderRepository.delete({ user });
 
@@ -223,14 +242,31 @@ export class PhotosService {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new Error("사용자를 찾을 수 없습니다.");
 
+    // 스크랩 폴더 확인 또는 생성
+    let scrapFolder = await this.photoFolderRepository.findOne({
+      where: {
+        user: { id: userId },
+        title: "스크랩",
+      },
+    });
+
+    if (!scrapFolder) {
+      scrapFolder = this.photoFolderRepository.create({
+        title: "스크랩",
+        user,
+      });
+      scrapFolder = await this.photoFolderRepository.save(scrapFolder);
+    }
+
     const copiedPhoto = new Photo();
     copiedPhoto.title = originalPhoto.title;
     copiedPhoto.content = originalPhoto.content;
     copiedPhoto.photo_url = originalPhoto.photo_url;
     copiedPhoto.visibility = VisibilityType.PUBLIC;
-    copiedPhoto.folder = originalPhoto.folder;
+    copiedPhoto.folder = scrapFolder;
     copiedPhoto.isScripted = true;
     copiedPhoto.user = user;
+    copiedPhoto.origin_author = originalPhoto.user.name;
 
     originalPhoto.use_count = (originalPhoto.use_count || 0) + 1;
     await this.photoRepository.save(originalPhoto);
