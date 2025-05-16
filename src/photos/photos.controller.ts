@@ -29,7 +29,7 @@ export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
 
   // 폴더 생성
-  @Post("saveTree")
+  @Patch("saveTree")
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SavePhotoFolderDto[],
@@ -92,7 +92,7 @@ export class PhotosController {
     if (file) {
       dto.photo_url = `/uploads/${file.filename}`;
     }
-    console.log(dto.folderId, "sdfsd");
+    console.log(dto, "sdfsd");
     return await this.photosService.savePhoto(userId, dto);
   }
 

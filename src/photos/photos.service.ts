@@ -68,8 +68,10 @@ export class PhotosService {
 
     await this.photoFolderRepository.delete({ user });
 
+    // 새 폴더를 위한 매핑
     const keyToEntityMap = new Map<string, PhotoFolder>();
 
+    // 새로 저장할 폴더들 처리
     for (const dto of folders) {
       const folder = new PhotoFolder();
       folder.title = dto.title;
@@ -79,12 +81,30 @@ export class PhotosService {
         folder.parent = keyToEntityMap.get(dto.parent_id)!;
       }
 
+      // 새 폴더 저장
       const saved = await this.photoFolderRepository.save(folder);
       keyToEntityMap.set(dto.key, saved);
     }
 
+    // 새로 저장된 폴더 ID를 사용하여 해당 폴더에 속하는 기존 사진들 업데이트
+    const newFolders = await this.photoFolderRepository.find({
+      where: { user },
+    });
+
+    // 기존 사진들 업데이트 (각 사진의 folderId를 새 폴더에 맞게 변경)
+    for (const folder of newFolders) {
+      const photos = await this.photoRepository.find({
+        where: { folder: { title: folder.title } },
+      });
+
+      for (const photo of photos) {
+        photo.folder = folder; // 해당 폴더로 사진의 폴더 업데이트
+        await this.photoRepository.save(photo); // 업데이트된 사진 저장
+      }
+    }
+
     return {
-      message: "폴더 저장 완료",
+      message: "폴더 및 사진 저장 완료",
     };
   }
 
