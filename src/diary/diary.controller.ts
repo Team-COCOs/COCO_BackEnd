@@ -14,6 +14,9 @@ import { AuthGuard } from "@nestjs/passport";
 import { SaveDiaryFolderDto } from "./dto/diaryFolder.dto";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { DiaryFolder } from "./diaryFolder.entity";
+import { Diary } from "./diary.entity";
+import { SaveDiaryDto } from "./dto/diary.dto";
+import { Request } from "express";
 
 @Controller("diary")
 export class DiaryController {
@@ -50,57 +53,38 @@ export class DiaryController {
     return await this.diaryService.getFolder(userId);
   }
 
-  // // 사진 저장
-  // @Post("save")
-  // @UseGuards(AuthGuard("jwt"))
-  // @UseInterceptors(
-  //   FileInterceptor("photo", {
-  //     storage: diskStorage({
-  //       destination: "./uploads",
-  //       filename: (req, file, cb) => {
-  //         const uniqueSuffix =
-  //           Date.now() + "-" + Math.round(Math.random() * 1e9);
-  //         const ext = extname(file.originalname);
-  //         cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-  //       },
-  //     }),
-  //   })
-  // )
-  // @ApiConsumes("multipart/form-data")
-  // @ApiOperation({ summary: "사진 저장" })
-  // @ApiResponse({
-  //   status: 201,
-  //   description: "사진이 저장되었습니다.",
-  //   type: Photo,
-  // })
-  // async savePhoto(
-  //   @Body() dto: SavePhotoDto,
-  //   @UploadedFile() file: Express.Multer.File,
-  //   @Req() req: Request
-  // ): Promise<Photo> {
-  //   const userId = req.user["id"];
+  // 다이어리 저장
+  @Post("save")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "다이어리 저장" })
+  @ApiResponse({
+    status: 201,
+    description: "다이어리가 저장되었습니다.",
+    type: Diary,
+  })
+  async saveDiary(
+    @Body() dto: SaveDiaryDto,
+    @Req() req: Request
+  ): Promise<Diary> {
+    const userId = req.user["id"];
 
-  //   if (file) {
-  //     dto.photo_url = `/uploads/${file.filename}`;
-  //   }
+    return await this.diaryService.saveDiary(userId, dto);
+  }
 
-  //   return await this.photosService.savePhoto(userId, dto);
-  // }
-
-  // // 사진 조회
-  // @Get(":hostId")
-  // @UseGuards(AuthGuard("jwt"))
-  // @ApiOperation({ summary: "내 사진첩 목록 조회" })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: "사용자 사진 목록 반환",
-  //   type: [Photo],
-  // })
-  // async getMyPhotos(
-  //   @Param("hostId", ParseIntPipe) hostId: number,
-  //   @Req() req: Request
-  // ): Promise<Photo[]> {
-  //   const viewerId = req.user["id"];
-  //   return await this.photosService.getPhotosByUser(hostId, viewerId);
-  // }
+  // 다이어리 조회
+  @Get(":hostId")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "다이어리 목록 조회" })
+  @ApiResponse({
+    status: 200,
+    description: "사용자 사진 목록 반환",
+    type: [Diary],
+  })
+  async getDiary(
+    @Param("hostId", ParseIntPipe) hostId: number,
+    @Req() req: Request
+  ): Promise<Diary[]> {
+    const viewerId = req.user["id"];
+    return await this.diaryService.getPhotosByUser(hostId, viewerId);
+  }
 }
