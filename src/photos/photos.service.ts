@@ -60,64 +60,28 @@ export class PhotosService {
     return mappedPhotos;
   }
 
+  // 사진쳡 폴더 저장
   async saveFolderTree(folders: SavePhotoFolderDto[], userId: number) {
     const user = await this.usersService.findUserById(userId);
 
     if (!user) throw new Error("유저 정보가 없습니다");
 
-    // 기존 폴더들 불러오기
-    const existingFolders = await this.photoFolderRepository.find({
-      where: { user },
-      relations: ["parent"],
-    });
+    await this.photoFolderRepository.delete({ user });
 
-    // 기존 폴더 매핑 (기존 폴더 제목을 키로 사용)
-    const existingMap = new Map<number, PhotoFolder>();
-    for (const folder of existingFolders) {
-      existingMap.set(folder.id, folder);
-    }
-
-    // 새로운 폴더 추가 및 기존 폴더 업데이트
     const keyToEntityMap = new Map<string, PhotoFolder>();
 
     for (const dto of folders) {
-      let folder: PhotoFolder;
+      const folder = new PhotoFolder();
+      folder.title = dto.title;
+      folder.user = user;
 
-      // 기존 폴더가 있는지 확인하고, 없으면 새로 생성
-      if (existingMap.has(dto.id)) {
-        folder = existingMap.get(dto.id)!;
-        folder.title = dto.title; // 폴더 제목 업데이트
-        folder.user = user;
-
-        // 부모 폴더 매핑 및 변경 사항이 있으면 업데이트
-        if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
-          const newParentFolder = keyToEntityMap.get(dto.parent_id)!;
-          if (folder.parent?.id !== newParentFolder.id) {
-            folder.parent = newParentFolder;
-            await this.photoFolderRepository.save(folder); // 부모 폴더 변경 시 업데이트
-          }
-        }
-      } else {
-        // 새로운 폴더인 경우 새로 저장
-        folder = new PhotoFolder();
-        folder.title = dto.title;
-        folder.user = user;
-
-        // 부모 폴더 매핑
-        if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
-          folder.parent = keyToEntityMap.get(dto.parent_id)!;
-        }
-
-        // 폴더 저장
-        const savedFolder = await this.photoFolderRepository.save(folder);
-        keyToEntityMap.set(dto.key, savedFolder);
+      if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
+        folder.parent = keyToEntityMap.get(dto.parent_id)!;
       }
-    }
 
-    // 선택된 폴더 삭제 (기존 폴더 중 선택되지 않은 것만 삭제)
-    const titlesToKeep = new Set(folders.map((f) => f.title));
-    const toDelete = existingFolders.filter((f) => !titlesToKeep.has(f.title));
-    await this.photoFolderRepository.remove(toDelete);
+      const saved = await this.photoFolderRepository.save(folder);
+      keyToEntityMap.set(dto.key, saved);
+    }
 
     return {
       message: "폴더 저장 완료",
