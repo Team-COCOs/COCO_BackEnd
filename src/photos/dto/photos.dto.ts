@@ -14,6 +14,9 @@ export class NewPhotoDto {
   @ApiProperty({ example: "제주도 바다", description: "사진 제목" })
   title: string;
 
+  @ApiProperty({ example: "ㅇㅇㅇ", description: "작성자" })
+  author: string;
+
   @ApiProperty({
     example: "맑은 날의 제주 바다 사진입니다.",
     description: "사진 본문 내용",
@@ -39,6 +42,9 @@ export class SavePhotoDto {
 
   @ApiProperty()
   content: string;
+
+  @ApiProperty()
+  user: string;
 
   @ApiProperty()
   folderId?: number;

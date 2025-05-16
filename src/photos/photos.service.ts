@@ -38,6 +38,7 @@ export class PhotosService {
 
     const mappedPhotos: NewPhotoDto[] = photos.map((p) => ({
       id: p.id,
+      author: p.user.name,
       folderName: p.folder?.title ?? "기타",
       photoUrl: p.photo_url,
       title: p.title,
