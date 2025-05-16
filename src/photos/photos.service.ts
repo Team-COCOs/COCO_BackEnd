@@ -187,7 +187,35 @@ export class PhotosService {
     });
   }
 
-  // 로그아웃 유저
+  async clipPhoto(userId: number, photoId: number): Promise<Photo> {
+    const originalPhoto = await this.photoRepository.findOne({
+      where: { id: photoId },
+      relations: ["folder", "user"],
+    });
+
+    if (!originalPhoto) {
+      throw new Error("원본 사진을 찾을 수 없습니다.");
+    }
+
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new Error("사용자를 찾을 수 없습니다.");
+
+    const copiedPhoto = new Photo();
+    copiedPhoto.title = originalPhoto.title;
+    copiedPhoto.content = originalPhoto.content;
+    copiedPhoto.photo_url = originalPhoto.photo_url;
+    copiedPhoto.visibility = VisibilityType.PUBLIC;
+    copiedPhoto.folder = originalPhoto.folder;
+    copiedPhoto.isScripted = true;
+    copiedPhoto.user = user;
+
+    originalPhoto.use_count = (originalPhoto.use_count || 0) + 1;
+    await this.photoRepository.save(originalPhoto);
+
+    return await this.photoRepository.save(copiedPhoto);
+  }
+
+  // 로그아웃 유저가 조회할때
   async getPhotosByLogout(hostId: number): Promise<Photo[]> {
     const targetUser = await this.usersService.findUserById(hostId);
     if (!targetUser) throw new Error("Target user not found");

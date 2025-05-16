@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -110,6 +111,18 @@ export class PhotosController {
   ): Promise<Photo[]> {
     const viewerId = req.user["id"];
     return await this.photosService.getPhotosByUser(hostId, viewerId);
+  }
+
+  @Patch(":photoId/clip")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "사진 스크랩" })
+  @ApiResponse({ status: 200, description: "스크랩 완료" })
+  async clipPhoto(
+    @Param("photoId") photoId: number,
+    @Req() req: Request
+  ): Promise<Photo> {
+    const userId = req.user["id"];
+    return await this.photosService.clipPhoto(userId, photoId);
   }
 
   @Get("logout/:hostId")
