@@ -111,4 +111,17 @@ export class PhotosController {
     const viewerId = req.user["id"];
     return await this.photosService.getPhotosByUser(hostId, viewerId);
   }
+
+  @Get("logout/:hostId")
+  @ApiOperation({ summary: "사진첩 조회 (비로그인 상태)" })
+  @ApiResponse({
+    status: 200,
+    description: "공개 사진 리스트",
+    type: [Photo],
+  })
+  async getPhotosForLogoutUser(
+    @Param("hostId", ParseIntPipe) hostId: number
+  ): Promise<Photo[]> {
+    return await this.photosService.getPhotosByLogout(hostId);
+  }
 }

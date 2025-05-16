@@ -186,4 +186,26 @@ export class PhotosService {
       order: { created_at: "DESC" },
     });
   }
+
+  // 로그아웃 유저
+  async getPhotosByLogout(hostId: number): Promise<Photo[]> {
+    const targetUser = await this.usersService.findUserById(hostId);
+    if (!targetUser) throw new Error("Target user not found");
+
+    const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
+
+    return await this.photoRepository.find({
+      where: {
+        user: { id: hostId },
+        visibility: In(visibilityFilters),
+      },
+      relations: [
+        "folder",
+        "comments",
+        "comments.user",
+        "comments.parentComment",
+      ],
+      order: { created_at: "DESC" },
+    });
+  }
 }
