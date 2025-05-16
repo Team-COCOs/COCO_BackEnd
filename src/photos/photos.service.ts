@@ -281,15 +281,4 @@ export class PhotosService {
 
     return await this.photoRepository.save(copiedPhoto);
   }
-
-  // 조회수 로직
-  async increaseViewCount(photoId: number) {
-    const photo = await this.photoRepository.findOne({
-      where: { id: photoId },
-    });
-    if (!photo) throw new NotFoundException("사진을 찾을 수 없습니다.");
-
-    photo.view_count += 1;
-    return await this.photoRepository.save(photo);
-  }
 }
