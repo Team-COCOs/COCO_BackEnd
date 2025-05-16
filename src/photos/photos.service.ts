@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThan, In } from "typeorm";
 import { Photo, VisibilityType } from "./photos.entity";
@@ -275,5 +280,16 @@ export class PhotosService {
     await this.photoRepository.save(originalPhoto);
 
     return await this.photoRepository.save(copiedPhoto);
+  }
+
+  // 조회수 로직
+  async increaseViewCount(photoId: number) {
+    const photo = await this.photoRepository.findOne({
+      where: { id: photoId },
+    });
+    if (!photo) throw new NotFoundException("사진을 찾을 수 없습니다.");
+
+    photo.view_count += 1;
+    return await this.photoRepository.save(photo);
   }
 }

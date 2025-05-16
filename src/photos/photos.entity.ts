@@ -49,6 +49,9 @@ export class Photo {
   @Column({ type: "int", default: 0 })
   use_count: number;
 
+  @Column({ type: "int", default: 0 })
+  view_count: number;
+
   @Column({
     type: "enum",
     enum: VisibilityType,

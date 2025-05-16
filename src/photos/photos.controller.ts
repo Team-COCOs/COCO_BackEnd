@@ -139,4 +139,10 @@ export class PhotosController {
     const userId = req.user["id"];
     return await this.photosService.clipPhoto(userId, photoId);
   }
+
+  // 조회 수
+  @Patch(":photoId/view")
+  async increaseViewCount(@Param("photoId") photoId: number) {
+    return this.photosService.increaseViewCount(photoId);
+  }
 }
