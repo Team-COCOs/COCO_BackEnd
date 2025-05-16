@@ -15,6 +15,7 @@ import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { LanguageType } from "./useritems.entity";
+import { tap } from "rxjs";
 @Controller("useritems")
 export class UseritemsController {
   constructor(private readonly useritemsService: UseritemsService) {}
@@ -139,19 +140,23 @@ export class UseritemsController {
   @ApiOperation({ summary: "대표 미니미 이미지 조회" })
   async getMinihomepis(
     @Param("userId") userId: number
-  ): Promise<{ id: number; file: string }> {
+  ): Promise<{ id: number; file: string; category: string; name: string }> {
     const minihomepis = await this.useritemsService.getUserMinihomepis(userId);
 
     if (!minihomepis) {
       return {
         id: null,
         file: null,
+        category: null,
+        name: null,
       };
     }
 
     return {
       id: minihomepis.id,
       file: minihomepis.file,
+      category: minihomepis.category,
+      name: minihomepis.name,
     };
   }
 
@@ -178,19 +183,23 @@ export class UseritemsController {
   @ApiOperation({ summary: "다이어리 배경 조회" })
   async getBK(
     @Param("userId") userId: number
-  ): Promise<{ id: number; file: string }> {
+  ): Promise<{ id: number; file: string; category: string; name: string }> {
     const bk = await this.useritemsService.getUserBK(userId);
 
     if (!bk) {
       return {
         id: null,
         file: null,
+        category: null,
+        name: null,
       };
     }
 
     return {
       id: bk.id,
       file: bk.file,
+      category: bk.category,
+      name: bk.name,
     };
   }
 
@@ -217,19 +226,23 @@ export class UseritemsController {
   @ApiOperation({ summary: "탭 컬러 조회" })
   async getTapColor(
     @Param("userId") userId: number
-  ): Promise<{ id: number; file: string }> {
+  ): Promise<{ id: number; file: string; category: string; name: string }> {
     const tapcolor = await this.useritemsService.getUserTapColor(userId);
 
     if (!tapcolor) {
       return {
         id: null,
         file: null,
+        category: null,
+        name: null,
       };
     }
 
     return {
       id: tapcolor.id,
       file: tapcolor.file,
+      category: tapcolor.category,
+      name: tapcolor.name,
     };
   }
 }
