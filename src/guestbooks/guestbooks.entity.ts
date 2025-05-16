@@ -22,8 +22,8 @@ export class Guestbook {
   host: User;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "guest_id" })
-  guest: User;
+  @JoinColumn({ name: "author_id" })
+  author: User;
 
   @Column({ type: "text" })
   content: string;

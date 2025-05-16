@@ -1,5 +1,4 @@
 import { User } from "../users/users.entity";
-import { Friend } from "../friends/friends.entity";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -15,10 +14,12 @@ export class FriendComment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "host_id" })
   host: User;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "author_id" })
   author: User;
   // 작성자
 

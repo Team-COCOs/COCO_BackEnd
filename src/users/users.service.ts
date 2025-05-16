@@ -57,11 +57,6 @@ export class UsersService {
       savedUser.id
     );
 
-    // 폴더 생성
-    const photoFolder = await this.photosService.createDefaultFolders(
-      savedUser.id
-    );
-
     savedUser.minihomepi = minihomepi;
     savedUser.miniroom = miniroom;
 
