@@ -322,7 +322,12 @@ export class UseritemsService {
   // 미니홈피 탭 컬러 조회
   async getUserTapColor(
     userId: number
-  ): Promise<{ id: number; file: string } | null> {
+  ): Promise<{
+    id: number;
+    file: string;
+    category: string;
+    name: string;
+  } | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
       relations: ["tapColorItem"],
@@ -338,6 +343,8 @@ export class UseritemsService {
     return {
       id: purchase ? purchase.id : null,
       file: userItem.tapColorItem.file,
+      category: userItem.tapColorItem.category,
+      name: userItem.tapColorItem.name,
     };
   }
 
