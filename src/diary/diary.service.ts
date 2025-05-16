@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { Diary } from "./diary.entity";
+import { Diary, VisibilityType } from "./diary.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MoreThan, Repository } from "typeorm";
-import { NewDiaryDto } from "./dto/diary.dto";
+import { In, MoreThan, Repository } from "typeorm";
+import { NewDiaryDto, SaveDiaryDto } from "./dto/diary.dto";
 import { DiaryFolder } from "./diaryFolder.entity";
 import { UsersService } from "src/users/users.service";
 import { SaveDiaryFolderDto } from "./dto/diaryFolder.dto";
+import { FriendsService } from "src/friends/friends.service";
 
 @Injectable()
 export class DiaryService {
@@ -16,7 +17,8 @@ export class DiaryService {
     @InjectRepository(DiaryFolder)
     private readonly diaryFolderRepository: Repository<DiaryFolder>,
 
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly friendsService: FriendsService
   ) {}
 
   // 오늘 새 게시물
@@ -37,6 +39,8 @@ export class DiaryService {
       id: d.id,
       title: d.title,
       content: d.content,
+      mood: d.mood,
+      weather: d.weather,
       created_at: d.created_at.toISOString().slice(0, 16).replace("T", " "),
       type: "diary" as const,
     }));
@@ -112,5 +116,62 @@ export class DiaryService {
     });
 
     return tree;
+  }
+
+  // 다이어리 게시글 저장
+  async saveDiary(userId: number, dto: SaveDiaryDto): Promise<Diary> {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new Error("유저 정보가 없습니다");
+
+    const diary = new Diary();
+    diary.user = user;
+    diary.title = dto.title;
+    diary.content = dto.content;
+    diary.visibility = dto.visibility;
+
+    if (dto.folderId) {
+      const folder = await this.diaryFolderRepository.findOne({
+        where: { id: dto.folderId },
+      });
+      if (!folder) throw new Error("해당 폴더가 없습니다");
+      diary.folder = folder;
+    }
+
+    return await this.diaryRepository.save(diary);
+  }
+
+  // 사진첩 게시글 조회
+  async getPhotosByUser(hostId: number, viewId: number): Promise<Diary[]> {
+    const targetUser = await this.usersService.findUserById(hostId);
+    if (!targetUser) throw new Error("해당 유저를 찾을수없습니다");
+
+    const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
+
+    if (hostId === viewId) {
+      // 내 프로필 → 모든 사진 조회
+      visibilityFilters.push(
+        VisibilityType.PRIVATE,
+        VisibilityType.FRIENDS_ONLY
+      );
+    } else {
+      // 다른 사람 → 일촌인지 확인
+      const friendStatus = await this.friendsService.friendStatus(
+        hostId,
+        viewId
+      );
+      if (friendStatus.areFriends) {
+        visibilityFilters.push(VisibilityType.FRIENDS_ONLY);
+      }
+      // 비일촌이거나 비로그인 사용자는 PUBLIC만 유지
+    }
+
+    return await this.diaryRepository.find({
+      where: {
+        user: { id: hostId },
+        visibility: In(visibilityFilters),
+      },
+      relations: ["folder", "comments", "comments.user"],
+      order: { created_at: "DESC" },
+    });
   }
 }

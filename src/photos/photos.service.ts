@@ -123,7 +123,7 @@ export class PhotosService {
     return tree;
   }
 
-  // 사진 저장
+  // 사진첩 게시글 저장
   async savePhoto(userId: number, dto: SavePhotoDto): Promise<Photo> {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new Error("User not found");
@@ -147,7 +147,7 @@ export class PhotosService {
     return await this.photoRepository.save(photo);
   }
 
-  // 사진 조회
+  // 사진첩 게시글 조회
   async getPhotosByUser(hostId: number, viewId: number): Promise<Photo[]> {
     const targetUser = await this.usersService.findUserById(hostId);
     if (!targetUser) throw new Error("Target user not found");
@@ -177,7 +177,12 @@ export class PhotosService {
         user: { id: hostId },
         visibility: In(visibilityFilters),
       },
-      relations: ["folder", "comments", "comments.user"],
+      relations: [
+        "folder",
+        "comments",
+        "comments.user",
+        "comments.parentComment",
+      ],
       order: { created_at: "DESC" },
     });
   }
