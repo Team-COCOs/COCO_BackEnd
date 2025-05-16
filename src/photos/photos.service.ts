@@ -187,6 +187,29 @@ export class PhotosService {
     });
   }
 
+  // 로그아웃 유저가 조회할때
+  async getPhotosByLogout(hostId: number): Promise<Photo[]> {
+    const targetUser = await this.usersService.findUserById(hostId);
+    if (!targetUser) throw new Error("Target user not found");
+
+    const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
+
+    return await this.photoRepository.find({
+      where: {
+        user: { id: hostId },
+        visibility: In(visibilityFilters),
+      },
+      relations: [
+        "folder",
+        "comments",
+        "comments.user",
+        "comments.parentComment",
+      ],
+      order: { created_at: "DESC" },
+    });
+  }
+
+  // 사진첩 스크랩
   async clipPhoto(userId: number, photoId: number): Promise<Photo> {
     const originalPhoto = await this.photoRepository.findOne({
       where: { id: photoId },
@@ -213,27 +236,5 @@ export class PhotosService {
     await this.photoRepository.save(originalPhoto);
 
     return await this.photoRepository.save(copiedPhoto);
-  }
-
-  // 로그아웃 유저가 조회할때
-  async getPhotosByLogout(hostId: number): Promise<Photo[]> {
-    const targetUser = await this.usersService.findUserById(hostId);
-    if (!targetUser) throw new Error("Target user not found");
-
-    const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
-
-    return await this.photoRepository.find({
-      where: {
-        user: { id: hostId },
-        visibility: In(visibilityFilters),
-      },
-      relations: [
-        "folder",
-        "comments",
-        "comments.user",
-        "comments.parentComment",
-      ],
-      order: { created_at: "DESC" },
-    });
   }
 }

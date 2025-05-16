@@ -113,18 +113,7 @@ export class PhotosController {
     return await this.photosService.getPhotosByUser(hostId, viewerId);
   }
 
-  @Patch(":photoId/clip")
-  @UseGuards(AuthGuard("jwt"))
-  @ApiOperation({ summary: "사진 스크랩" })
-  @ApiResponse({ status: 200, description: "스크랩 완료" })
-  async clipPhoto(
-    @Param("photoId") photoId: number,
-    @Req() req: Request
-  ): Promise<Photo> {
-    const userId = req.user["id"];
-    return await this.photosService.clipPhoto(userId, photoId);
-  }
-
+  // 로그아웃 유저 사진첩 조회
   @Get("logout/:hostId")
   @ApiOperation({ summary: "사진첩 조회 (비로그인 상태)" })
   @ApiResponse({
@@ -136,5 +125,18 @@ export class PhotosController {
     @Param("hostId", ParseIntPipe) hostId: number
   ): Promise<Photo[]> {
     return await this.photosService.getPhotosByLogout(hostId);
+  }
+
+  // 스크랩
+  @Patch(":photoId/clip")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "사진 스크랩" })
+  @ApiResponse({ status: 200, description: "스크랩 완료" })
+  async clipPhoto(
+    @Param("photoId") photoId: number,
+    @Req() req: Request
+  ): Promise<Photo> {
+    const userId = req.user["id"];
+    return await this.photosService.clipPhoto(userId, photoId);
   }
 }
