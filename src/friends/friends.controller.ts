@@ -92,6 +92,22 @@ export class FriendsController {
     return { message: "일촌 신청을 거절했습니다." };
   }
 
+  @Get("list")
+  @UseGuards(AuthGuard("jwt"))
+  async getMainProfile(@Req() req: Request) {
+    const userId = req.user["id"];
+
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new NotFoundException("유저 없음");
+
+    // 일촌 목록 확인
+    const friends = await this.friendsService.getFriends(userId);
+
+    return {
+      friends,
+    };
+  }
+
   // 일촌 상태
   @Get("status/:userId")
   @UseGuards(AuthGuard("jwt"))

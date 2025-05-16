@@ -177,7 +177,7 @@ export class PhotosService {
         user: { id: hostId },
         visibility: In(visibilityFilters),
       },
-      relations: ["folder"],
+      relations: ["folder", "comments"],
       order: { created_at: "DESC" },
     });
   }
