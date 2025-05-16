@@ -197,6 +197,7 @@ export class PhotosService {
         visibility: In(visibilityFilters),
       },
       relations: [
+        "user",
         "folder",
         "comments",
         "comments.user",
@@ -219,6 +220,7 @@ export class PhotosService {
         visibility: In(visibilityFilters),
       },
       relations: [
+        "user",
         "folder",
         "comments",
         "comments.user",
