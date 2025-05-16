@@ -267,9 +267,12 @@ export class UseritemsService {
   }
 
   // 미니홈피 스킨 조회
-  async getUserMinihomepis(
-    userId: number
-  ): Promise<{ id: number; file: string } | null> {
+  async getUserMinihomepis(userId: number): Promise<{
+    id: number;
+    file: string;
+    category: string;
+    name: string;
+  } | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
       relations: ["skinItem"],
@@ -285,6 +288,8 @@ export class UseritemsService {
     return {
       id: purchase ? purchase.id : null,
       file: userItem.skinItem.file,
+      category: userItem.skinItem.category,
+      name: userItem.skinItem.name,
     };
   }
 
@@ -320,9 +325,7 @@ export class UseritemsService {
   }
 
   // 미니홈피 탭 컬러 조회
-  async getUserTapColor(
-    userId: number
-  ): Promise<{
+  async getUserTapColor(userId: number): Promise<{
     id: number;
     file: string;
     category: string;
@@ -380,9 +383,12 @@ export class UseritemsService {
   }
 
   // 미니홈피 스킨 조회
-  async getUserBK(
-    userId: number
-  ): Promise<{ id: number; file: string } | null> {
+  async getUserBK(userId: number): Promise<{
+    id: number;
+    file: string;
+    category: string;
+    name: string;
+  } | null> {
     const userItem = await this.userItemRepository.findOne({
       where: { user: { id: userId } },
       relations: ["diaryBackgroundItem"],
@@ -398,6 +404,8 @@ export class UseritemsService {
     return {
       id: purchase ? purchase.id : null,
       file: userItem.diaryBackgroundItem.file,
+      category: userItem.diaryBackgroundItem.category,
+      name: userItem.diaryBackgroundItem.name,
     };
   }
 }
