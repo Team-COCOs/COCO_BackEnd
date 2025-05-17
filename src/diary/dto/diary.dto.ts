@@ -40,8 +40,8 @@ export class SaveDiaryDto {
   @ApiProperty({ example: "맑음", description: "날씨" })
   weather: string;
 
-  @ApiProperty({ example: 1, description: "폴더 ID (nullable)" })
-  folderId?: number;
+  @ApiProperty({ example: 1, description: "폴더명" })
+  folder_name?: string;
 
   @ApiProperty({ example: true, description: "스크립트 여부" })
   isScripted: boolean;

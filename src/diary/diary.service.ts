@@ -54,21 +54,35 @@ export class DiaryService {
 
     if (!user) throw new Error("User not found");
 
-    await this.diaryFolderRepository.delete({ user });
-
+    // 새 폴더를 위한 매핑
     const keyToEntityMap = new Map<string, DiaryFolder>();
 
+    // 새로 저장할 폴더들 처리
     for (const dto of folders) {
-      const folder = new DiaryFolder();
-      folder.title = dto.title;
-      folder.user = user;
+      // 기존 폴더가 있는지 확인 (폴더명이 동일한 경우)
+      let folder = await this.diaryFolderRepository.findOne({
+        where: { user: { id: userId }, title: dto.title }, // 폴더명 기준으로 찾기
+      });
 
+      if (folder) {
+        throw new Error(`폴더명이 중복되었습니다: ${dto.title}`);
+      }
+
+      // 기존 폴더가 없다면 새 폴더 생성
+      if (!folder) {
+        folder = new DiaryFolder();
+        folder.title = dto.title;
+        folder.user = user;
+      }
+
+      // 부모 폴더 매핑
       if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
         folder.parent = keyToEntityMap.get(dto.parent_id)!;
       }
 
-      const saved = await this.diaryFolderRepository.save(folder);
-      keyToEntityMap.set(dto.key, saved);
+      // 폴더 저장
+      await this.diaryFolderRepository.save(folder);
+      keyToEntityMap.set(dto.key, folder); // 매핑에 추가
     }
 
     return {
@@ -129,11 +143,11 @@ export class DiaryService {
     diary.content = dto.content;
     diary.visibility = dto.visibility;
 
-    if (dto.folderId) {
+    if (dto.folder_name) {
       const folder = await this.diaryFolderRepository.findOne({
-        where: { id: dto.folderId },
+        where: { title: dto.folder_name },
       });
-      if (!folder) throw new Error("해당 폴더가 없습니다");
+      if (!folder) throw new Error("Folder not found");
       diary.folder = folder;
     }
 
