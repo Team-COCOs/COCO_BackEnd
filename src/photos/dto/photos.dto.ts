@@ -47,7 +47,7 @@ export class SavePhotoDto {
   user: string;
 
   @ApiProperty()
-  folderId?: number;
+  folder_name: string;
 
   @ApiProperty()
   isScripted: boolean;

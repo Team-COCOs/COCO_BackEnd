@@ -59,48 +59,41 @@ export class PhotosService {
 
     return mappedPhotos;
   }
-
-  // 사진쳡 폴더 저장
+  // 사진첩 폴더 저장
   async saveFolderTree(folders: SavePhotoFolderDto[], userId: number) {
     const user = await this.usersService.findUserById(userId);
 
     if (!user) throw new Error("유저 정보가 없습니다");
-
-    await this.photoFolderRepository.delete({ user });
 
     // 새 폴더를 위한 매핑
     const keyToEntityMap = new Map<string, PhotoFolder>();
 
     // 새로 저장할 폴더들 처리
     for (const dto of folders) {
-      const folder = new PhotoFolder();
-      folder.title = dto.title;
-      folder.user = user;
+      // 기존 폴더가 있는지 확인 (폴더명이 동일한 경우)
+      let folder = await this.photoFolderRepository.findOne({
+        where: { user: { id: userId }, title: dto.title }, // 폴더명 기준으로 찾기
+      });
 
+      if (folder) {
+        throw new Error(`폴더명이 중복되었습니다: ${dto.title}`);
+      }
+
+      // 기존 폴더가 없다면 새 폴더 생성
+      if (!folder) {
+        folder = new PhotoFolder();
+        folder.title = dto.title;
+        folder.user = user;
+      }
+
+      // 부모 폴더 매핑
       if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
         folder.parent = keyToEntityMap.get(dto.parent_id)!;
       }
 
-      // 새 폴더 저장
-      const saved = await this.photoFolderRepository.save(folder);
-      keyToEntityMap.set(dto.key, saved);
-    }
-
-    // 새로 저장된 폴더 ID를 사용하여 해당 폴더에 속하는 기존 사진들 업데이트
-    const newFolders = await this.photoFolderRepository.find({
-      where: { user },
-    });
-
-    // 기존 사진들 업데이트 (각 사진의 folderId를 새 폴더에 맞게 변경)
-    for (const folder of newFolders) {
-      const photos = await this.photoRepository.find({
-        where: { folder: { title: folder.title } },
-      });
-
-      for (const photo of photos) {
-        photo.folder = folder; // 해당 폴더로 사진의 폴더 업데이트
-        await this.photoRepository.save(photo); // 업데이트된 사진 저장
-      }
+      // 폴더 저장
+      await this.photoFolderRepository.save(folder);
+      keyToEntityMap.set(dto.key, folder); // 매핑에 추가
     }
 
     return {
@@ -163,9 +156,9 @@ export class PhotosService {
     photo.visibility = dto.visibility;
     photo.isScripted = dto.isScripted;
 
-    if (dto.folderId) {
+    if (dto.folder_name) {
       const folder = await this.photoFolderRepository.findOne({
-        where: { id: dto.folderId },
+        where: { title: dto.folder_name },
       });
       if (!folder) throw new Error("Folder not found");
       photo.folder = folder;
