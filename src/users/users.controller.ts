@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
+  Patch,
   Query,
   Req,
   UseGuards,
@@ -102,6 +104,25 @@ export class UsersController {
       dotoris: user.dotoris,
       friends,
     };
+  }
+
+  // 비밀번호 변경 (로그인 상태)
+  @Patch("update/password")
+  @UseGuards(AuthGuard("jwt"))
+  async changePassword(
+    @Req() req: Request,
+    @Body() body: { password: string }
+  ) {
+    const userId = req.user["id"];
+    return await this.usersService.changePw(userId, body.password);
+  }
+
+  // 비밀번호 변경 (로그인 상태)
+  @Patch("update/phone")
+  @UseGuards(AuthGuard("jwt"))
+  async changePhone(@Req() req: Request, @Body() body: { phone: string }) {
+    const userId = req.user["id"];
+    return await this.usersService.changePhone(userId, body.phone);
   }
 
   // 모든 유저 id 조회

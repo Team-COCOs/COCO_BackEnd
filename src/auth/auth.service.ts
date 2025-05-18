@@ -121,23 +121,6 @@ export class AuthService {
     return { message: "비밀번호가 성공적으로 변경되었습니다." };
   }
 
-  // 비밀번호 변경
-  async changePw(
-    userId: number,
-    newPassword: string
-  ): Promise<{ message: string }> {
-    const user = await this.userService.findUserById(userId);
-    if (!user) {
-      throw new NotFoundException("유저를 찾을 수 없습니다.");
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await this.userService.save(user);
-
-    return { message: "비밀번호가 성공적으로 변경되었습니다." };
-  }
-
   // access 토큰 및 refresh 토큰
   async issueTokens(
     user: User

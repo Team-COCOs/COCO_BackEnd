@@ -72,17 +72,6 @@ export class AuthController {
     return await this.authService.resetPw(email, newPassword);
   }
 
-  // 비밀번호 변경 (로그인 상태)
-  @Patch("change-password")
-  @UseGuards(AuthGuard("jwt"))
-  async changePassword(
-    @Req() req: Request,
-    @Body() body: { newPassword: string }
-  ) {
-    const userId = req.user["id"];
-    return await this.authService.changePw(userId, body.newPassword);
-  }
-
   @Post("refresh")
   async refresh(@Req() req: Request): Promise<{
     ok: boolean;

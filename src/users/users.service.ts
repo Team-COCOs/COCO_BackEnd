@@ -11,6 +11,7 @@ import { MiniroomsService } from "src/minirooms/minirooms.service";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
 import { UseritemsService } from "src/useritems/useritems.service";
 import { PhotosService } from "src/photos/photos.service";
+import * as bcrypt from "bcrypt";
 @Injectable()
 export class UsersService {
   constructor(
@@ -61,6 +62,40 @@ export class UsersService {
     savedUser.miniroom = miniroom;
 
     return await this.userRepository.save(savedUser);
+  }
+
+  // 비밀번호 변경
+  async changePw(
+    userId: number,
+    newPassword: string
+  ): Promise<{ message: string }> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      throw new NotFoundException("유저를 찾을 수 없습니다.");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await this.userRepository.save(user);
+
+    return { message: "비밀번호가 성공적으로 변경되었습니다." };
+  }
+
+  // 전화번호 변경
+  async changePhone(
+    userId: number,
+    newPhone: string
+  ): Promise<{ message: string }> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException("유저를 찾을 수 없습니다.");
+    }
+
+    user.phone = newPhone;
+    await this.userRepository.save(user);
+
+    return { message: "전화번호가 성공적으로 변경되었습니다." };
   }
 
   // 이름이랑 전화번호로 유저 찾기

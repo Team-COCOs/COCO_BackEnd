@@ -62,42 +62,43 @@ export class PhotosService {
   // 사진첩 폴더 저장
   async saveFolderTree(folders: SavePhotoFolderDto[], userId: number) {
     const user = await this.usersService.findUserById(userId);
-
     if (!user) throw new Error("유저 정보가 없습니다");
 
-    // 새 폴더를 위한 매핑
     const keyToEntityMap = new Map<string, PhotoFolder>();
+    const duplicatedTitles: string[] = [];
+    let createdCount = 0;
 
-    // 새로 저장할 폴더들 처리
     for (const dto of folders) {
-      // 기존 폴더가 있는지 확인 (폴더명이 동일한 경우)
-      let folder = await this.photoFolderRepository.findOne({
-        where: { user: { id: userId }, title: dto.title }, // 폴더명 기준으로 찾기
+      const existingFolder = await this.photoFolderRepository.findOne({
+        where: { user: { id: userId }, title: dto.title },
       });
 
-      if (folder) {
-        throw new Error(`폴더명이 중복되었습니다: ${dto.title}`);
+      if (existingFolder) {
+        duplicatedTitles.push(dto.title);
+        keyToEntityMap.set(dto.key, existingFolder);
+        continue;
       }
 
-      // 기존 폴더가 없다면 새 폴더 생성
-      if (!folder) {
-        folder = new PhotoFolder();
-        folder.title = dto.title;
-        folder.user = user;
-      }
+      const newFolder = this.photoFolderRepository.create({
+        title: dto.title,
+        user,
+      });
 
-      // 부모 폴더 매핑
       if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
-        folder.parent = keyToEntityMap.get(dto.parent_id)!;
+        newFolder.parent = keyToEntityMap.get(dto.parent_id)!;
+      } else if (dto.parent_id) {
+        console.warn(`부모 키 ${dto.parent_id} 가 존재하지 않음`);
       }
 
-      // 폴더 저장
-      await this.photoFolderRepository.save(folder);
-      keyToEntityMap.set(dto.key, folder); // 매핑에 추가
+      await this.photoFolderRepository.save(newFolder);
+      keyToEntityMap.set(dto.key, newFolder);
+      createdCount++;
     }
 
     return {
-      message: "폴더 및 사진 저장 완료",
+      message: "폴더 저장 완료",
+      createdCount,
+      duplicatedTitles, // 중복된 폴더명을 클라이언트가 알 수 있도록
     };
   }
 
