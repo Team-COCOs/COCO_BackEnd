@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -23,7 +24,7 @@ export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   // 폴더 구조 생성
-  @Post("saveTree")
+  @Patch("saveTree")
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SaveDiaryFolderDto[],

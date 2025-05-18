@@ -35,9 +35,6 @@ export class Diary {
   folder: DiaryFolder;
 
   @Column({ type: "varchar", length: 100 })
-  title: string;
-
-  @Column({ type: "varchar", length: 100 })
   mood: string;
 
   @Column({ type: "varchar", length: 100 })

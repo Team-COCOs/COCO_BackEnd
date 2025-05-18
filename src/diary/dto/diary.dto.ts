@@ -5,9 +5,6 @@ export class NewDiaryDto {
   @ApiProperty({ example: 1, description: "다이어리 고유 ID" })
   id: number;
 
-  @ApiProperty({ example: "오늘의 일기", description: "다이어리 제목" })
-  title: string;
-
   @ApiProperty({ example: "React 공부 완료!", description: "다이어리 내용" })
   content: string;
 
@@ -28,9 +25,6 @@ export class NewDiaryDto {
 }
 
 export class SaveDiaryDto {
-  @ApiProperty({ example: "오늘의 일기", description: "제목" })
-  title: string;
-
   @ApiProperty({ example: "React 공부 완료!", description: "본문 내용" })
   content: string;
 

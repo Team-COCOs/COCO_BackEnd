@@ -37,7 +37,6 @@ export class DiaryService {
 
     const mappedDiaries = diaries.map((d) => ({
       id: d.id,
-      title: d.title,
       content: d.content,
       mood: d.mood,
       weather: d.weather,
@@ -139,9 +138,10 @@ export class DiaryService {
 
     const diary = new Diary();
     diary.user = user;
-    diary.title = dto.title;
     diary.content = dto.content;
     diary.visibility = dto.visibility;
+    diary.mood = dto.mood;
+    diary.weather = dto.weather;
 
     if (dto.folder_name) {
       const folder = await this.diaryFolderRepository.findOne({
@@ -184,7 +184,12 @@ export class DiaryService {
         user: { id: hostId },
         visibility: In(visibilityFilters),
       },
-      relations: ["folder", "comments", "comments.user"],
+      relations: [
+        "folder",
+        "comments",
+        "comments.user",
+        "comments.parentComment",
+      ],
       order: { created_at: "DESC" },
     });
   }
