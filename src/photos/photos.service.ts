@@ -158,7 +158,11 @@ export class PhotosService {
 
     if (dto.folder_name) {
       const folder = await this.photoFolderRepository.findOne({
-        where: { title: dto.folder_name },
+        where: {
+          user: { id: userId },
+          title: dto.folder_name,
+        },
+        relations: ["user"],
       });
       if (!folder) throw new Error("Folder not found");
       photo.folder = folder;
