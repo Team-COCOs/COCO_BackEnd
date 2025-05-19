@@ -178,4 +178,14 @@ export class UsersService {
     user.phone = null;
     await this.userRepository.save(user);
   }
+
+  // 탈퇴 유저 확인
+  async getUserRole(userId: number) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) throw new NotFoundException("유저가 존재하지 않습니다.");
+    return {
+      id: user.id,
+      role: user.role,
+    };
+  }
 }

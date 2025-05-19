@@ -158,4 +158,10 @@ export class UsersController {
     const userId = req.user["id"];
     return await this.usersService.withdrawUser(userId);
   }
+
+  // 유저 역할 확인
+  @Get("role/:id")
+  async getUserById(@Param("id") id: number) {
+    return await this.usersService.getUserRole(id);
+  }
 }
