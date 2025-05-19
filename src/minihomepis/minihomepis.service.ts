@@ -120,19 +120,20 @@ export class MinihomepisService {
 
     const results = await Promise.all(
       allMinihomepis.map(async (m) => {
-        const todayVisitCount = await this.visitService.countTodayVisits(
+        const totalVisitCount = await this.visitService.countTotalVisits(
           m.user.id
         );
         return {
           userId: m.user.id,
+          user_role: m.user.role,
           name: m.user.name,
-          todayVisitCount,
+          totalVisitCount,
         };
       })
     );
 
     return results
-      .sort((a, b) => b.todayVisitCount - a.todayVisitCount)
+      .sort((a, b) => b.totalVisitCount - a.totalVisitCount)
       .slice(0, 5);
   }
 }
