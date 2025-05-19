@@ -75,10 +75,7 @@ export class PhotosCommentsController {
     @Param("commentId", ParseIntPipe) commentId: number,
     @Req() req: Request
   ) {
-    const user = {
-      id: req.user["id"],
-      role: req.user["role"],
-    };
-    return await this.commentsService.deleteComment(commentId, user);
+    const userId = req.user["id"];
+    return await this.commentsService.deleteComment(commentId, userId);
   }
 }
