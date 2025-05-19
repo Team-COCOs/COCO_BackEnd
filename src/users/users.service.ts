@@ -19,9 +19,7 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     private readonly miniroomService: MiniroomsService,
     private readonly minihomepiService: MinihomepisService,
-    private readonly useritemsService: UseritemsService,
-
-    private readonly photosService: PhotosService
+    private readonly useritemsService: UseritemsService
   ) {}
 
   // 유저 정보 저장
