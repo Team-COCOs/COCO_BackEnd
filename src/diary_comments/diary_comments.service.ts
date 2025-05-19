@@ -68,24 +68,23 @@ export class DiaryCommentsService {
   // 댓글 삭제
   async deleteDiaryComment(
     commentId: number,
-    user: { id: number; role: UserRole }
+    userId: number
   ): Promise<{ ok: boolean }> {
     const comment = await this.diaryCommentsRepository.findOne({
       where: { id: commentId },
-      relations: ["user"],
+      relations: ["user", "diary", "diary.user"],
     });
 
     if (!comment) {
       throw new NotFoundException("댓글을 찾을 수 없습니다.");
     }
 
-    const author = comment.user.id === user.id;
-    const admin = user.role === UserRole.ADMIN;
+    const isAuthor = comment.user.id === userId;
+    const isOwnerOfPost = comment.diary.user.id === userId;
 
-    if (!author && !admin) {
+    if (!isAuthor && !isOwnerOfPost) {
       throw new NotFoundException("삭제 권한이 없습니다.");
     }
-
     await this.diaryCommentsRepository.remove(comment);
     return { ok: true };
   }

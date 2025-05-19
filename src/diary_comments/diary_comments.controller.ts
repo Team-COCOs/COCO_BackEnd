@@ -81,10 +81,10 @@ export class DiaryCommentsController {
     @Param("commentId", ParseIntPipe) commentId: number,
     @Req() req: AuthRequest
   ) {
-    const user = {
-      id: req.user.id,
-      role: req.user.role,
-    };
-    return await this.diaryCommentsService.deleteDiaryComment(commentId, user);
+    const userId = req.user["id"];
+    return await this.diaryCommentsService.deleteDiaryComment(
+      commentId,
+      userId
+    );
   }
 }
