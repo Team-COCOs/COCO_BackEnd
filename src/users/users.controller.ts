@@ -160,8 +160,8 @@ export class UsersController {
   }
 
   // 유저 역할 확인
-  @Get("role/:id")
-  async getUserById(@Param("id") id: number) {
-    return await this.usersService.getUserRole(id);
+  @Get("role/:userId")
+  async getUserById(@Param("userId") userId: number) {
+    return await this.usersService.getUserRole(userId);
   }
 }
