@@ -52,6 +52,10 @@ export class SavePhotoDto {
   @ApiProperty()
   isScripted: boolean;
 
-  @ApiProperty({ enum: VisibilityType, default: VisibilityType.PUBLIC })
+  @ApiProperty({
+    enum: VisibilityType,
+    default: VisibilityType.PUBLIC,
+    description: "공개 범위",
+  })
   visibility: VisibilityType;
 }

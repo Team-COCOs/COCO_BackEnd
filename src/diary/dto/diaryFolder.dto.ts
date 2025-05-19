@@ -1,6 +1,10 @@
-import { IsString, IsOptional } from "class-validator";
+import { IsString, IsOptional, IsInt } from "class-validator";
 
 export class SaveDiaryFolderDto {
+  @IsOptional()
+  @IsInt()
+  id?: number;
+
   @IsString()
   key: string;
 

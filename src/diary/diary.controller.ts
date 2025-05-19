@@ -29,9 +29,9 @@ export class DiaryController {
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SaveDiaryFolderDto[],
-    @Req() req
+    @Req() req: Request
   ) {
-    const userId = req.user.id;
+    const userId = req.user["id"];
 
     const result = await this.diaryService.saveFolderTree(folders, userId);
 

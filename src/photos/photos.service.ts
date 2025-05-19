@@ -65,6 +65,7 @@ export class PhotosService {
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 정보가 없습니다");
 
+    // 새 폴더를 위한 매핑
     const keyToEntityMap = new Map<string, PhotoFolder>();
 
     // 기존 폴더 모두 로드 (삭제된 것도 포함해야 업데이트 및 복구 가능)

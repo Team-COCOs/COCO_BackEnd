@@ -201,7 +201,7 @@ export class DiaryService {
     return await this.diaryRepository.save(diary);
   }
 
-  // 사진첩 게시글 조회
+  // 다이어리 게시글 조회
   async getPhotosByUser(hostId: number, viewId: number): Promise<Diary[]> {
     const targetUser = await this.usersService.findUserById(hostId);
     if (!targetUser) throw new NotFoundException("해당 유저를 찾을수없습니다");
@@ -255,6 +255,7 @@ export class DiaryService {
         visibility: In(visibilityFilters),
       },
       relations: [
+        "user",
         "folder",
         "comments",
         "comments.user",
