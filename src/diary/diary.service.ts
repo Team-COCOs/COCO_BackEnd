@@ -138,7 +138,7 @@ export class DiaryService {
     if (!user) throw new NotFoundException("User not found");
 
     const folders = await this.diaryFolderRepository.find({
-      where: { user: { id: userId } },
+      where: { user: { id: userId }, is_deleted: false },
       relations: ["parent"],
       // 부모 폴더 관계 포함
     });
