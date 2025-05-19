@@ -150,4 +150,12 @@ export class UsersController {
   async getHotMinihomepis() {
     return this.minihomepisService.getTop5HotMinihomepis();
   }
+
+  // 탈퇴 유저로 수정
+  @Patch("delete")
+  @UseGuards(AuthGuard("jwt"))
+  async setDeleteUser(@Req() req: Request) {
+    const userId = req.user["id"];
+    return await this.usersService.withdrawUser(userId);
+  }
 }

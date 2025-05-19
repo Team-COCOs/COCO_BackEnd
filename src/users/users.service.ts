@@ -174,8 +174,9 @@ export class UsersService {
     if (!user) throw new NotFoundException("유저가 존재하지 않습니다.");
 
     user.role = UserRole.WITHDRAWN;
-    user.email = `withdrawn_${user.email}`;
-    user.password = "";
+    user.email = `withdrawn_${Date.now()}_${user.email}`;
+    user.password = null;
+    user.phone = null;
     await this.userRepository.save(user);
   }
 }
