@@ -56,6 +56,8 @@ export class DiaryCommentsService {
     return comments.map((comment) => {
       return {
         id: comment.id,
+        userId: comment.user.id,
+        name: comment.user.name,
         content: comment.content,
         created_at: comment.created_at,
         parentCommentId: comment.parentComment?.id || null,

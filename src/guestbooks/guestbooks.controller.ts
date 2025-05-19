@@ -25,6 +25,7 @@ export class GuestbooksController {
     @Body("hostId") hostId: number,
     @Body("content") content: string,
     @Body("status") status: VisibilityStatus,
+    @Body("management") management: string,
     @Req() req: Request
   ) {
     const authorId = req.user["id"];
@@ -33,6 +34,7 @@ export class GuestbooksController {
       authorId,
       hostId,
       content,
+      management,
       status
     );
 
