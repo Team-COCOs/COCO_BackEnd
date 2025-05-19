@@ -37,9 +37,6 @@ export class SaveDiaryDto {
   @ApiProperty({ example: "새 폴더", description: "폴더명" })
   folder_name?: string;
 
-  @ApiProperty({ example: true, description: "스크립트 여부" })
-  isScripted: boolean;
-
   @ApiProperty({
     enum: VisibilityType,
     default: VisibilityType.PUBLIC,

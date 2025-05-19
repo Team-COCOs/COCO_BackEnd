@@ -265,6 +265,50 @@ export class DiaryService {
     });
   }
 
+  // 수정
+  async updateDiary(
+    userId: number,
+    diaryId: number,
+    dto: SaveDiaryDto
+  ): Promise<Diary> {
+    const diary = await this.diaryRepository.findOne({
+      where: { id: diaryId },
+      relations: ["user", "folder"],
+    });
+
+    if (!diary) {
+      throw new NotFoundException("게시글을 찾을 수 없습니다.");
+    }
+
+    if (diary.user.id !== userId) {
+      throw new NotFoundException("수정 권한이 없습니다.");
+    }
+
+    // 내용 업데이트
+    diary.content = dto.content;
+    diary.mood = dto.mood;
+    diary.weather = dto.weather;
+    diary.visibility = dto.visibility;
+
+    // 폴더 변경
+    if (dto.folder_name) {
+      const folder = await this.diaryFolderRepository.findOne({
+        where: {
+          user: { id: userId },
+          title: dto.folder_name,
+          is_deleted: false,
+        },
+      });
+
+      if (!folder) {
+        throw new NotFoundException("폴더 정보가 없습니다.");
+      }
+
+      diary.folder = folder;
+    }
+
+    return await this.diaryRepository.save(diary);
+  }
   // 다이어리 삭제
   async deletePost(userId: number, diaryId: number): Promise<{ ok: boolean }> {
     const post = await this.diaryRepository.findOne({

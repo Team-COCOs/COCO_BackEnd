@@ -14,7 +14,7 @@ import {
 import { DiaryService } from "./diary.service";
 import { AuthGuard } from "@nestjs/passport";
 import { SaveDiaryFolderDto } from "./dto/diaryFolder.dto";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { DiaryFolder } from "./diaryFolder.entity";
 import { Diary } from "./diary.entity";
 import { SaveDiaryDto } from "./dto/diary.dto";
@@ -102,6 +102,21 @@ export class DiaryController {
     @Param("hostId", ParseIntPipe) hostId: number
   ): Promise<Diary[]> {
     return await this.diaryService.getDiaryByLogout(hostId);
+  }
+
+  // 수정
+  @Patch(":diaryId")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "다이어리 수정" })
+  @ApiResponse({ status: 200, type: Diary })
+  async updateDiary(
+    @Param("diaryId", ParseIntPipe) diaryId: number,
+    @Body() dto: SaveDiaryDto,
+    @Req() req: Request
+  ) {
+    const userId = req.user["id"];
+    return await this.diaryService.updateDiary(userId, diaryId, dto);
   }
 
   // 삭제
