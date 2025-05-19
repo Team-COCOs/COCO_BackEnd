@@ -56,13 +56,14 @@ export class PhotosCommentsController {
     }
   }
 
-  // @Get(":postId")
-  // @ApiOperation({ summary: "게시글 댓글 목록 조회" })
-  // @ApiResponse({ status: 200, type: GetCommentsResponseDto })
-  // async getComments(@Param("postId") postId: number) {
-  //   const comments = await this.commentsService.getCommentsByPost(postId);
-  //   return { ok: true, comments, postId };
-  // }
+  // 댓글 조회
+  @Get(":postId")
+  @ApiOperation({ summary: "게시글 댓글 목록 조회" })
+  @ApiResponse({ status: 200, type: GetCommentsResponseDto })
+  async getComments(@Param("postId") postId: number) {
+    const comments = await this.commentsService.getCommentsByPost(postId);
+    return { ok: true, comments, postId };
+  }
 
   // 댓글 삭제
   @Delete(":commentId")
