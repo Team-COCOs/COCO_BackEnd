@@ -65,42 +65,112 @@ export class PhotosService {
     if (!user) throw new Error("유저 정보가 없습니다");
 
     const keyToEntityMap = new Map<string, PhotoFolder>();
-    const duplicatedTitles: string[] = [];
-    let createdCount = 0;
 
-    for (const dto of folders) {
-      const existingFolder = await this.photoFolderRepository.findOne({
-        where: { user: { id: userId }, title: dto.title },
-      });
+    // 기존 폴더 모두 로드 (삭제된 것도 포함해야 업데이트 및 복구 가능)
+    const existingFolders = await this.photoFolderRepository.find({
+      where: { user: { id: userId } },
+      relations: ["parent"],
+      withDeleted: true,
+    });
 
-      if (existingFolder) {
-        duplicatedTitles.push(dto.title);
-        keyToEntityMap.set(dto.key, existingFolder);
-        continue;
-      }
-
-      const newFolder = this.photoFolderRepository.create({
-        title: dto.title,
-        user,
-      });
-
-      if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
-        newFolder.parent = keyToEntityMap.get(dto.parent_id)!;
-      } else if (dto.parent_id) {
-        console.warn(`부모 키 ${dto.parent_id} 가 존재하지 않음`);
-      }
-
-      await this.photoFolderRepository.save(newFolder);
-      keyToEntityMap.set(dto.key, newFolder);
-      createdCount++;
+    const existingFolderMap = new Map<number, PhotoFolder>();
+    for (const folder of existingFolders) {
+      existingFolderMap.set(folder.id, folder);
     }
 
-    return {
-      message: "폴더 저장 완료",
-      createdCount,
-      duplicatedTitles, // 중복된 폴더명을 클라이언트가 알 수 있도록
-    };
+    // 이번 요청에서 받은 폴더 key들
+    const receivedKeys = new Set(folders.map((f) => f.key));
+
+    // 이미 있는 폴더 중, 요청에 없는 것들 → soft-delete 처리 (is_deleted : true)
+    const toDisable = existingFolders.filter(
+      (f) => !receivedKeys.has(f.id.toString()) && !f.is_deleted
+    );
+    for (const folder of toDisable) {
+      folder.is_deleted = true;
+      await this.photoFolderRepository.save(folder);
+    }
+
+    // 생성 및 업데이트 처리
+    for (const dto of folders) {
+      const maybeId = Number(dto.key);
+      const isExisting = !isNaN(maybeId);
+
+      let folder: PhotoFolder;
+
+      if (isExisting && existingFolderMap.has(maybeId)) {
+        // 기존 폴더 업데이트
+        folder = existingFolderMap.get(maybeId)!;
+        folder.title = dto.title;
+        folder.is_deleted = false; // soft-delete 되었던 폴더 복구
+      } else {
+        // 중복 제목 검사 (삭제된 것 제외)
+        const duplicate = await this.photoFolderRepository.findOne({
+          where: {
+            user: { id: userId },
+            title: dto.title,
+            is_deleted: false,
+          },
+        });
+        if (duplicate) {
+          throw new Error(`폴더명이 중복되었습니다: ${dto.title}`);
+        }
+
+        // 새 폴더 생성
+        folder = new PhotoFolder();
+        folder.title = dto.title;
+        folder.user = user;
+      }
+
+      // 부모 연결
+      if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
+        folder.parent = keyToEntityMap.get(dto.parent_id)!;
+      } else {
+        folder.parent = null;
+      }
+
+      await this.photoFolderRepository.save(folder);
+      keyToEntityMap.set(dto.key, folder);
+    }
+
+    return { message: "폴더 트리 저장 완료" };
   }
+
+  // const duplicatedTitles: string[] = [];
+  // let createdCount = 0;
+
+  //   for (const dto of folders) {
+  //     const existingFolder = await this.photoFolderRepository.findOne({
+  //       where: { user: { id: userId }, title: dto.title },
+  //     });
+
+  //     if (existingFolder) {
+  //       duplicatedTitles.push(dto.title);
+  //       keyToEntityMap.set(dto.key, existingFolder);
+  //       continue;
+  //     }
+
+  //     const newFolder = this.photoFolderRepository.create({
+  //       title: dto.title,
+  //       user,
+  //     });
+
+  //     if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
+  //       newFolder.parent = keyToEntityMap.get(dto.parent_id)!;
+  //     } else if (dto.parent_id) {
+  //       console.warn(`부모 키 ${dto.parent_id} 가 존재하지 않음`);
+  //     }
+
+  //     await this.photoFolderRepository.save(newFolder);
+  //     keyToEntityMap.set(dto.key, newFolder);
+  //     createdCount++;
+  //   }
+
+  //   return {
+  //     message: "폴더 저장 완료",
+  //     createdCount,
+  //     duplicatedTitles, // 중복된 폴더명을 클라이언트가 알 수 있도록
+  //   };
+  // }
 
   // 폴더 조회
   async getFolder(userId: number): Promise<PhotoFolder[]> {
@@ -109,7 +179,7 @@ export class PhotosService {
     if (!user) throw new Error("User not found");
 
     const folders = await this.photoFolderRepository.find({
-      where: { user: { id: userId } },
+      where: { user: { id: userId }, is_deleted: false },
       relations: ["parent"],
       // 부모 폴더 관계 포함
     });
