@@ -244,7 +244,7 @@ export class PhotosService {
         "comments",
         "comments.user",
         "comments.parentComment",
-        "originAuthorId",
+        "origin_author",
       ],
       order: { created_at: "DESC" },
     });
@@ -268,7 +268,7 @@ export class PhotosService {
         "comments",
         "comments.user",
         "comments.parentComment",
-        "originAuthorId",
+        "origin_author",
       ],
       order: { created_at: "DESC" },
     });
