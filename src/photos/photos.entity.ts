@@ -61,10 +61,7 @@ export class Photo {
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "origin_author_id" })
-  originAuthorId: User;
-
-  @Column({ type: "varchar", length: 100, nullable: true })
-  origin_author: string;
+  origin_author: User;
 
   @CreateDateColumn()
   created_at: Date;
