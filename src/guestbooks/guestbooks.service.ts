@@ -22,7 +22,6 @@ export class GuestbooksService {
     authorId: number,
     hostId: number,
     content: string,
-    management: string,
     status: VisibilityStatus
   ): Promise<Guestbook> {
     const author = await this.usersService.findUserById(authorId);
@@ -32,7 +31,6 @@ export class GuestbooksService {
       author,
       host,
       content,
-      management,
       status,
     });
 

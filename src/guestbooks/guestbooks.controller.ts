@@ -25,7 +25,6 @@ export class GuestbooksController {
     @Body("hostId") hostId: number,
     @Body("content") content: string,
     @Body("status") status: VisibilityStatus,
-    @Body("management") management: string,
     @Req() req: Request
   ) {
     const authorId = req.user["id"];
@@ -34,7 +33,6 @@ export class GuestbooksController {
       authorId,
       hostId,
       content,
-      management,
       status
     );
 
@@ -46,7 +44,6 @@ export class GuestbooksController {
 
   // 조회
   @Get(":hostId")
-  @UseGuards(AuthGuard("jwt"))
   async getComments(@Param("hostId") hostId: number, @Req() req: Request) {
     const viewId = req.user["id"];
     const comments = await this.guestbooksService.getComments(hostId, viewId);
