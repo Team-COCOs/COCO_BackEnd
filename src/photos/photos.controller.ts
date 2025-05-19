@@ -16,7 +16,12 @@ import {
 import { PhotosService } from "./photos.service";
 import { SavePhotoFolderDto } from "./dto/photoFolder.dto";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiConsumes, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+} from "@nestjs/swagger";
 import { PhotoFolder } from "./photoFolder.entity";
 import { SavePhotoDto } from "./dto/photos.dto";
 import { Photo } from "./photos.entity";
@@ -139,6 +144,21 @@ export class PhotosController {
   ): Promise<Photo> {
     const userId = req.user["id"];
     return await this.photosService.clipPhoto(userId, photoId);
+  }
+
+  // 수정
+  @Patch(":photoId")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "다이어리 수정" })
+  @ApiResponse({ status: 200, type: Photo })
+  async updateDiary(
+    @Param("photoId", ParseIntPipe) photoId: number,
+    @Body() dto: SavePhotoDto,
+    @Req() req: Request
+  ) {
+    const userId = req.user["id"];
+    return await this.photosService.updatePhoto(userId, photoId, dto);
   }
 
   // 삭제

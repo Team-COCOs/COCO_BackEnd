@@ -198,9 +198,52 @@ export class PhotosService {
         where: {
           user: { id: userId },
           title: dto.folder_name,
+          is_deleted: false,
         },
         relations: ["user"],
       });
+      if (!folder) throw new NotFoundException("폴더 정보가 없습니다.");
+      photo.folder = folder;
+    }
+
+    return await this.photoRepository.save(photo);
+  }
+
+  // 사진첩 게시글 수정
+  async updatePhoto(
+    userId: number,
+    photoId: number,
+    dto: SavePhotoDto
+  ): Promise<Photo> {
+    const photo = await this.photoRepository.findOne({
+      where: { id: photoId },
+      relations: ["user", "folder"],
+    });
+
+    if (!photo) {
+      throw new NotFoundException("게시글을 찾을 수 없습니다.");
+    }
+
+    if (photo.user.id !== userId) {
+      throw new NotFoundException("수정 권한이 없습니다.");
+    }
+
+    photo.photo_url = dto.photo_url;
+    photo.title = dto.title;
+    photo.content = dto.content;
+    photo.visibility = dto.visibility;
+    photo.isScripted = dto.isScripted;
+
+    if (dto.folder_name) {
+      const folder = await this.photoFolderRepository.findOne({
+        where: {
+          user: { id: userId },
+          title: dto.folder_name,
+          is_deleted: false,
+        },
+        relations: ["user"],
+      });
+
       if (!folder) throw new NotFoundException("폴더 정보가 없습니다.");
       photo.folder = folder;
     }
