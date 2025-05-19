@@ -43,7 +43,7 @@ export class GuestbooksService {
     viewId: number
   ): Promise<GuestbookResponseDto[]> {
     const targetUser = await this.usersService.findUserById(hostId);
-    if (!targetUser) throw new Error("해당 유저를 찾을수없습니다");
+    if (!targetUser) throw new NotFoundException("해당 유저를 찾을수없습니다");
 
     const visibilityFilters: VisibilityStatus[] = [VisibilityStatus.PUBLIC];
 

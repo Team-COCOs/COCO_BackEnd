@@ -17,6 +17,9 @@ export class DiaryFolder {
   @Column({ type: "varchar", length: 100 })
   title: string;
 
+  @Column({ default: false })
+  is_deleted: boolean;
+
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   user: User;
 

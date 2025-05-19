@@ -11,6 +11,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  NotFoundException,
 } from "@nestjs/common";
 import { StoreitemsService } from "./storeitems.service";
 import { CreateStoreItemDto, UpdateStoreItemDto } from "./dto/storeitem.dto";
@@ -91,7 +92,7 @@ export class StoreitemsController {
 
     const mappedCategory = categoryMap[dto.category];
     if (!mappedCategory) {
-      throw new Error("유효하지 않은 category입니다.");
+      throw new NotFoundException("유효하지 않은 category입니다.");
     }
 
     const imageUrl = `http://localhost:5001/uploads/${file.filename}`;

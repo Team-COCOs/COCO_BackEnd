@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { LanguageType, UserItem } from "./useritems.entity";
@@ -61,7 +66,9 @@ export class UseritemsService {
     );
 
     if (!purchase) {
-      throw new Error("선택한 미니미 아이템을 구매한 내역이 없습니다.");
+      throw new NotFoundException(
+        "선택한 미니미 아이템을 구매한 내역이 없습니다."
+      );
     }
 
     userItem.minimiItem = purchase.storeItems;
@@ -124,7 +131,9 @@ export class UseritemsService {
       purchaseId
     );
     if (!purchase)
-      throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
+      throw new NotFoundException(
+        "선택한 미니룸 배경 아이템을 구매한 내역이 없습니다."
+      );
 
     const userItem = await this.getOrCreateUserItem(userId);
     userItem.miniroomItem = purchase.storeItems;
@@ -170,7 +179,9 @@ export class UseritemsService {
     const userItem = await this.getOrCreateUserItem(userId);
 
     if (!purchase)
-      throw new Error("선택한 미니룸 배경 아이템을 구매한 내역이 없습니다.");
+      throw new NotFoundException(
+        "선택한 미니룸 배경 아이템을 구매한 내역이 없습니다."
+      );
 
     userItem.bgmItem = purchase.storeItems;
 
@@ -257,7 +268,9 @@ export class UseritemsService {
     );
 
     if (!purchase) {
-      throw new Error("선택한 미니홈피 아이템을 구매한 내역이 없습니다.");
+      throw new NotFoundException(
+        "선택한 미니홈피 아이템을 구매한 내역이 없습니다."
+      );
     }
 
     userItem.skinItem = purchase.storeItems;
@@ -315,7 +328,7 @@ export class UseritemsService {
     );
 
     if (!purchase) {
-      throw new Error("선택한 탭 컬러를 구매한 내역이 없습니다.");
+      throw new NotFoundException("선택한 탭 컬러를 구매한 내역이 없습니다.");
     }
 
     userItem.tapColorItem = purchase.storeItems;
@@ -373,7 +386,7 @@ export class UseritemsService {
     );
 
     if (!purchase) {
-      throw new Error("선택한 배경을 구매한 내역이 없습니다.");
+      throw new NotFoundException("선택한 배경을 구매한 내역이 없습니다.");
     }
 
     userItem.diaryBackgroundItem = purchase.storeItems;

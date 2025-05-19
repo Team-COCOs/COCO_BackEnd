@@ -63,7 +63,7 @@ export class PhotosService {
   // 사진첩 폴더 저장
   async saveFolderTree(folders: SavePhotoFolderDto[], userId: number) {
     const user = await this.usersService.findUserById(userId);
-    if (!user) throw new Error("유저 정보가 없습니다");
+    if (!user) throw new NotFoundException("유저 정보가 없습니다");
 
     const keyToEntityMap = new Map<string, PhotoFolder>();
 
@@ -75,6 +75,7 @@ export class PhotosService {
     });
 
     const existingFolderMap = new Map<number, PhotoFolder>();
+
     for (const folder of existingFolders) {
       existingFolderMap.set(folder.id, folder);
     }
@@ -113,7 +114,7 @@ export class PhotosService {
           },
         });
         if (duplicate) {
-          throw new Error(`폴더명이 중복되었습니다: ${dto.title}`);
+          throw new NotFoundException(`폴더명이 중복되었습니다: ${dto.title}`);
         }
 
         // 새 폴더 생성
@@ -136,48 +137,11 @@ export class PhotosService {
     return { message: "폴더 트리 저장 완료" };
   }
 
-  // const duplicatedTitles: string[] = [];
-  // let createdCount = 0;
-
-  //   for (const dto of folders) {
-  //     const existingFolder = await this.photoFolderRepository.findOne({
-  //       where: { user: { id: userId }, title: dto.title },
-  //     });
-
-  //     if (existingFolder) {
-  //       duplicatedTitles.push(dto.title);
-  //       keyToEntityMap.set(dto.key, existingFolder);
-  //       continue;
-  //     }
-
-  //     const newFolder = this.photoFolderRepository.create({
-  //       title: dto.title,
-  //       user,
-  //     });
-
-  //     if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
-  //       newFolder.parent = keyToEntityMap.get(dto.parent_id)!;
-  //     } else if (dto.parent_id) {
-  //       console.warn(`부모 키 ${dto.parent_id} 가 존재하지 않음`);
-  //     }
-
-  //     await this.photoFolderRepository.save(newFolder);
-  //     keyToEntityMap.set(dto.key, newFolder);
-  //     createdCount++;
-  //   }
-
-  //   return {
-  //     message: "폴더 저장 완료",
-  //     createdCount,
-  //     duplicatedTitles, // 중복된 폴더명을 클라이언트가 알 수 있도록
-  //   };
-  // }
-
   // 폴더 조회
   async getFolder(userId: number): Promise<PhotoFolder[]> {
     const user = await this.usersService.findUserById(userId);
 
-    if (!user) throw new Error("User not found");
+    if (!user) throw new NotFoundException("User not found");
 
     const folders = await this.photoFolderRepository.find({
       where: { user: { id: userId }, is_deleted: false },
@@ -218,7 +182,7 @@ export class PhotosService {
   // 사진첩 게시글 저장
   async savePhoto(userId: number, dto: SavePhotoDto): Promise<Photo> {
     const user = await this.usersService.findUserById(userId);
-    if (!user) throw new Error("User not found");
+    if (!user) throw new NotFoundException("유저 정보가 없습니다");
 
     const photo = new Photo();
     photo.user = user;
@@ -236,7 +200,7 @@ export class PhotosService {
         },
         relations: ["user"],
       });
-      if (!folder) throw new Error("Folder not found");
+      if (!folder) throw new NotFoundException("폴더 정보가 없습니다.");
       photo.folder = folder;
     }
 
@@ -246,7 +210,7 @@ export class PhotosService {
   // 사진첩 게시글 조회
   async getPhotosByUser(hostId: number, viewId: number): Promise<Photo[]> {
     const targetUser = await this.usersService.findUserById(hostId);
-    if (!targetUser) throw new Error("Target user not found");
+    if (!targetUser) throw new NotFoundException("해당 유저를 찾을수없습니다");
 
     const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
 
@@ -287,7 +251,7 @@ export class PhotosService {
   // 로그아웃 유저가 조회할때
   async getPhotosByLogout(hostId: number): Promise<Photo[]> {
     const targetUser = await this.usersService.findUserById(hostId);
-    if (!targetUser) throw new Error("Target user not found");
+    if (!targetUser) throw new NotFoundException("Target user not found");
 
     const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
 
@@ -315,11 +279,11 @@ export class PhotosService {
     });
 
     if (!originalPhoto) {
-      throw new Error("원본 사진을 찾을 수 없습니다.");
+      throw new NotFoundException("원본 사진을 찾을 수 없습니다.");
     }
 
     const user = await this.usersService.findUserById(userId);
-    if (!user) throw new Error("사용자를 찾을 수 없습니다.");
+    if (!user) throw new NotFoundException("사용자를 찾을 수 없습니다.");
 
     // 스크랩 폴더 확인 또는 생성
     let scrapFolder = await this.photoFolderRepository.findOne({
@@ -352,5 +316,27 @@ export class PhotosService {
     await this.photoRepository.save(originalPhoto);
 
     return await this.photoRepository.save(copiedPhoto);
+  }
+
+  // 사진첩 삭제
+  async deletePost(userId: number, postId: number): Promise<{ ok: boolean }> {
+    const post = await this.photoRepository.findOne({
+      where: { id: postId },
+      relations: ["user"],
+    });
+
+    if (!post) {
+      throw new NotFoundException("게시글을 찾을 수 없습니다.");
+    }
+
+    const author = post.user.id === userId;
+
+    if (!author) {
+      throw new NotFoundException("삭제 권한이 없습니다.");
+    }
+
+    await this.photoRepository.remove(post);
+
+    return { ok: true };
   }
 }

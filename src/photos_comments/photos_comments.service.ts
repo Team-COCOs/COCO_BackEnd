@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PhotoComment } from "./photos_comments.entity";
 import { Repository } from "typeorm";
@@ -102,13 +107,13 @@ export class PhotosCommentsService {
     });
 
     if (!comment) {
-      throw new Error("댓글을 찾을 수 없습니다.");
+      throw new NotFoundException("댓글을 찾을 수 없습니다.");
     }
 
     const author = comment.user.id === user.id;
 
     if (!author) {
-      throw new Error("삭제 권한이 없습니다.");
+      throw new NotFoundException("삭제 권한이 없습니다.");
     }
 
     await this.commentRepository.remove(comment);

@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Diary, VisibilityType } from "./diary.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, MoreThan, Repository } from "typeorm";
@@ -51,49 +55,87 @@ export class DiaryService {
   async saveFolderTree(folders: SaveDiaryFolderDto[], userId: number) {
     const user = await this.usersService.findUserById(userId);
 
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      throw new NotFoundException("일치하는 회원 정보가 없습니다.");
+    }
 
     // 새 폴더를 위한 매핑
     const keyToEntityMap = new Map<string, DiaryFolder>();
 
-    // 새로 저장할 폴더들 처리
+    const existingFolders = await this.diaryFolderRepository.find({
+      where: { user: { id: userId } },
+      relations: ["parent"],
+      withDeleted: true,
+    });
+
+    const existingFolderMap = new Map<number, DiaryFolder>();
+
+    for (const folder of existingFolders) {
+      existingFolderMap.set(folder.id, folder);
+    }
+
+    // 이번 요청에서 받은 폴더 key들
+    const receivedKeys = new Set(folders.map((f) => f.key));
+
+    // 이미 있는 폴더 중, 요청에 없는 것들 → soft-delete 처리 (is_deleted : true)
+    const toDisable = existingFolders.filter(
+      (f) => !receivedKeys.has(f.id.toString()) && !f.is_deleted
+    );
+    for (const folder of toDisable) {
+      folder.is_deleted = true;
+      await this.diaryFolderRepository.save(folder);
+    }
+
+    // 생성 및 업데이트 처리
     for (const dto of folders) {
-      // 기존 폴더가 있는지 확인 (폴더명이 동일한 경우)
-      let folder = await this.diaryFolderRepository.findOne({
-        where: { user: { id: userId }, title: dto.title }, // 폴더명 기준으로 찾기
-      });
+      const maybeId = Number(dto.key);
+      const isExisting = !isNaN(maybeId);
 
-      if (folder) {
-        throw new Error(`폴더명이 중복되었습니다: ${dto.title}`);
-      }
+      let folder: DiaryFolder;
 
-      // 기존 폴더가 없다면 새 폴더 생성
-      if (!folder) {
+      if (isExisting && existingFolderMap.has(maybeId)) {
+        // 기존 폴더 업데이트
+        folder = existingFolderMap.get(maybeId)!;
+        folder.title = dto.title;
+        folder.is_deleted = false; // soft-delete 되었던 폴더 복구
+      } else {
+        // 중복 제목 검사 (삭제된 것 제외)
+        const duplicate = await this.diaryFolderRepository.findOne({
+          where: {
+            user: { id: userId },
+            title: dto.title,
+            is_deleted: false,
+          },
+        });
+        if (duplicate) {
+          throw new NotFoundException(`폴더명이 중복되었습니다: ${dto.title}`);
+        }
+
+        // 새 폴더 생성
         folder = new DiaryFolder();
         folder.title = dto.title;
         folder.user = user;
       }
 
-      // 부모 폴더 매핑
+      // 부모 연결
       if (dto.parent_id && keyToEntityMap.has(dto.parent_id)) {
         folder.parent = keyToEntityMap.get(dto.parent_id)!;
+      } else {
+        folder.parent = null;
       }
 
-      // 폴더 저장
       await this.diaryFolderRepository.save(folder);
-      keyToEntityMap.set(dto.key, folder); // 매핑에 추가
+      keyToEntityMap.set(dto.key, folder);
     }
 
-    return {
-      message: "폴더 저장 완료",
-    };
+    return { message: "폴더 트리 저장 완료" };
   }
 
   // 폴더 조회
   async getFolder(userId: number): Promise<DiaryFolder[]> {
     const user = await this.usersService.findUserById(userId);
 
-    if (!user) throw new Error("User not found");
+    if (!user) throw new NotFoundException("User not found");
 
     const folders = await this.diaryFolderRepository.find({
       where: { user: { id: userId } },
@@ -134,7 +176,7 @@ export class DiaryService {
   // 다이어리 게시글 저장
   async saveDiary(userId: number, dto: SaveDiaryDto): Promise<Diary> {
     const user = await this.usersService.findUserById(userId);
-    if (!user) throw new Error("유저 정보가 없습니다");
+    if (!user) throw new NotFoundException("유저 정보가 없습니다");
 
     const diary = new Diary();
     diary.user = user;
@@ -145,9 +187,14 @@ export class DiaryService {
 
     if (dto.folder_name) {
       const folder = await this.diaryFolderRepository.findOne({
-        where: { title: dto.folder_name },
+        where: {
+          user: { id: userId },
+          title: dto.folder_name,
+        },
+        relations: ["user"],
       });
-      if (!folder) throw new Error("Folder not found");
+      if (!folder) throw new NotFoundException("폴더 정보가 없습니다.");
+
       diary.folder = folder;
     }
 
@@ -157,7 +204,7 @@ export class DiaryService {
   // 사진첩 게시글 조회
   async getPhotosByUser(hostId: number, viewId: number): Promise<Diary[]> {
     const targetUser = await this.usersService.findUserById(hostId);
-    if (!targetUser) throw new Error("해당 유저를 찾을수없습니다");
+    if (!targetUser) throw new NotFoundException("해당 유저를 찾을수없습니다");
 
     const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
 
@@ -198,7 +245,7 @@ export class DiaryService {
   // 로그아웃 유저가 조회할때
   async getDiaryByLogout(hostId: number): Promise<Diary[]> {
     const targetUser = await this.usersService.findUserById(hostId);
-    if (!targetUser) throw new Error("Target user not found");
+    if (!targetUser) throw new NotFoundException("Target user not found");
 
     const visibilityFilters: VisibilityType[] = [VisibilityType.PUBLIC];
 
@@ -215,5 +262,27 @@ export class DiaryService {
       ],
       order: { created_at: "DESC" },
     });
+  }
+
+  // 다이어리 삭제
+  async deletePost(userId: number, diaryId: number): Promise<{ ok: boolean }> {
+    const post = await this.diaryRepository.findOne({
+      where: { id: diaryId },
+      relations: ["user"],
+    });
+
+    if (!post) {
+      throw new NotFoundException("게시글을 찾을 수 없습니다.");
+    }
+
+    const author = post.user.id === userId;
+
+    if (!author) {
+      throw new NotFoundException("삭제 권한이 없습니다.");
+    }
+
+    await this.diaryRepository.remove(post);
+
+    return { ok: true };
   }
 }

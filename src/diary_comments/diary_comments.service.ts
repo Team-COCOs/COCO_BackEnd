@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { DiaryComment } from "./diary_comments.entity";
@@ -31,7 +31,9 @@ export class DiaryCommentsService {
     });
 
     if (!fullComment || !fullComment.user || !fullComment.diary) {
-      throw new Error("댓글 조회 실패: 필요한 관계 데이터가 없습니다.");
+      throw new NotFoundException(
+        "댓글 조회 실패: 필요한 관계 데이터가 없습니다."
+      );
     }
 
     return {
@@ -72,14 +74,14 @@ export class DiaryCommentsService {
     });
 
     if (!comment) {
-      throw new Error("댓글을 찾을 수 없습니다.");
+      throw new NotFoundException("댓글을 찾을 수 없습니다.");
     }
 
     const author = comment.user.id === user.id;
     const admin = user.role === UserRole.ADMIN;
 
     if (!author && !admin) {
-      throw new Error("삭제 권한이 없습니다.");
+      throw new NotFoundException("삭제 권한이 없습니다.");
     }
 
     await this.diaryCommentsRepository.remove(comment);

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -138,5 +139,18 @@ export class PhotosController {
   ): Promise<Photo> {
     const userId = req.user["id"];
     return await this.photosService.clipPhoto(userId, photoId);
+  }
+
+  // 삭제
+  @Delete(":photoId")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "사진 삭제" })
+  @ApiResponse({ status: 200, description: "삭제 완료" })
+  async deletePhoto(
+    @Param("photoId") photoId: number,
+    @Req() req: Request
+  ): Promise<{ ok: boolean }> {
+    const userId = req.user["id"];
+    return await this.photosService.deletePost(userId, photoId);
   }
 }

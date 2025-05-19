@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -101,5 +102,18 @@ export class DiaryController {
     @Param("hostId", ParseIntPipe) hostId: number
   ): Promise<Diary[]> {
     return await this.diaryService.getDiaryByLogout(hostId);
+  }
+
+  // 삭제
+  @Delete(":diaryId")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "사진 삭제" })
+  @ApiResponse({ status: 200, description: "삭제 완료" })
+  async deletePhoto(
+    @Param("diaryId") diaryId: number,
+    @Req() req: Request
+  ): Promise<{ ok: boolean }> {
+    const userId = req.user["id"];
+    return await this.diaryService.deletePost(userId, diaryId);
   }
 }
