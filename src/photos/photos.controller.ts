@@ -98,7 +98,6 @@ export class PhotosController {
     if (file) {
       dto.photo_url = `/uploads/${file.filename}`;
     }
-    console.log(dto, "sdfsd");
     return await this.photosService.savePhoto(userId, dto);
   }
 
@@ -149,15 +148,38 @@ export class PhotosController {
   // 수정
   @Patch(":photoId")
   @UseGuards(AuthGuard("jwt"))
-  @ApiBearerAuth()
-  @ApiOperation({ summary: "다이어리 수정" })
-  @ApiResponse({ status: 200, type: Photo })
-  async updateDiary(
-    @Param("photoId", ParseIntPipe) photoId: number,
+  @UseInterceptors(
+    FileInterceptor("photo", {
+      storage: diskStorage({
+        destination: "./uploads",
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    })
+  )
+  @ApiConsumes("multipart/form-data")
+  @ApiOperation({ summary: "사진 수정" })
+  @ApiResponse({
+    status: 201,
+    description: "사진이 수정되었습니다.",
+    type: Photo,
+  })
+  async updatePhoto(
     @Body() dto: SavePhotoDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Param("photoId", ParseIntPipe) photoId: number,
     @Req() req: Request
   ) {
     const userId = req.user["id"];
+
+    if (file) {
+      dto.photo_url = `/uploads/${file.filename}`;
+    }
+
     return await this.photosService.updatePhoto(userId, photoId, dto);
   }
 
