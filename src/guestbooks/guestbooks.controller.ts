@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -11,6 +12,7 @@ import {
 import { GuestbooksService } from "./guestbooks.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
+import { VisibilityStatus } from "./guestbooks.entity";
 
 @Controller("guestbooks")
 export class GuestbooksController {
@@ -22,6 +24,7 @@ export class GuestbooksController {
   async createFriendComment(
     @Body("hostId") hostId: number,
     @Body("content") content: string,
+    @Body("status") status: VisibilityStatus,
     @Req() req: Request
   ) {
     const authorId = req.user["id"];
@@ -29,7 +32,8 @@ export class GuestbooksController {
     const result = await this.guestbooksService.create(
       authorId,
       hostId,
-      content
+      content,
+      status
     );
 
     return {
@@ -40,8 +44,30 @@ export class GuestbooksController {
 
   // 조회
   @Get(":hostId")
-  async getComments(@Param("hostId") hostId: number) {
-    const comments = await this.guestbooksService.getComments(hostId);
+  @UseGuards(AuthGuard("jwt"))
+  async getComments(@Param("hostId") hostId: number, @Req() req: Request) {
+    const viewId = req.user["id"];
+    const comments = await this.guestbooksService.getComments(hostId, viewId);
+    return {
+      message: "일촌평 조회 성공",
+      data: comments,
+    };
+  }
+
+  // 비밀로 하기
+  @Patch("status/:commentId")
+  @UseGuards(AuthGuard("jwt"))
+  async changeVisibility(
+    @Param("commentId") commentId: number,
+    @Body("status") status: VisibilityStatus,
+    @Req() req: Request
+  ) {
+    const userId = req.user["id"];
+    const comments = await this.guestbooksService.changeVisibility(
+      userId,
+      commentId,
+      status
+    );
     return {
       message: "일촌평 조회 성공",
       data: comments,

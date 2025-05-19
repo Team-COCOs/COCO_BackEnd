@@ -185,6 +185,7 @@ export class DiaryService {
         visibility: In(visibilityFilters),
       },
       relations: [
+        "user",
         "folder",
         "comments",
         "comments.user",
