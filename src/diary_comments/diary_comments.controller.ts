@@ -29,7 +29,8 @@ interface AuthRequest extends Request {
 export class DiaryCommentsController {
   constructor(private readonly diaryCommentsService: DiaryCommentsService) {}
 
-  @Post("comment/:diaryId")
+  // 댓글 작성
+  @Post(":diaryId")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
   @ApiOperation({ summary: "댓글 작성" })
@@ -60,16 +61,18 @@ export class DiaryCommentsController {
     }
   }
 
-  @Get("comment/:diaryId")
-  @ApiOperation({ summary: "게시글 댓글 목록 조회" })
-  @ApiResponse({ status: 200, type: GetCommentsResponseDto })
-  async getComments(@Param("diaryId") diaryId: number) {
-    const comments =
-      await this.diaryCommentsService.getCommentsByDiary(diaryId);
-    return { ok: true, comments, diaryId };
-  }
+  // 조회
+  // @Get(":diaryId")
+  // @ApiOperation({ summary: "게시글 댓글 목록 조회" })
+  // @ApiResponse({ status: 200, type: GetCommentsResponseDto })
+  // async getComments(@Param("diaryId") diaryId: number) {
+  //   const comments =
+  //     await this.diaryCommentsService.getCommentsByDiary(diaryId);
+  //   return { ok: true, comments, diaryId };
+  // }
 
-  @Delete("comment/:commentId")
+  // 삭제
+  @Delete(":commentId")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
   @ApiOperation({ summary: "댓글 삭제" })
