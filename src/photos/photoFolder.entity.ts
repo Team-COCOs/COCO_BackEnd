@@ -38,7 +38,4 @@ export class PhotoFolder {
     onDelete: "CASCADE",
   })
   photos: Photo[];
-
-  @Column({ default: false })
-  is_deleted: boolean;
 }
