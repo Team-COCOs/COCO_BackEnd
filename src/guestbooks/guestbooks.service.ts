@@ -74,6 +74,7 @@ export class GuestbooksService {
         hostId: comment.host.id,
         authorRealName: comment.author.name,
         authorProfile: comment.author.minimi_image,
+        authorGender: comment.author.gender,
         hostRealName: comment.host.name,
         content: comment.content,
         status: comment.status,

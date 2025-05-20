@@ -406,13 +406,14 @@ export class PhotosService {
 
   // 최근 업로드한 게시글 제목 2개
   async getRecentPhotoTitles(userId: number): Promise<string[]> {
-    const photos = await this.photoRepository.find({
-      where: { user: { id: userId } },
-      order: { created_at: "DESC" },
-      take: 2,
-      select: ["title"],
-    });
+    const rows = await this.photoRepository
+      .createQueryBuilder("photo")
+      .select("photo.title", "title")
+      .where("photo.user_id = :userId", { userId })
+      .orderBy("photo.created_at", "DESC")
+      .limit(2)
+      .getRawMany();
 
-    return photos.map((p) => p.title);
+    return rows.map((row) => row.title);
   }
 }
