@@ -7,6 +7,6 @@ export interface GuestbookResponseDto {
   authorRealName: string;
   hostRealName: string;
   content: string;
-  status: VisibilityStatus;
+  isSecret: VisibilityStatus;
   created_at: string;
 }

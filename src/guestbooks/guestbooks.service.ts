@@ -22,7 +22,7 @@ export class GuestbooksService {
     authorId: number,
     hostId: number,
     content: string,
-    status: VisibilityStatus
+    isSecret: VisibilityStatus
   ): Promise<Guestbook> {
     const author = await this.usersService.findUserById(authorId);
     const host = await this.usersService.findUserById(hostId);
@@ -31,7 +31,7 @@ export class GuestbooksService {
       author,
       host,
       content,
-      status,
+      isSecret,
     });
 
     return this.guestbooksRepository.save(comment);
@@ -53,7 +53,7 @@ export class GuestbooksService {
     }
 
     const comments = await this.guestbooksRepository.find({
-      where: { host: { id: hostId }, status: In(visibilityFilters) },
+      where: { host: { id: hostId }, isSecret: In(visibilityFilters) },
       relations: ["author", "host"],
       order: { created_at: "DESC" },
     });
@@ -69,7 +69,7 @@ export class GuestbooksService {
         authorRealName: comment.author.name,
         hostRealName: comment.host.name,
         content: comment.content,
-        status: comment.status,
+        isSecret: comment.isSecret,
         created_at: created_at.toISOString().replace("T", " ").substring(0, 16),
       };
     });
@@ -97,7 +97,7 @@ export class GuestbooksService {
       );
     }
 
-    guestbook.status = visibility;
+    guestbook.isSecret = visibility;
     await this.guestbooksRepository.save(guestbook);
 
     return {
