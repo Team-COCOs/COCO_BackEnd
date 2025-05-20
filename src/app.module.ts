@@ -10,7 +10,6 @@ import { DiaryCommentsModule } from "./diary_comments/diary_comments.module";
 import { GuestbooksModule } from "./guestbooks/guestbooks.module";
 import { StoreitemsModule } from "./storeitems/storeitems.module";
 import { PurchasesModule } from "./purchases/purchases.module";
-import { ChatbotmessagesModule } from "./chatbotmessages/chatbotmessages.module";
 import { UseritemsModule } from "./useritems/useritems.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { PhotosModule } from "./photos/photos.module";
@@ -20,7 +19,6 @@ import { User } from "./users/users.entity";
 import { Payment } from "./payments/payments.entity";
 import { Photo } from "./photos/photos.entity";
 import { Friend } from "./friends/friends.entity";
-import { ChatbotMessage } from "./chatbotmessages/chatbotmessages.entity";
 import { Diary } from "./diary/diary.entity";
 import { PhotosCommentsModule } from "./photos_comments/photos_comments.module";
 import { StoreItems } from "./storeitems/storeitems.entity";
@@ -58,7 +56,6 @@ import { Minimi } from "./minirooms/minimi.entity";
           PhotoFolder,
           Payment,
           Friend,
-          ChatbotMessage,
           Diary,
           StoreItems,
           Minihomepi,
@@ -83,7 +80,6 @@ import { Minimi } from "./minirooms/minimi.entity";
     GuestbooksModule,
     StoreitemsModule,
     PurchasesModule,
-    ChatbotmessagesModule,
     UseritemsModule,
     PaymentsModule,
     PhotosModule,

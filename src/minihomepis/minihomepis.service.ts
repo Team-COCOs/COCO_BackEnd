@@ -136,4 +136,28 @@ export class MinihomepisService {
       .sort((a, b) => b.totalVisitCount - a.totalVisitCount)
       .slice(0, 5);
   }
+
+  // 방명록에 관리글 저장
+  async setManagement(userId: number, content: string) {
+    const minihomepi = await this.miniRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (!minihomepi) {
+      throw new NotFoundException("미니홈피가 존재하지 않습니다.");
+    }
+
+    minihomepi.management = content;
+    await this.miniRepository.save(minihomepi);
+    return { message: "관리글이 저장되었습니다." };
+  }
+
+  // 방명록에 관리글 조회
+  async getManagement(userId: number) {
+    const minihomepi = await this.miniRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    return { content: minihomepi?.management ?? "" };
+  }
 }

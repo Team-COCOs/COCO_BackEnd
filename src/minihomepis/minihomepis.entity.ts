@@ -33,6 +33,9 @@ export class Minihomepi {
   @Column({ type: "varchar", nullable: true })
   minihompi_image: string;
 
+  @Column({ type: "text" })
+  management: string;
+
   @CreateDateColumn()
   created_at: Date;
 

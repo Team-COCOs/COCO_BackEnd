@@ -128,4 +128,18 @@ export class MinihomepisController {
   ): Promise<MinihomepiStatusDto> {
     return this.minihomepisService.getMinihomepiStatus(userId);
   }
+
+  // 관리글 저장
+  @Patch("management")
+  @UseGuards(AuthGuard("jwt"))
+  async setManagement(@Req() req: Request, @Body("content") content: string) {
+    const userId = req.user["id"];
+    return await this.minihomepisService.setManagement(userId, content);
+  }
+
+  // 관리글 조회
+  @Get("management/:userId")
+  async getManagement(@Param("userId") userId: number) {
+    return await this.minihomepisService.getManagement(userId);
+  }
 }

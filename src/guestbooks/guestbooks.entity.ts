@@ -28,9 +28,6 @@ export class Guestbook {
   @Column({ type: "text" })
   content: string;
 
-  @Column({ type: "text" })
-  management: string;
-
   @Column({
     type: "enum",
     enum: VisibilityStatus,
