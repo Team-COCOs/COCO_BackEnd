@@ -52,11 +52,15 @@ export class GuestbooksService {
       order: { created_at: "DESC" },
     });
 
+    const numericViewerId =
+      viewerId !== undefined ? Number(viewerId) : undefined;
+
     const filtered = allComments.filter((comment) => {
       const isPublic = comment.status === VisibilityStatus.PUBLIC;
-      const isOwner = viewerId !== undefined && comment.host.id === viewerId;
-      const isAuthor = viewerId !== undefined && comment.author.id === viewerId;
-
+      const isOwner =
+        numericViewerId !== undefined && comment.host.id === numericViewerId;
+      const isAuthor =
+        numericViewerId !== undefined && comment.author.id === numericViewerId;
       return isPublic || isOwner || isAuthor;
     });
 
@@ -69,11 +73,14 @@ export class GuestbooksService {
         authorId: comment.author.id,
         hostId: comment.host.id,
         authorRealName: comment.author.name,
+        authorProfile: comment.author.minimi_image,
         hostRealName: comment.host.name,
         content: comment.content,
         status: comment.status,
         created_at: created_at.toISOString().replace("T", " ").substring(0, 16),
-        isMine: viewerId !== undefined && comment.author.id === viewerId,
+        isMine:
+          numericViewerId !== undefined &&
+          comment.author.id === numericViewerId,
       };
     });
   }
