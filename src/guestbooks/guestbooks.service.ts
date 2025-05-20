@@ -86,12 +86,8 @@ export class GuestbooksService {
     });
   }
 
-  // 방명록 공개/비공개 전환
-  async changeVisibility(
-    hostId: number,
-    guestbookId: number,
-    visibility: VisibilityStatus
-  ) {
+  // 방명록 공개/비공개 토글
+  async toggleVisibility(hostId: number, guestbookId: number) {
     const guestbook = await this.guestbooksRepository.findOne({
       where: { id: guestbookId },
       relations: ["host"],
@@ -104,18 +100,25 @@ export class GuestbooksService {
     // host만 수정 가능
     if (guestbook.host.id !== hostId) {
       throw new ForbiddenException(
-        "방명록의 visibility는 해당 미니홈피 주인만 수정할 수 있습니다."
+        "해당 미니홈피 주인만 공개 여부를 변경할 수 있습니다."
       );
     }
 
-    guestbook.status = visibility;
+    // 현재 상태 토글
+    guestbook.status =
+      guestbook.status === VisibilityStatus.PRIVATE
+        ? VisibilityStatus.PUBLIC
+        : VisibilityStatus.PRIVATE;
+
     await this.guestbooksRepository.save(guestbook);
 
     return {
-      message: `방명록이 ${visibility === VisibilityStatus.PRIVATE ? "비공개" : "공개"}로 설정되었습니다.`,
+      message: `방명록이 ${
+        guestbook.status === VisibilityStatus.PRIVATE ? "비공개" : "공개"
+      }로 설정되었습니다.`,
+      status: guestbook.status,
     };
   }
-
   // 삭제
   async delete(guestbookId: number, userId: number) {
     const comment = await this.guestbooksRepository.findOne({

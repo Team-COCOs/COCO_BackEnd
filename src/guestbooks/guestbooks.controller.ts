@@ -59,20 +59,12 @@ export class GuestbooksController {
   // 비밀로 하기
   @Patch("status/:id")
   @UseGuards(AuthGuard("jwt"))
-  async changeVisibility(
-    @Param("id") id: number,
-    @Body("status") status: VisibilityStatus,
-    @Req() req: Request
-  ) {
+  async toggleVisibility(@Param("id") id: number, @Req() req: Request) {
     const userId = req.user["id"];
-    const comments = await this.guestbooksService.changeVisibility(
-      userId,
-      id,
-      status
-    );
+    const result = await this.guestbooksService.toggleVisibility(userId, id);
     return {
-      message: "일촌평 조회 성공",
-      data: comments,
+      message: result.message,
+      status: result.status,
     };
   }
 
