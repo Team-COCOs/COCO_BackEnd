@@ -33,7 +33,7 @@ export class Guestbook {
     enum: VisibilityStatus,
     default: VisibilityStatus.PUBLIC,
   })
-  isSecret: VisibilityStatus;
+  status: VisibilityStatus;
 
   @CreateDateColumn()
   created_at: Date;

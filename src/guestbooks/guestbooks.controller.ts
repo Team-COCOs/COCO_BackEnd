@@ -22,18 +22,18 @@ export class GuestbooksController {
   @Post()
   @UseGuards(AuthGuard("jwt"))
   async createFriendComment(
-    @Body("hostId") hostId: number,
+    @Body("miniUserId") miniUserId: number,
     @Body("content") content: string,
-    @Body("isSecret") isSecret: VisibilityStatus,
+    @Body("status") status: VisibilityStatus,
     @Req() req: Request
   ) {
     const authorId = req.user["id"];
 
     const result = await this.guestbooksService.create(
       authorId,
-      hostId,
+      miniUserId,
       content,
-      isSecret
+      status
     );
 
     return {
@@ -58,14 +58,14 @@ export class GuestbooksController {
   @UseGuards(AuthGuard("jwt"))
   async changeVisibility(
     @Param("commentId") commentId: number,
-    @Body("isSecret") isSecret: VisibilityStatus,
+    @Body("status") status: VisibilityStatus,
     @Req() req: Request
   ) {
     const userId = req.user["id"];
     const comments = await this.guestbooksService.changeVisibility(
       userId,
       commentId,
-      isSecret
+      status
     );
     return {
       message: "일촌평 조회 성공",

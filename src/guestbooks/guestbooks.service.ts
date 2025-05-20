@@ -22,7 +22,7 @@ export class GuestbooksService {
     authorId: number,
     hostId: number,
     content: string,
-    isSecret: VisibilityStatus
+    status: VisibilityStatus
   ): Promise<Guestbook> {
     const author = await this.usersService.findUserById(authorId);
     const host = await this.usersService.findUserById(hostId);
@@ -31,7 +31,7 @@ export class GuestbooksService {
       author,
       host,
       content,
-      isSecret,
+      status,
     });
 
     return this.guestbooksRepository.save(comment);
@@ -43,22 +43,24 @@ export class GuestbooksService {
     viewId: number
   ): Promise<GuestbookResponseDto[]> {
     const targetUser = await this.usersService.findUserById(hostId);
-    if (!targetUser) throw new NotFoundException("해당 유저를 찾을수없습니다");
+    if (!targetUser)
+      throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
 
-    const visibilityFilters: VisibilityStatus[] = [VisibilityStatus.PUBLIC];
-
-    if (hostId === viewId) {
-      // 내 프로필 → 모든 게시글 조회
-      visibilityFilters.push(VisibilityStatus.PRIVATE);
-    }
-
-    const comments = await this.guestbooksRepository.find({
-      where: { host: { id: hostId }, isSecret: In(visibilityFilters) },
+    const allComments = await this.guestbooksRepository.find({
+      where: { host: { id: hostId } },
       relations: ["author", "host"],
       order: { created_at: "DESC" },
     });
 
-    return comments.map((comment) => {
+    const filtered = allComments.filter((comment) => {
+      const isPublic = comment.status === VisibilityStatus.PUBLIC;
+      const isOwner = comment.host.id === viewId;
+      const isAuthor = comment.author.id === viewId;
+
+      return isPublic || isOwner || isAuthor;
+    });
+
+    return filtered.map((comment) => {
       const created_at = new Date(comment.created_at);
       created_at.setHours(created_at.getHours() + 9);
 
@@ -69,8 +71,9 @@ export class GuestbooksService {
         authorRealName: comment.author.name,
         hostRealName: comment.host.name,
         content: comment.content,
-        isSecret: comment.isSecret,
+        status: comment.status,
         created_at: created_at.toISOString().replace("T", " ").substring(0, 16),
+        isMine: comment.author.id === viewId,
       };
     });
   }
@@ -97,7 +100,7 @@ export class GuestbooksService {
       );
     }
 
-    guestbook.isSecret = visibility;
+    guestbook.status = visibility;
     await this.guestbooksRepository.save(guestbook);
 
     return {
