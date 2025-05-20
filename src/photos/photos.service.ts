@@ -410,7 +410,9 @@ export class PhotosService {
       .createQueryBuilder("photo")
       .select("photo.title", "title")
       .where("photo.user_id = :userId", { userId })
+      .andWhere("photo.visibility = :visibility", { visibility: "public" })
       .orderBy("photo.created_at", "DESC")
+      .limit(2)
       .limit(2)
       .getRawMany();
 
