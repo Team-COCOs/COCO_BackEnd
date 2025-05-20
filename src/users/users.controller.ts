@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -166,9 +167,16 @@ export class UsersController {
   }
 
   // 파도타기
-  @Get("wave")
-  async getRandomUser(@Query("hostId") hostId: number) {
-    const userId = await this.usersService.getRandomUserExcept(Number(hostId));
+  @Get("wave/:hostId")
+  async getRandomUser(@Param("hostId") hostId: string) {
+    const parsed = Number(hostId);
+
+    if (isNaN(parsed)) {
+      throw new BadRequestException("유효한 hostId가 아닙니다.");
+    }
+
+    const userId = await this.usersService.getRandomUserExcept(parsed);
+
     return { userId };
   }
 }

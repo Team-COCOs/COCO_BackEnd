@@ -190,16 +190,19 @@ export class UsersService {
   }
 
   // 파도타기 (현재 있는 미니홈피 말고 랜덤하게 하나)
-  async getRandomUserExcept(hostId: number): Promise<number> {
-    const users = await this.userRepository.find({
-      where: { id: Not(hostId) },
-    });
+  async getRandomUserExcept(excludeId: number): Promise<number> {
+    const user = await this.userRepository
+      .createQueryBuilder("user")
+      .where("user.id != :excludeId", { excludeId })
+      .andWhere("user.role = :role", { role: "user" })
+      .orderBy("RAND()") // MySQL용 랜덤 정렬
+      .limit(1)
+      .getOne();
 
-    if (users.length === 0) {
+    if (!user) {
       throw new NotFoundException("다른 유저가 없습니다.");
     }
 
-    const random = Math.floor(Math.random() * users.length);
-    return users[random].id;
+    return user.id;
   }
 }
