@@ -29,6 +29,7 @@ import { diskStorage } from "multer";
 import { extname } from "path";
 import { PhotosService } from "src/photos/photos.service";
 import { DiaryService } from "src/diary/diary.service";
+import { GuestbooksService } from "src/guestbooks/guestbooks.service";
 
 @Controller("minihomepis")
 export class MinihomepisController {
@@ -38,7 +39,8 @@ export class MinihomepisController {
     private readonly visitService: VisitService,
     private readonly minihomepisService: MinihomepisService,
     private readonly photosService: PhotosService,
-    private readonly diaryService: DiaryService
+    private readonly diaryService: DiaryService,
+    private readonly guestbookService: GuestbooksService
   ) {}
 
   // 파도타기
@@ -156,4 +158,25 @@ export class MinihomepisController {
   }
 
   // 카운트
+  @Get("postCount/:userId")
+  async getPostCount(@Param("userId", ParseIntPipe) userId: number) {
+    const photoCount = await this.photosService.getTodayPhotoCount(userId);
+    const photoTotalCount = await this.photosService.getTotalPhotoCount(userId);
+    const diaryCount = await this.diaryService.getTodayDiaryCount(userId);
+    const diaryTotalCount = await this.diaryService.getTotalDiaryCount(userId);
+    const guestBookCount =
+      await this.guestbookService.getTodayGuestBookCount(userId);
+    const guestBookTotalCount =
+      await this.guestbookService.getTotalGuestBookCount(userId);
+    return {
+      photoCount,
+      photoTotalCount,
+      diaryCount,
+      diaryTotalCount,
+      guestBookCount,
+      guestBookTotalCount,
+      cocoCount: 1,
+      cocoTotalCount: 1,
+    };
+  }
 }

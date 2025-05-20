@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Guestbook, VisibilityStatus } from "./guestbooks.entity";
-import { In, Repository } from "typeorm";
+import { In, MoreThan, Repository } from "typeorm";
 import { UsersService } from "../users/users.service";
 import { GuestbookResponseDto } from "./dto/guestbookRes.dto";
 
@@ -128,5 +128,25 @@ export class GuestbooksService {
 
     await this.guestbooksRepository.remove(comment);
     return { message: "방명록이 삭제되었습니다." };
+  }
+
+  // 오늘 새로 올린 게시글 개수
+  async getTodayGuestBookCount(userId: number): Promise<number> {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    return await this.guestbooksRepository.count({
+      where: {
+        host: { id: userId },
+        created_at: MoreThan(todayStart),
+      },
+    });
+  }
+
+  // 총 게시글 개수
+  async getTotalGuestBookCount(userId: number): Promise<number> {
+    return await this.guestbooksRepository.count({
+      where: { host: { id: userId } },
+    });
   }
 }

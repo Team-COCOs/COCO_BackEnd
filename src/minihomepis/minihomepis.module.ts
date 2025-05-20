@@ -8,6 +8,7 @@ import { FriendsModule } from "src/friends/friends.module";
 import { VisitModule } from "src/visit/visit.module";
 import { PhotosModule } from "src/photos/photos.module";
 import { DiaryModule } from "src/diary/diary.module";
+import { GuestbooksModule } from "src/guestbooks/guestbooks.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { DiaryModule } from "src/diary/diary.module";
     forwardRef(() => VisitModule),
     forwardRef(() => PhotosModule),
     forwardRef(() => DiaryModule),
+    forwardRef(() => GuestbooksModule),
   ],
   providers: [MinihomepisService],
   controllers: [MinihomepisController],
