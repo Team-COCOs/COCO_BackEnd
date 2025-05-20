@@ -33,7 +33,7 @@ export class Minihomepi {
   @Column({ type: "varchar", nullable: true })
   minihompi_image: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   quote: string;
 
   @CreateDateColumn()

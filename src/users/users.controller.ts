@@ -176,7 +176,6 @@ export class UsersController {
     }
 
     const userId = await this.usersService.getRandomUserExcept(parsed);
-
     return { userId };
   }
 }
