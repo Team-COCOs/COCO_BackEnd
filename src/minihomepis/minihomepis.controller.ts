@@ -132,9 +132,10 @@ export class MinihomepisController {
   // 관리글 저장
   @Patch("management")
   @UseGuards(AuthGuard("jwt"))
-  async setManagement(@Req() req: Request, @Body("content") content: string) {
+  async setManagement(@Req() req: Request, @Body("quote") quote: string) {
     const userId = req.user["id"];
-    return await this.minihomepisService.setManagement(userId, content);
+    console.log(quote, "sdfsd");
+    return await this.minihomepisService.setManagement(userId, quote);
   }
 
   // 관리글 조회

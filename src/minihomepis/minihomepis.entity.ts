@@ -34,7 +34,7 @@ export class Minihomepi {
   minihompi_image: string;
 
   @Column({ type: "text" })
-  management: string;
+  quote: string;
 
   @CreateDateColumn()
   created_at: Date;

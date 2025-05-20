@@ -138,7 +138,7 @@ export class MinihomepisService {
   }
 
   // 방명록에 관리글 저장
-  async setManagement(userId: number, content: string) {
+  async setManagement(userId: number, quote: string) {
     const minihomepi = await this.miniRepository.findOne({
       where: { user: { id: userId } },
     });
@@ -147,7 +147,7 @@ export class MinihomepisService {
       throw new NotFoundException("미니홈피가 존재하지 않습니다.");
     }
 
-    minihomepi.management = content;
+    minihomepi.quote = quote;
     await this.miniRepository.save(minihomepi);
     return { message: "관리글이 저장되었습니다." };
   }
@@ -158,6 +158,6 @@ export class MinihomepisService {
       where: { user: { id: userId } },
     });
 
-    return { content: minihomepi.management ?? "" };
+    return { content: minihomepi.quote ?? "" };
   }
 }
