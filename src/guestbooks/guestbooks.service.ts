@@ -48,7 +48,7 @@ export class GuestbooksService {
 
     const allComments = await this.guestbooksRepository.find({
       where: { host: { id: hostId } },
-      relations: ["author", "host"],
+      relations: ["author", "host", "comments", "comments.author"],
       order: { created_at: "DESC" },
     });
 

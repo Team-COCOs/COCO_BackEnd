@@ -5,8 +5,10 @@ import {
   JoinColumn,
   CreateDateColumn,
   Column,
+  OneToMany,
 } from "typeorm";
 import { User } from "../users/users.entity";
+import { GuestbookComment } from "src/guestbooks_comments/guestbooks.entity";
 
 export enum VisibilityStatus {
   PRIVATE = "private",
@@ -34,6 +36,9 @@ export class Guestbook {
     default: VisibilityStatus.PUBLIC,
   })
   status: VisibilityStatus;
+
+  @OneToMany(() => GuestbookComment, (comment) => comment.guestbook)
+  comments: GuestbookComment[];
 
   @CreateDateColumn()
   created_at: Date;

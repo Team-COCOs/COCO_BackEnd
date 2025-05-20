@@ -6,8 +6,10 @@ import { UserRole } from "../users/users.entity";
 
 @Injectable()
 export class DiaryCommentsService {
-  @InjectRepository(DiaryComment)
-  private readonly diaryCommentsRepository: Repository<DiaryComment>;
+  constructor(
+    @InjectRepository(DiaryComment)
+    private readonly diaryCommentsRepository: Repository<DiaryComment>
+  ) {}
 
   // 댓글 작성하기
   async createDiaryComment(
