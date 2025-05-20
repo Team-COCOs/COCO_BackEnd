@@ -24,6 +24,7 @@ import { MiniroomsModule } from "src/minirooms/minirooms.module";
     forwardRef(() => MinihomepisModule),
     forwardRef(() => MiniroomsModule),
     forwardRef(() => PhotosModule),
+    forwardRef(() => DiaryModule),
   ],
   providers: [UsersService],
   controllers: [UsersController],

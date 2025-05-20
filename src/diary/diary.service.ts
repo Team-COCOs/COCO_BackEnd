@@ -1,4 +1,6 @@
 import {
+  forwardRef,
+  Inject,
   Injectable,
   NotAcceptableException,
   NotFoundException,
@@ -21,6 +23,7 @@ export class DiaryService {
     @InjectRepository(DiaryFolder)
     private readonly diaryFolderRepository: Repository<DiaryFolder>,
 
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly friendsService: FriendsService
   ) {}
@@ -171,6 +174,23 @@ export class DiaryService {
     });
 
     return tree;
+  }
+
+  // 회원가입 -> 새폴더 생성
+  async createDefaultFolders(userId: number): Promise<void> {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new Error("유저 정보가 없습니다");
+
+    const existing = await this.diaryFolderRepository.find({ where: { user } });
+    if (existing.length > 0) return;
+
+    const defaultFolders = ["새 폴더"];
+    for (const title of defaultFolders) {
+      const folder = new DiaryFolder();
+      folder.title = title;
+      folder.user = user;
+      await this.diaryFolderRepository.save(folder);
+    }
   }
 
   // 다이어리 게시글 저장

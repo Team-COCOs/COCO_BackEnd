@@ -180,6 +180,23 @@ export class PhotosService {
     return tree;
   }
 
+  // 회원가입 -> 새폴더 생성
+  async createDefaultFolders(userId: number): Promise<void> {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new Error("유저 정보가 없습니다");
+
+    const existing = await this.photoFolderRepository.find({ where: { user } });
+    if (existing.length > 0) return;
+
+    const defaultFolders = ["새 폴더", "스크랩"];
+    for (const title of defaultFolders) {
+      const folder = new PhotoFolder();
+      folder.title = title;
+      folder.user = user;
+      await this.photoFolderRepository.save(folder);
+    }
+  }
+
   // 사진첩 게시글 저장
   async savePhoto(userId: number, dto: SavePhotoDto): Promise<Photo> {
     const user = await this.usersService.findUserById(userId);
