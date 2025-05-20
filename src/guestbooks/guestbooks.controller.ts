@@ -57,17 +57,17 @@ export class GuestbooksController {
   }
 
   // 비밀로 하기
-  @Patch("status/:commentId")
+  @Patch("status/:id")
   @UseGuards(AuthGuard("jwt"))
   async changeVisibility(
-    @Param("commentId") commentId: number,
+    @Param("id") id: number,
     @Body("status") status: VisibilityStatus,
     @Req() req: Request
   ) {
     const userId = req.user["id"];
     const comments = await this.guestbooksService.changeVisibility(
       userId,
-      commentId,
+      id,
       status
     );
     return {
@@ -77,10 +77,13 @@ export class GuestbooksController {
   }
 
   // 삭제
-  @Delete(":hostId")
+  @Delete(":guestbookId")
   @UseGuards(AuthGuard("jwt"))
-  async deleteComment(@Param("hostId") hostId: number, @Req() req: Request) {
-    const authorId = req.user["id"];
-    return this.guestbooksService.delete(authorId, hostId);
+  async deleteComment(
+    @Param("guestbookId") guestbookId: number,
+    @Req() req: Request
+  ) {
+    const userId = req.user["id"];
+    return this.guestbooksService.delete(guestbookId, userId);
   }
 }

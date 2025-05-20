@@ -117,21 +117,22 @@ export class GuestbooksService {
   }
 
   // 삭제
-  async delete(authorId: number, hostId: number) {
+  async delete(guestbookId: number, userId: number) {
     const comment = await this.guestbooksRepository.findOne({
-      where: { host: { id: hostId }, author: { id: authorId } },
+      where: { id: guestbookId },
       relations: ["author", "host"],
     });
 
     if (!comment) {
-      const hostComment = await this.guestbooksRepository.findOne({
-        where: { host: { id: hostId } },
-        relations: ["author", "host"],
-      });
+      throw new NotFoundException("삭제할 방명록이 존재하지 않습니다.");
+    }
 
-      if (!hostComment || hostComment.host.id !== authorId) {
-        throw new NotFoundException("삭제할 방명록이 존재하지 않습니다.");
-      }
+    // 작성자이거나, 본인 미니홈피의 방명록이면 삭제 가능
+    const isAuthor = comment.author.id === userId;
+    const isHost = comment.host.id === userId;
+
+    if (!isAuthor && !isHost) {
+      throw new Error("삭제 권한이 없습니다.");
     }
 
     await this.guestbooksRepository.remove(comment);
