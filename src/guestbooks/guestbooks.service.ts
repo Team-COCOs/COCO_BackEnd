@@ -57,10 +57,14 @@ export class GuestbooksService {
 
     const filtered = allComments.filter((comment) => {
       const isPublic = comment.status === VisibilityStatus.PUBLIC;
-      const isOwner =
-        numericViewerId !== undefined && comment.host.id === numericViewerId;
-      const isAuthor =
-        numericViewerId !== undefined && comment.author.id === numericViewerId;
+
+      if (numericViewerId === undefined) {
+        return isPublic;
+      }
+
+      const isOwner = comment.host.id === numericViewerId;
+      const isAuthor = comment.author.id === numericViewerId;
+
       return isPublic || isOwner || isAuthor;
     });
 
