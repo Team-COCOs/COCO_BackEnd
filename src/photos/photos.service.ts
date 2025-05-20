@@ -383,4 +383,36 @@ export class PhotosService {
 
     return { ok: true };
   }
+
+  // 오늘 새로 올린 게시글 개수
+  async getTodayPhotoCount(userId: number): Promise<number> {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    return await this.photoRepository.count({
+      where: {
+        user: { id: userId },
+        created_at: MoreThan(todayStart),
+      },
+    });
+  }
+
+  // 총 게시글 개수
+  async getTotalPhotoCount(userId: number): Promise<number> {
+    return await this.photoRepository.count({
+      where: { user: { id: userId } },
+    });
+  }
+
+  // 최근 업로드한 게시글 제목 2개
+  async getRecentPhotoTitles(userId: number): Promise<string[]> {
+    const photos = await this.photoRepository.find({
+      where: { user: { id: userId } },
+      order: { created_at: "DESC" },
+      take: 2,
+      select: ["title"],
+    });
+
+    return photos.map((p) => p.title);
+  }
 }

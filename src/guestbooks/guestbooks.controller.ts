@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -44,8 +45,10 @@ export class GuestbooksController {
 
   // 조회
   @Get(":hostId")
-  async getComments(@Param("hostId") hostId: number, @Req() req: Request) {
-    const viewId = req.user["id"];
+  async getComments(
+    @Param("hostId") hostId: number,
+    @Query("viewer") viewId?: number
+  ) {
     const comments = await this.guestbooksService.getComments(hostId, viewId);
     return {
       message: "일촌평 조회 성공",

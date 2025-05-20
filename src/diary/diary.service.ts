@@ -330,4 +330,24 @@ export class DiaryService {
 
     return { ok: true };
   }
+
+  // 오늘 새로 올린 게시글 개수
+  async getTodayDiaryCount(userId: number): Promise<number> {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    return await this.diaryRepository.count({
+      where: {
+        user: { id: userId },
+        created_at: MoreThan(todayStart),
+      },
+    });
+  }
+
+  // 총 게시글 개수
+  async getTotalDiaryCount(userId: number): Promise<number> {
+    return await this.diaryRepository.count({
+      where: { user: { id: userId } },
+    });
+  }
 }

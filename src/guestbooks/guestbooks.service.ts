@@ -40,7 +40,7 @@ export class GuestbooksService {
   // 방명록 조회
   async getComments(
     hostId: number,
-    viewId: number
+    viewerId?: number
   ): Promise<GuestbookResponseDto[]> {
     const targetUser = await this.usersService.findUserById(hostId);
     if (!targetUser)
@@ -54,8 +54,8 @@ export class GuestbooksService {
 
     const filtered = allComments.filter((comment) => {
       const isPublic = comment.status === VisibilityStatus.PUBLIC;
-      const isOwner = comment.host.id === viewId;
-      const isAuthor = comment.author.id === viewId;
+      const isOwner = viewerId !== undefined && comment.host.id === viewerId;
+      const isAuthor = viewerId !== undefined && comment.author.id === viewerId;
 
       return isPublic || isOwner || isAuthor;
     });
@@ -73,7 +73,7 @@ export class GuestbooksService {
         content: comment.content,
         status: comment.status,
         created_at: created_at.toISOString().replace("T", " ").substring(0, 16),
-        isMine: comment.author.id === viewId,
+        isMine: viewerId !== undefined && comment.author.id === viewerId,
       };
     });
   }

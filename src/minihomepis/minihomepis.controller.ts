@@ -27,6 +27,8 @@ import { MinihomepiStatusDto } from "./dto/minihomepiInfo.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
+import { PhotosService } from "src/photos/photos.service";
+import { DiaryService } from "src/diary/diary.service";
 
 @Controller("minihomepis")
 export class MinihomepisController {
@@ -34,7 +36,9 @@ export class MinihomepisController {
     private readonly usersService: UsersService,
     private readonly friendsService: FriendsService,
     private readonly visitService: VisitService,
-    private readonly minihomepisService: MinihomepisService
+    private readonly minihomepisService: MinihomepisService,
+    private readonly photosService: PhotosService,
+    private readonly diaryService: DiaryService
   ) {}
 
   // 파도타기
@@ -143,4 +147,13 @@ export class MinihomepisController {
   async getManagement(@Param("userId") userId: number) {
     return await this.minihomepisService.getManagement(userId);
   }
+
+  // 최근에 올린 사진첩 title 2개
+  @Get("photo/:userId")
+  async getRecentTitles(@Param("userId", ParseIntPipe) userId: number) {
+    const titles = await this.photosService.getRecentPhotoTitles(userId);
+    return { titles };
+  }
+
+  // 카운트
 }
