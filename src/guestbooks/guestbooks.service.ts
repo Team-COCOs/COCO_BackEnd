@@ -68,6 +68,18 @@ export class GuestbooksService {
       const created_at = new Date(comment.created_at);
       created_at.setHours(created_at.getHours() + 9);
 
+      const commentList =
+        comment.comments?.map((c) => ({
+          id: c.id,
+          content: c.content,
+          authorId: c.author.id,
+          authorName: c.author.name,
+          created_at: new Date(c.created_at.getTime() + 9 * 60 * 60 * 1000)
+            .toISOString()
+            .replace("T", " ")
+            .substring(0, 16),
+        })) ?? [];
+
       return {
         id: comment.id,
         authorId: comment.author.id,
@@ -82,6 +94,7 @@ export class GuestbooksService {
         isMine:
           numericViewerId !== undefined &&
           comment.author.id === numericViewerId,
+        comments: commentList,
       };
     });
   }
