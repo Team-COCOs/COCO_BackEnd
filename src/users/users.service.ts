@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, ILike } from "typeorm";
+import { Repository, ILike, Not } from "typeorm";
 import { User, Gender, UserRole } from "./users.entity";
 import { SearchUserDto } from "./dto/searchUsers.dto";
 import { MiniroomsService } from "src/minirooms/minirooms.service";
@@ -187,5 +187,19 @@ export class UsersService {
       id: user.id,
       role: user.role,
     };
+  }
+
+  // 파도타기 (현재 있는 미니홈피 말고 랜덤하게 하나)
+  async getRandomUserExcept(hostId: number): Promise<number> {
+    const users = await this.userRepository.find({
+      where: { id: Not(hostId) },
+    });
+
+    if (users.length === 0) {
+      throw new NotFoundException("다른 유저가 없습니다.");
+    }
+
+    const random = Math.floor(Math.random() * users.length);
+    return users[random].id;
   }
 }

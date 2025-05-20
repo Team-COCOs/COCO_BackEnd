@@ -158,6 +158,6 @@ export class MinihomepisService {
       where: { user: { id: userId } },
     });
 
-    return { content: minihomepi?.management ?? "" };
+    return { content: minihomepi.management ?? "" };
   }
 }

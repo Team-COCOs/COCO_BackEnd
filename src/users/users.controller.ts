@@ -164,4 +164,11 @@ export class UsersController {
   async getUserById(@Param("userId") userId: number) {
     return await this.usersService.getUserRole(userId);
   }
+
+  // 파도타기
+  @Get("wave")
+  async getRandomUser(@Query("hostId") hostId: number) {
+    const userId = await this.usersService.getRandomUserExcept(Number(hostId));
+    return { userId };
+  }
 }
