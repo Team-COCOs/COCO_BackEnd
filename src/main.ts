@@ -27,8 +27,8 @@ async function bootstrap() {
     prefix: "/uploads",
   });
 
-  app.use(bodyParser.json({ limit: "20mb" }));
-  app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
   app.enableCors({
     origin: ["http://localhost:3000", "http://34.236.72.45"],
