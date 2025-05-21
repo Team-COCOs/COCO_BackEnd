@@ -2109,7 +2109,7 @@
         ]
       }
     },
-    "/friendComments": {
+    "/friend-comments": {
       "post": {
         "operationId": "FriendCommentsController_createFriendComment",
         "parameters": [],
@@ -2123,7 +2123,7 @@
         ]
       }
     },
-    "/friendComments/{hostId}": {
+    "/friend-comments/{hostId}": {
       "get": {
         "operationId": "FriendCommentsController_getComments",
         "parameters": [

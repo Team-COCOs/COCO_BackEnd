@@ -13,7 +13,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { ApiTags } from "@nestjs/swagger";
 @ApiTags("일촌평")
-@Controller("friendComments")
+@Controller("friend-comments")
 export class FriendCommentsController {
   constructor(private readonly friendCommentsService: FriendCommentsService) {}
 
