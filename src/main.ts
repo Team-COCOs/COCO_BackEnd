@@ -6,6 +6,7 @@ import { join } from "path";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { writeFileSync } from "fs";
+import * as bodyParser from "body-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -25,6 +26,9 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, "..", "uploads"), {
     prefix: "/uploads",
   });
+
+  app.use(bodyParser.json({ limit: "20mb" }));
+  app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
 
   app.enableCors({
     origin: ["http://localhost:3000", "http://34.236.72.45"],
