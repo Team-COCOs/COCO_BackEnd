@@ -372,6 +372,7 @@ export class PhotosService {
     copiedPhoto.folder = scrapFolder;
     copiedPhoto.isScripted = true;
     copiedPhoto.user = user;
+    copiedPhoto.origin_author = originalPhoto.user;
 
     originalPhoto.use_count = (originalPhoto.use_count || 0) + 1;
     await this.photoRepository.save(originalPhoto);

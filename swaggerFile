@@ -1,0 +1,2619 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/users/profile": {
+      "get": {
+        "operationId": "UsersController_getProfile",
+        "summary": "자신의 유저 프로필 조회",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/users/mainProfile": {
+      "get": {
+        "operationId": "UsersController_getMainProfile",
+        "summary": "메인화면용 프로필 데이터",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/users/update/password": {
+      "patch": {
+        "operationId": "UsersController_changePassword",
+        "summary": "비밀번호 변경",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/users/update/phone": {
+      "patch": {
+        "operationId": "UsersController_changePhone",
+        "summary": "전화번호 변경",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePhoneDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/users/id": {
+      "get": {
+        "operationId": "UsersController_getAllUserIds",
+        "summary": "모든 유저의 ID 및 이름 조회",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserIdNameDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/users/search": {
+      "get": {
+        "operationId": "UsersController_searchUsers",
+        "summary": "키워드로 유저 검색",
+        "parameters": [
+          {
+            "name": "keyword",
+            "required": true,
+            "in": "query",
+            "description": "검색 키워드",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchUserDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/getPopularUser": {
+      "get": {
+        "operationId": "UsersController_getHotMinihomepis",
+        "summary": "화제의 미니홈피 Top 5",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/delete": {
+      "patch": {
+        "operationId": "UsersController_setDeleteUser",
+        "summary": "회원 탈퇴 처리 (soft delete)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/users/role/{userId}": {
+      "get": {
+        "operationId": "UsersController_getUserById",
+        "summary": "유저 역할 정보 확인",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRoleDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/wave/{hostId}": {
+      "get": {
+        "operationId": "UsersController_getRandomUser",
+        "summary": "파도타기 (랜덤 유저 조회)",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/useritems/set-minimi": {
+      "patch": {
+        "operationId": "UseritemsController_setMinimi",
+        "summary": "미니미 아이템 저장",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "미니미 아이템이 저장되었습니다."
+          }
+        }
+      }
+    },
+    "/useritems/minimi/profile-image/{userId}": {
+      "get": {
+        "operationId": "UseritemsController_getMinimiProfileImage",
+        "summary": "대표 미니미 이미지 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "대표 미니미 이미지 경로 반환"
+          }
+        }
+      }
+    },
+    "/useritems/set-bgm": {
+      "patch": {
+        "operationId": "UseritemsController_setBGM",
+        "summary": "bgm 아이템 저장",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "bgm 아이템이 저장되었습니다."
+          }
+        }
+      }
+    },
+    "/useritems/bgm/{userId}": {
+      "get": {
+        "operationId": "UseritemsController_getMainBGM",
+        "summary": "대표 미니미 이미지 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "대표 미니미 이미지 경로 반환"
+          }
+        }
+      }
+    },
+    "/useritems/set-language": {
+      "patch": {
+        "operationId": "UseritemsController_setLanguage",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/useritems/language/{userId}": {
+      "get": {
+        "operationId": "UseritemsController_getLanguage",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/useritems/set-tabs": {
+      "patch": {
+        "operationId": "UseritemsController_setTabs",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/useritems/tabs/{userId}": {
+      "get": {
+        "operationId": "UseritemsController_getTabs",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/useritems/set-minihomepis": {
+      "patch": {
+        "operationId": "UseritemsController_setMinihomepis",
+        "summary": "미니홈피 스킨 저장",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "미니홈피 아이템이 저장되었습니다."
+          }
+        }
+      }
+    },
+    "/useritems/minihomepis/{userId}": {
+      "get": {
+        "operationId": "UseritemsController_getMinihomepis",
+        "summary": "대표 미니미 이미지 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/useritems/set-BK": {
+      "patch": {
+        "operationId": "UseritemsController_setBK",
+        "summary": "다이어리 배경 저장",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "다이어리 배경 아이템이 저장되었습니다."
+          }
+        }
+      }
+    },
+    "/useritems/bk/{userId}": {
+      "get": {
+        "operationId": "UseritemsController_getBK",
+        "summary": "다이어리 배경 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/useritems/set-tapcolor": {
+      "patch": {
+        "operationId": "UseritemsController_settapcolor",
+        "summary": "탭 색깔 저장",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "탭 컬러 아이템이 저장되었습니다."
+          }
+        }
+      }
+    },
+    "/useritems/tapcolor/{userId}": {
+      "get": {
+        "operationId": "UseritemsController_getTapColor",
+        "summary": "탭 컬러 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/purchases": {
+      "post": {
+        "operationId": "PurchasesController_buyItem",
+        "summary": "스토어 아이템 구매",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "스토어 구매"
+        ]
+      },
+      "get": {
+        "operationId": "PurchasesController_getMyItems",
+        "summary": "내가 구매한 아이템 목록",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "스토어 구매"
+        ]
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "operationId": "AuthController_signUp",
+        "summary": "회원가입",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "회원가입 성공"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/check/{type}": {
+      "post": {
+        "operationId": "AuthController_checkDuplicate",
+        "summary": "회원가입 중복 체크 (email 또는 phone)",
+        "parameters": [
+          {
+            "name": "type",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckDuplicateRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/localLogin": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "이메일/비밀번호 로그인",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "로그인 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/findId": {
+      "post": {
+        "operationId": "AuthController_findId",
+        "summary": "아이디(이메일) 찾기",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindIdRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/reset-password": {
+      "patch": {
+        "operationId": "AuthController_resetPassword",
+        "summary": "비밀번호 재설정",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "summary": "Access Token 재발급 (Refresh Token 필요)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/photos/saveTree": {
+      "patch": {
+        "operationId": "PhotosController_saveFolderTree",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/photos/folderList": {
+      "get": {
+        "operationId": "PhotosController_getFolderTree",
+        "summary": "사용자의 폴더 트리 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "사용자의 폴더 트리가 조회되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PhotoFolder"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/save": {
+      "post": {
+        "operationId": "PhotosController_savePhoto",
+        "summary": "사진 저장",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/SavePhotoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "사진이 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Photo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/{hostId}": {
+      "get": {
+        "operationId": "PhotosController_getMyPhotos",
+        "summary": "내 사진첩 목록 조회",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "사용자 사진 목록 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Photo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/logout/{hostId}": {
+      "get": {
+        "operationId": "PhotosController_getPhotosForLogoutUser",
+        "summary": "사진첩 조회 (비로그인 상태)",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "공개 사진 리스트",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Photo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/{photoId}/clip": {
+      "patch": {
+        "operationId": "PhotosController_clipPhoto",
+        "summary": "사진 스크랩",
+        "parameters": [
+          {
+            "name": "photoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "스크랩 완료"
+          }
+        }
+      }
+    },
+    "/photos/{photoId}": {
+      "patch": {
+        "operationId": "PhotosController_updatePhoto",
+        "summary": "사진 수정",
+        "parameters": [
+          {
+            "name": "photoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/SavePhotoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "사진이 수정되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Photo"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "PhotosController_deletePhoto",
+        "summary": "사진 삭제",
+        "parameters": [
+          {
+            "name": "photoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "삭제 완료"
+          }
+        }
+      }
+    },
+    "/photos-comments/{postId}": {
+      "post": {
+        "operationId": "PhotosCommentsController_createComment",
+        "summary": "댓글 작성",
+        "parameters": [
+          {
+            "name": "postId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "댓글 생성 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "PhotosCommentsController_getComments",
+        "summary": "게시글 댓글 목록 조회",
+        "parameters": [
+          {
+            "name": "postId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCommentsResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos-comments/{commentId}": {
+      "delete": {
+        "operationId": "PhotosCommentsController_deleteComment",
+        "summary": "댓글 삭제",
+        "parameters": [
+          {
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteCommentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/diary/saveTree": {
+      "patch": {
+        "operationId": "DiaryController_saveFolderTree",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/diary/folderList": {
+      "get": {
+        "operationId": "DiaryController_getFolderTree",
+        "summary": "사용자의 폴더 트리 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "사용자의 폴더 트리가 조회되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiaryFolder"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diary/save": {
+      "post": {
+        "operationId": "DiaryController_saveDiary",
+        "summary": "다이어리 저장",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveDiaryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "다이어리가 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Diary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diary/{hostId}": {
+      "get": {
+        "operationId": "DiaryController_getDiary",
+        "summary": "다이어리 목록 조회",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "사용자 사진 목록 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Diary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diary/logout/{hostId}": {
+      "get": {
+        "operationId": "DiaryController_getPhotosForLogoutUser",
+        "summary": "사진첩 조회 (비로그인 상태)",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "공개 사진 리스트",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Diary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diary/{diaryId}": {
+      "patch": {
+        "operationId": "DiaryController_updateDiary",
+        "summary": "다이어리 수정",
+        "parameters": [
+          {
+            "name": "diaryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveDiaryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Diary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "DiaryController_deletePhoto",
+        "summary": "사진 삭제",
+        "parameters": [
+          {
+            "name": "diaryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "삭제 완료"
+          }
+        }
+      }
+    },
+    "/diaryComments/{diaryId}": {
+      "post": {
+        "operationId": "DiaryCommentsController_createComment",
+        "summary": "댓글 작성",
+        "parameters": [
+          {
+            "name": "diaryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "댓글 생성 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "DiaryCommentsController_getComments",
+        "summary": "게시글 댓글 목록 조회",
+        "parameters": [
+          {
+            "name": "diaryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCommentsResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/diaryComments/{commentId}": {
+      "delete": {
+        "operationId": "DiaryCommentsController_deleteComment",
+        "summary": "댓글 삭제",
+        "parameters": [
+          {
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteCommentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/friends/names/{userId}": {
+      "get": {
+        "operationId": "FriendsController_getUserNames",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friends/request": {
+      "post": {
+        "operationId": "FriendsController_requestFriend",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friends/accept": {
+      "post": {
+        "operationId": "FriendsController_acceptFriend",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friends/reject": {
+      "post": {
+        "operationId": "FriendsController_rejectFriend",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friends/list": {
+      "get": {
+        "operationId": "FriendsController_getMainProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friends/status/{userId}": {
+      "get": {
+        "operationId": "FriendsController_checkFollowStatus",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friends/{targetId}": {
+      "delete": {
+        "operationId": "FriendsController_unfriend",
+        "summary": "일촌 삭제",
+        "parameters": [
+          {
+            "name": "targetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/visit/auth": {
+      "post": {
+        "operationId": "VisitController_visitAuth",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/visit/guest": {
+      "post": {
+        "operationId": "VisitController_visitGuest",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minihomepis/history/{hostId}": {
+      "get": {
+        "operationId": "MinihomepisController_getOtherProfile",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minihomepis/count/{hostId}": {
+      "get": {
+        "operationId": "MinihomepisController_getTotalVisits",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minihomepis/info": {
+      "post": {
+        "operationId": "MinihomepisController_updateMyMinihomepi",
+        "summary": "내 미니홈피 상태 저장 (무드/소개글/제목/이미지)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minihomepis/{userId}/my-status": {
+      "get": {
+        "operationId": "MinihomepisController_getMyMinihomepi",
+        "summary": "내 미니홈피 상태 정보 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MinihomepiStatusDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/minihomepis/management": {
+      "patch": {
+        "operationId": "MinihomepisController_setManagement",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minihomepis/management/{userId}": {
+      "get": {
+        "operationId": "MinihomepisController_getManagement",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minihomepis/photo/{userId}": {
+      "get": {
+        "operationId": "MinihomepisController_getRecentTitles",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minihomepis/postCount/{userId}": {
+      "get": {
+        "operationId": "MinihomepisController_getPostCount",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minirooms/background": {
+      "post": {
+        "operationId": "MiniroomsController_saveBackground",
+        "summary": "미니룸 배경(스킨) 설정",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minirooms/{userId}/background": {
+      "get": {
+        "operationId": "MiniroomsController_getMiniroomBackByUserId",
+        "summary": "유저 ID로 미니룸 배치 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minirooms/title": {
+      "patch": {
+        "operationId": "MiniroomsController_saveMiniroomName",
+        "summary": "미니룸 타이틀 저장",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "미니룸 이름 저장 완료"
+          }
+        }
+      }
+    },
+    "/minirooms/{userId}/title": {
+      "get": {
+        "operationId": "MiniroomsController_getMiniroomNameByUserId",
+        "summary": "유저 ID로 미니룸 배치 조회 (JWT 없음)",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minirooms/save-layout": {
+      "post": {
+        "operationId": "MiniroomsController_saveLayout",
+        "summary": "미니룸에 미니미/말풍선 저장 (유저 기준)",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/minirooms/{userId}/layout": {
+      "get": {
+        "operationId": "MiniroomsController_getMiniroomLayoutByUserId",
+        "summary": "유저 ID로 미니룸 배치 조회 (JWT 없음)",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/storeitems": {
+      "get": {
+        "operationId": "StoreitemsController_findAll",
+        "summary": "스토어 아이템 전체 또는 타입별 조회",
+        "parameters": [
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "아이템 타입 필터 (예: minimi, tapcolor 등)",
+            "schema": {
+              "enum": [
+                "tapcolor",
+                "minihomepis",
+                "diary_background",
+                "miniroom",
+                "minimi",
+                "bgm"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "스토어 아이템"
+        ]
+      },
+      "post": {
+        "operationId": "StoreitemsController_create",
+        "summary": "스토어 아이템 등록 (관리자)",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "스토어 아이템"
+        ]
+      }
+    },
+    "/storeitems/{id}": {
+      "patch": {
+        "operationId": "StoreitemsController_update",
+        "summary": "스토어 아이템 수정 (관리자)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "스토어 아이템"
+        ]
+      },
+      "delete": {
+        "operationId": "StoreitemsController_remove",
+        "summary": "스토어 아이템 삭제 (관리자)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "스토어 아이템"
+        ]
+      }
+    },
+    "/guestbooks": {
+      "post": {
+        "operationId": "GuestbooksController_createFriendComment",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/guestbooks/{hostId}": {
+      "get": {
+        "operationId": "GuestbooksController_getComments",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "viewer",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/guestbooks/status/{id}": {
+      "patch": {
+        "operationId": "GuestbooksController_toggleVisibility",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/guestbooks/{guestbookId}": {
+      "delete": {
+        "operationId": "GuestbooksController_deleteComment",
+        "parameters": [
+          {
+            "name": "guestbookId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/pay/tossClientKey": {
+      "get": {
+        "operationId": "PaymentsController_getTossClientKey",
+        "summary": "Toss Client Key 조회",
+        "description": "프론트에서 결제를 요청할 때 사용하는 Toss Client Key를 반환합니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Toss Client Key 반환"
+          }
+        }
+      }
+    },
+    "/pay/save": {
+      "post": {
+        "operationId": "PaymentsController_createPayment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/pay": {
+      "get": {
+        "operationId": "PaymentsController_getMyPayments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friend-comments": {
+      "post": {
+        "operationId": "FriendCommentsController_createFriendComment",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/friend-comments/{hostId}": {
+      "get": {
+        "operationId": "FriendCommentsController_getComments",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "operationId": "FriendCommentsController_deleteComment",
+        "parameters": [
+          {
+            "name": "hostId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/guestbooks-comments/{guestbookId}": {
+      "post": {
+        "operationId": "GuestbooksCommentsController_createComment",
+        "summary": "방명록 댓글 작성",
+        "parameters": [
+          {
+            "name": "guestbookId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "방명록 댓글"
+        ]
+      }
+    },
+    "/guestbooks-comments/{commentId}": {
+      "delete": {
+        "operationId": "GuestbooksCommentsController_deleteComment",
+        "summary": "방명록 댓글 삭제",
+        "parameters": [
+          {
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "방명록 댓글"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "COCO world API",
+    "description": "COCO world 백엔드 API 문서입니다.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "UserProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "유저 고유 ID"
+          },
+          "email": {
+            "type": "string",
+            "example": "foo@bar.com",
+            "description": "이메일"
+          },
+          "name": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "이름"
+          },
+          "phone": {
+            "type": "string",
+            "example": "010-1234-5678",
+            "description": "전화번호"
+          },
+          "gender": {
+            "type": "string",
+            "example": "man",
+            "description": "성별"
+          },
+          "profile_image": {
+            "type": "string",
+            "example": "/avatarImg/default.png",
+            "description": "프로필 이미지 URL"
+          },
+          "role": {
+            "type": "string",
+            "example": "user",
+            "description": "유저 역할"
+          },
+          "dotoris": {
+            "type": "number",
+            "example": 42,
+            "description": "도토리 개수"
+          },
+          "birthday": {
+            "type": "string",
+            "example": "1990-05-14",
+            "description": "생일"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "phone",
+          "gender",
+          "profile_image",
+          "role",
+          "dotoris",
+          "birthday"
+        ]
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "newpassword123",
+            "description": "새 비밀번호"
+          }
+        },
+        "required": [
+          "password"
+        ]
+      },
+      "ChangePhoneDto": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "example": "010-1234-5678",
+            "description": "새 전화번호"
+          }
+        },
+        "required": [
+          "phone"
+        ]
+      },
+      "UserIdNameDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "유저 ID"
+          },
+          "name": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "유저 이름"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "SearchUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "유저 고유 ID"
+          },
+          "name": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "유저 이름"
+          },
+          "minimi_image": {
+            "type": "string",
+            "example": "https://…/avatar.png",
+            "description": "프로필 이미지 URL"
+          },
+          "gender": {
+            "type": "string",
+            "example": "male",
+            "description": "성별"
+          },
+          "birthday": {
+            "type": "string",
+            "example": "1990-05-14",
+            "description": "생년월일"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "minimi_image",
+          "gender",
+          "birthday"
+        ]
+      },
+      "UserRoleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "유저 ID"
+          },
+          "role": {
+            "type": "string",
+            "example": "user",
+            "description": "역할"
+          }
+        },
+        "required": [
+          "id",
+          "role"
+        ]
+      },
+      "PurchaseItemDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "SignUpDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123!"
+          },
+          "name": {
+            "type": "string",
+            "example": "홍길동"
+          },
+          "phone": {
+            "type": "string",
+            "example": "010-1234-5678"
+          },
+          "gender": {
+            "type": "string",
+            "example": "man",
+            "enum": [
+              "man",
+              "woman"
+            ]
+          },
+          "birthday": {
+            "type": "string",
+            "example": "1990-01-01"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "name",
+          "phone",
+          "gender",
+          "birthday"
+        ]
+      },
+      "CheckDuplicateRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "010-1234-5678"
+          }
+        }
+      },
+      "LoginRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123!"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "FindIdRequestDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "홍길동"
+          },
+          "phone": {
+            "type": "string",
+            "example": "010-1234-5678"
+          }
+        },
+        "required": [
+          "name",
+          "phone"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "newpassword123!"
+          }
+        },
+        "required": [
+          "email",
+          "newPassword"
+        ]
+      },
+      "PhotoFolder": {
+        "type": "object",
+        "properties": {}
+      },
+      "SavePhotoDto": {
+        "type": "object",
+        "properties": {
+          "photo_url": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "folder_name": {
+            "type": "string"
+          },
+          "isScripted": {
+            "type": "boolean"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "public",
+              "private",
+              "friends"
+            ],
+            "default": "public",
+            "description": "공개 범위"
+          }
+        },
+        "required": [
+          "photo_url",
+          "title",
+          "content",
+          "user",
+          "folder_name",
+          "isScripted",
+          "visibility"
+        ]
+      },
+      "Photo": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateCommentDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "좋은 글 잘 봤어요!",
+            "description": "댓글 내용",
+            "maxLength": 500
+          },
+          "parentCommentId": {
+            "type": "number",
+            "example": 1,
+            "description": "부모 댓글 ID",
+            "nullable": true
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "CommentUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "작성자 ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "작성자 이름"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "CommentResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "댓글 ID"
+          },
+          "content": {
+            "type": "string",
+            "example": "댓글 내용입니다.",
+            "description": "댓글 내용"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-05-08T12:34:56.000Z",
+            "description": "작성 일시"
+          },
+          "diaryId": {
+            "type": "number",
+            "example": 5,
+            "description": "게시글 ID"
+          },
+          "parentCommentId": {
+            "type": "number",
+            "example": 2,
+            "description": "부모 댓글 ID",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "content",
+          "created_at",
+          "diaryId",
+          "parentCommentId"
+        ]
+      },
+      "GetCommentsResponseDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "postId": {
+            "type": "number",
+            "example": 5
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentResponseDto"
+            }
+          }
+        },
+        "required": [
+          "ok",
+          "postId",
+          "comments"
+        ]
+      },
+      "DeleteCommentResponseDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "DiaryFolder": {
+        "type": "object",
+        "properties": {}
+      },
+      "SaveDiaryDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "오늘은 맑음~",
+            "description": "일기 내용"
+          },
+          "mood": {
+            "type": "string",
+            "example": "기분 최고!",
+            "description": "기분"
+          },
+          "weather": {
+            "type": "string",
+            "example": "sunny",
+            "description": "날씨"
+          },
+          "visibility": {
+            "type": "string",
+            "example": "public",
+            "enum": [
+              "public",
+              "private",
+              "friends"
+            ],
+            "description": "공개 범위"
+          },
+          "folder_name": {
+            "type": "string",
+            "example": "새 폴더",
+            "description": "폴더 이름"
+          }
+        },
+        "required": [
+          "content",
+          "mood",
+          "weather",
+          "visibility",
+          "folder_name"
+        ]
+      },
+      "Diary": {
+        "type": "object",
+        "properties": {}
+      },
+      "MinihomepiStatusDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateStoreItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "핑크 미니홈피 배경",
+            "description": "상품 이름"
+          },
+          "file": {
+            "type": "string",
+            "example": "https://cdn.example.com/images/skin1.png",
+            "description": "아이템 미리보기 이미지 URL"
+          },
+          "price": {
+            "type": "number",
+            "example": 10,
+            "description": "가격 (도토리)"
+          },
+          "category": {
+            "type": "string",
+            "example": "minimi",
+            "enum": [
+              "tapcolor",
+              "minihomepis",
+              "diary_background",
+              "miniroom",
+              "minimi",
+              "bgm"
+            ],
+            "description": "아이템 타입"
+          },
+          "artist": {
+            "type": "string",
+            "example": "아이유",
+            "description": "아티스트 이름 (쥬크박스용)"
+          },
+          "duration": {
+            "type": "number",
+            "example": 183,
+            "description": "재생 시간 (초, 쥬크박스용)"
+          }
+        },
+        "required": [
+          "name",
+          "file",
+          "price",
+          "category"
+        ]
+      },
+      "UpdateStoreItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "핑크 미니홈피 배경",
+            "description": "상품 이름"
+          },
+          "file": {
+            "type": "string",
+            "example": "https://cdn.example.com/images/skin1.png",
+            "description": "아이템 미리보기 이미지 URL"
+          },
+          "price": {
+            "type": "number",
+            "example": 10,
+            "description": "가격 (도토리)"
+          },
+          "category": {
+            "type": "string",
+            "example": "minimi",
+            "enum": [
+              "tapcolor",
+              "minihomepis",
+              "diary_background",
+              "miniroom",
+              "minimi",
+              "bgm"
+            ],
+            "description": "아이템 타입"
+          },
+          "artist": {
+            "type": "string",
+            "example": "아이유",
+            "description": "아티스트 이름 (쥬크박스용)"
+          },
+          "duration": {
+            "type": "number",
+            "example": 183,
+            "description": "재생 시간 (초, 쥬크박스용)"
+          }
+        }
+      },
+      "CreatePaymentDto": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  }
+}

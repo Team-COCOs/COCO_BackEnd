@@ -32,3 +32,11 @@ export class UserProfileDto {
   @ApiProperty({ example: "1990-05-14", description: "생일" })
   birthday: string | null;
 }
+
+export class UserRoleDto {
+  @ApiProperty({ example: 1, description: "유저 ID" })
+  id: number;
+
+  @ApiProperty({ example: UserRole.USER, description: "역할" })
+  role: UserRole;
+}

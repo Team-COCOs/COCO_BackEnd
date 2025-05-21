@@ -13,7 +13,14 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { UsersService } from "./users.service";
 import { Request } from "express";
-import { ApiOkResponse, ApiOperation, ApiQuery } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiBearerAuth,
+  ApiBody,
+} from "@nestjs/swagger";
 import { SearchUserDto } from "./dto/searchUsers.dto";
 import { DiaryService } from "../diary/diary.service";
 import { PhotosService } from "../photos/photos.service";
@@ -25,7 +32,11 @@ import { UserProfileDto } from "./dto/userProfile.dto";
 import { UserIdNameDto } from "./dto/userIdName.dto";
 import { MinihomepisService } from "src/minihomepis/minihomepis.service";
 import { UseritemsService } from "src/useritems/useritems.service";
+import { ChangePasswordDto } from "./dto/updateInfo.dto";
+import { ChangePhoneDto } from "./dto/updateInfo.dto";
+import { UserRoleDto } from "./dto/userProfile.dto";
 
+@ApiTags("Users")
 @Controller("users")
 export class UsersController {
   constructor(
@@ -38,12 +49,13 @@ export class UsersController {
     private readonly useritemsService: UseritemsService
   ) {}
 
-  // 유저 프로필
   @Get("profile")
   @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "자신의 유저 프로필 조회" })
+  @ApiOkResponse({ type: UserProfileDto })
   async getProfile(@Req() req: Request): Promise<UserProfileDto> {
     const userId = req.user["id"];
-
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
 
@@ -60,25 +72,19 @@ export class UsersController {
     };
   }
 
-  // 메인화면 프로필
   @Get("mainProfile")
   @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "메인화면용 프로필 데이터" })
   async getMainProfile(@Req() req: Request) {
     const userId = req.user["id"];
-
     const user = await this.usersService.findUserById(userId);
     if (!user) throw new NotFoundException("유저 없음");
 
-    // 오늘 방문자 수
     const todayVisit = await this.visitService.countTodayVisits(userId);
-
-    // 다이어리 새 글
     const newDiary = await this.diaryService.getNewDiarys(userId);
-
-    // 사진첩 새 글
     const newPhoto = await this.photosService.getNewPhotos(userId);
 
-    // 다이어리, 사진첩 새 글 오름차순
     const newPost: (NewDiaryDto | NewPhotoDto)[] = [
       ...newDiary,
       ...newPhoto,
@@ -87,11 +93,8 @@ export class UsersController {
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
-    // 일촌 요청 확인
     const friendRequest =
       await this.friendsService.getNewFriendRequests(userId);
-
-    // 일촌 목록 확인
     const friends = await this.friendsService.getFriends(userId);
 
     return {
@@ -107,70 +110,71 @@ export class UsersController {
     };
   }
 
-  // 비밀번호 변경 (로그인 상태)
   @Patch("update/password")
   @UseGuards(AuthGuard("jwt"))
-  async changePassword(
-    @Req() req: Request,
-    @Body() body: { password: string }
-  ) {
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "비밀번호 변경" })
+  @ApiBody({ type: ChangePasswordDto })
+  async changePassword(@Req() req: Request, @Body() body: ChangePasswordDto) {
     const userId = req.user["id"];
     return await this.usersService.changePw(userId, body.password);
   }
 
-  // 비밀번호 변경 (로그인 상태)
   @Patch("update/phone")
   @UseGuards(AuthGuard("jwt"))
-  async changePhone(@Req() req: Request, @Body() body: { phone: string }) {
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "전화번호 변경" })
+  @ApiBody({ type: ChangePhoneDto })
+  async changePhone(@Req() req: Request, @Body() body: ChangePhoneDto) {
     const userId = req.user["id"];
     return await this.usersService.changePhone(userId, body.phone);
   }
 
-  // 모든 유저 id 조회
   @Get("id")
   @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
   @ApiOperation({ summary: "모든 유저의 ID 및 이름 조회" })
   @ApiOkResponse({ type: [UserIdNameDto] })
   async getAllUserIds() {
     return this.usersService.getAllUserId();
   }
 
-  // 키워드로 검색
   @Get("search")
   @ApiOperation({ summary: "키워드로 유저 검색" })
   @ApiQuery({ name: "keyword", required: true, description: "검색 키워드" })
+  @ApiOkResponse({ type: [SearchUserDto] })
   async searchUsers(
     @Query("keyword") keyword: string
   ): Promise<SearchUserDto[]> {
     return this.usersService.searchUsers(keyword);
   }
 
-  // 화재의 미니홈피
   @Get("getPopularUser")
   @ApiOperation({ summary: "화제의 미니홈피 Top 5" })
   async getHotMinihomepis() {
     return this.minihomepisService.getTop5HotMinihomepis();
   }
 
-  // 탈퇴 유저로 수정
   @Patch("delete")
   @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "회원 탈퇴 처리 (soft delete)" })
   async setDeleteUser(@Req() req: Request) {
     const userId = req.user["id"];
     return await this.usersService.withdrawUser(userId);
   }
 
-  // 유저 역할 확인
   @Get("role/:userId")
+  @ApiOperation({ summary: "유저 역할 정보 확인" })
+  @ApiOkResponse({ type: UserRoleDto })
   async getUserById(@Param("userId") userId: number) {
     return await this.usersService.getUserRole(userId);
   }
 
-  // 파도타기
   @Get("wave/:hostId")
+  @ApiOperation({ summary: "파도타기 (랜덤 유저 조회)" })
   async getRandomUser(@Param("hostId") hostId: string) {
     const parsed = Number(hostId);
-
     if (isNaN(parsed)) {
       throw new BadRequestException("유효한 hostId가 아닙니다.");
     }

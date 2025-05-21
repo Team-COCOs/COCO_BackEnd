@@ -1,22 +1,17 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  Req,
-  Res,
-  UseGuards,
-} from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+import { Body, Controller, Param, Patch, Post, Req } from "@nestjs/common";
 import { Request } from "express";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
-import * as jwt from "jsonwebtoken";
 import { UsersService } from "../users/users.service";
+import { ApiTags, ApiOperation, ApiBody, ApiResponse } from "@nestjs/swagger";
+import { SignUpDto } from "./dto/signup.dto";
+import { LoginRequestDto, LoginResponseDto } from "./dto/login.dto";
+import { FindIdRequestDto } from "./dto/findId.dto";
+import { ResetPasswordDto } from "./dto/password.dto";
+import { CheckDuplicateRequestDto } from "./dto/check-duplicate.dto";
+import * as jwt from "jsonwebtoken";
 
+@ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
   constructor(
@@ -25,11 +20,12 @@ export class AuthController {
     private readonly usersService: UsersService
   ) {}
 
-  // 회원가입
   @Post("signup")
-  async signUp(@Body() body: any) {
+  @ApiOperation({ summary: "회원가입" })
+  @ApiBody({ type: SignUpDto })
+  @ApiResponse({ status: 201, description: "회원가입 성공" })
+  async signUp(@Body() body: SignUpDto) {
     const { email, password, name, phone, gender, birthday } = body;
-
     return await this.authService.signUp(
       email,
       password,
@@ -40,39 +36,48 @@ export class AuthController {
     );
   }
 
-  // 회원가입 시 중복 체크
   @Post("check/:type")
+  @ApiOperation({ summary: "회원가입 중복 체크 (email 또는 phone)" })
+  @ApiBody({ type: CheckDuplicateRequestDto })
   async checkDuplicate(
     @Param("type") type: "email" | "phone",
-    @Body() body: { email?: string; phone?: string }
+    @Body() body: CheckDuplicateRequestDto
   ) {
     const exists = await this.authService.checkDuplicate(type, body);
     return { exists };
   }
 
-  // 로그인
   @Post("localLogin")
-  async login(@Body() body: any) {
+  @ApiOperation({ summary: "이메일/비밀번호 로그인" })
+  @ApiBody({ type: LoginRequestDto })
+  @ApiResponse({
+    status: 200,
+    description: "로그인 성공",
+    type: LoginResponseDto,
+  })
+  async login(@Body() body: LoginRequestDto) {
     const { email, password } = body;
-
     return await this.authService.localLogin(email, password);
   }
 
-  // 아이디 찾기
   @Post("findId")
-  async findId(@Body() body: { name: string; phone: string }) {
+  @ApiOperation({ summary: "아이디(이메일) 찾기" })
+  @ApiBody({ type: FindIdRequestDto })
+  async findId(@Body() body: FindIdRequestDto) {
     const { name, phone } = body;
     return await this.authService.findId(name, phone);
   }
 
-  // 비밀번호 재설정 (비로그인 상태)
   @Patch("reset-password")
-  async resetPassword(@Body() body: { email: string; newPassword: string }) {
+  @ApiOperation({ summary: "비밀번호 재설정" })
+  @ApiBody({ type: ResetPasswordDto })
+  async resetPassword(@Body() body: ResetPasswordDto) {
     const { email, newPassword } = body;
     return await this.authService.resetPw(email, newPassword);
   }
 
   @Post("refresh")
+  @ApiOperation({ summary: "Access Token 재발급 (Refresh Token 필요)" })
   async refresh(@Req() req: Request): Promise<{
     ok: boolean;
     access_token?: string;
