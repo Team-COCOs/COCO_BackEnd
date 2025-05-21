@@ -24,14 +24,11 @@ export class Minihomepi {
   @Column({ type: "varchar", length: 100, nullable: true })
   mood: string;
 
-  @Column({ type: "int", default: 0 })
-  visit_count: number;
-
   @Column({ type: "varchar", length: 50, nullable: true })
   introduction: string;
 
   @Column({ type: "varchar", nullable: true })
-  minihompi_image: string;
+  minihomepi_image: string;
 
   @Column({ type: "text", nullable: true })
   quote: string;

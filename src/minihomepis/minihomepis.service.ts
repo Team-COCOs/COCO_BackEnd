@@ -40,31 +40,12 @@ export class MinihomepisService {
     return await this.miniRepository.save(minihomepi);
   }
 
-  // 총 방문자 수 업데이트
-  async setTotalVisitCount(userId: number, count: number): Promise<void> {
-    await this.miniRepository.update(
-      { user: { id: userId } },
-      { visit_count: count }
-    );
-  }
-
-  // 총 방문자 수 조회
-  async getVisitCount(userId: number): Promise<number> {
-    const mini = await this.miniRepository.findOne({
-      where: { user: { id: userId } },
-    });
-
-    if (!mini) throw new NotFoundException("미니홈피가 존재하지 않습니다.");
-
-    return mini.visit_count;
-  }
-
   // 미니홈피 정보 저장
   async saveMinihomepiInfo(
     userId: number,
     dto: MinihomepiInfoDto
   ): Promise<void> {
-    const { mood, title, introduction, minihompi_image } = dto;
+    const { mood, title, introduction, minihomepi_image } = dto;
 
     const user = await this.usersService.findUserById(userId);
 
@@ -75,18 +56,21 @@ export class MinihomepisService {
     });
 
     if (existingMini) {
-      await this.miniRepository.delete({ id: existingMini.id });
+      existingMini.title = title;
+      existingMini.mood = mood;
+      existingMini.introduction = introduction;
+      existingMini.minihomepi_image = minihomepi_image;
+      await this.miniRepository.save(existingMini);
+    } else {
+      const newMini = this.miniRepository.create({
+        user,
+        title,
+        mood,
+        introduction,
+        minihomepi_image,
+      });
+      await this.miniRepository.save(newMini);
     }
-
-    const mini = this.miniRepository.create({
-      user,
-      title,
-      mood,
-      introduction,
-      minihompi_image,
-    });
-
-    await this.miniRepository.save(mini);
   }
 
   // 미니홈피 정보 조회
@@ -100,7 +84,7 @@ export class MinihomepisService {
         title: null,
         mood: null,
         introduction: null,
-        minihompi_image: null,
+        minihomepi_image: null,
       };
     }
 
@@ -108,7 +92,7 @@ export class MinihomepisService {
       title: mini.title,
       mood: mini.mood,
       introduction: mini.introduction,
-      minihompi_image: mini.minihompi_image,
+      minihomepi_image: mini.minihomepi_image,
     };
   }
 

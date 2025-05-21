@@ -83,7 +83,7 @@ export class MinihomepisController {
   @Post("info")
   @UseGuards(AuthGuard("jwt"))
   @UseInterceptors(
-    FileInterceptor("minihompi_image", {
+    FileInterceptor("minihomepi_image", {
       storage: diskStorage({
         destination: "./uploads",
         filename: (req, file, cb) => {
@@ -104,7 +104,7 @@ export class MinihomepisController {
       name: string;
       status: string;
       introduction: string;
-      minihompi_image_url: string | null;
+      minihomepi_image_url: string | null;
     },
     @Req() req: Request
   ) {
@@ -117,10 +117,10 @@ export class MinihomepisController {
     if (file) {
       imageUrl = `${serverHost}/uploads/${file.filename}`;
     } else if (
-      body.minihompi_image_url &&
-      typeof body.minihompi_image_url === "string"
+      body.minihomepi_image_url &&
+      typeof body.minihomepi_image_url === "string"
     ) {
-      imageUrl = body.minihompi_image_url;
+      imageUrl = body.minihomepi_image_url;
     } else {
       imageUrl = null;
     }
@@ -129,7 +129,7 @@ export class MinihomepisController {
       title: body.name,
       mood: body.status,
       introduction: body.introduction,
-      minihompi_image: imageUrl,
+      minihomepi_image: imageUrl,
     });
     return { message: "저장 완료" };
   }
