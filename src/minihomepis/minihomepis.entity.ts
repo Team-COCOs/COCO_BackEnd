@@ -27,7 +27,7 @@ export class Minihomepi {
   @Column({ type: "int", default: 0 })
   visit_count: number;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "varchar", length: 50, nullable: true })
   introduction: string;
 
   @Column({ type: "varchar", nullable: true })
