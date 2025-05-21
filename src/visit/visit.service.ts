@@ -67,7 +67,6 @@ export class VisitService {
       .createQueryBuilder("visit")
       .select("COUNT(*)", "count")
       .where("visit.host_id = :hostId", { hostId })
-      .andWhere("visit.visitor_id IS NOT NULL")
       .andWhere("visit.visited_at >= :todayStart", {
         todayStart: todayStartUTC,
       })
