@@ -13,9 +13,9 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { FriendsService } from "./friends.service";
 import { UsersService } from "../users/users.service";
-import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
-
+@ApiTags("일촌")
 @Controller("friends")
 export class FriendsController {
   constructor(

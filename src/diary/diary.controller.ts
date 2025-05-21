@@ -14,18 +14,30 @@ import {
 import { DiaryService } from "./diary.service";
 import { AuthGuard } from "@nestjs/passport";
 import { SaveDiaryFolderDto } from "./dto/diaryFolder.dto";
-import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { DiaryFolder } from "./diaryFolder.entity";
 import { Diary } from "./diary.entity";
 import { SaveDiaryDto } from "./dto/diary.dto";
 import { Request } from "express";
-
+import { DiaryResponseDto } from "./dto/diary-res.dto";
+@ApiTags("다이어리")
 @Controller("diary")
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   // 폴더 구조 생성
   @Patch("saveTree")
+  @ApiOperation({ summary: "사용자의 폴더 트리 저장" })
+  @ApiResponse({
+    status: 200,
+    description: "사용자의 폴더 트리가 저장되었습니다.",
+    type: [DiaryFolder],
+  })
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
     @Body("folders") folders: SaveDiaryFolderDto[],
@@ -62,7 +74,7 @@ export class DiaryController {
   @ApiResponse({
     status: 201,
     description: "다이어리가 저장되었습니다.",
-    type: Diary,
+    type: DiaryResponseDto,
   })
   async saveDiary(
     @Body() dto: SaveDiaryDto,
@@ -80,7 +92,7 @@ export class DiaryController {
   @ApiResponse({
     status: 200,
     description: "사용자 사진 목록 반환",
-    type: [Diary],
+    type: [DiaryResponseDto],
   })
   async getDiary(
     @Param("hostId", ParseIntPipe) hostId: number,

@@ -19,7 +19,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ],
         "security": [
           {
@@ -39,7 +39,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ],
         "security": [
           {
@@ -69,7 +69,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ],
         "security": [
           {
@@ -99,7 +99,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ],
         "security": [
           {
@@ -129,7 +129,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ],
         "security": [
           {
@@ -169,7 +169,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ]
       }
     },
@@ -184,7 +184,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ]
       }
     },
@@ -199,7 +199,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ],
         "security": [
           {
@@ -235,7 +235,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ]
       }
     },
@@ -259,7 +259,7 @@
           }
         },
         "tags": [
-          "Users"
+          "유저"
         ]
       }
     },
@@ -272,7 +272,10 @@
           "200": {
             "description": "미니미 아이템이 저장되었습니다."
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/minimi/profile-image/{userId}": {
@@ -293,7 +296,10 @@
           "200": {
             "description": "대표 미니미 이미지 경로 반환"
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/set-bgm": {
@@ -305,7 +311,10 @@
           "200": {
             "description": "bgm 아이템이 저장되었습니다."
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/bgm/{userId}": {
@@ -326,7 +335,10 @@
           "200": {
             "description": "대표 미니미 이미지 경로 반환"
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/set-language": {
@@ -337,7 +349,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/language/{userId}": {
@@ -357,7 +372,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/set-tabs": {
@@ -368,7 +386,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/tabs/{userId}": {
@@ -388,7 +409,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/set-minihomepis": {
@@ -400,7 +424,10 @@
           "200": {
             "description": "미니홈피 아이템이 저장되었습니다."
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/minihomepis/{userId}": {
@@ -421,7 +448,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/set-BK": {
@@ -433,7 +463,10 @@
           "200": {
             "description": "다이어리 배경 아이템이 저장되었습니다."
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/bk/{userId}": {
@@ -454,7 +487,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/set-tapcolor": {
@@ -466,7 +502,10 @@
           "200": {
             "description": "탭 컬러 아이템이 저장되었습니다."
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/useritems/tapcolor/{userId}": {
@@ -487,7 +526,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "유저 착용템"
+        ]
       }
     },
     "/purchases": {
@@ -511,7 +553,7 @@
           }
         },
         "tags": [
-          "스토어 구매"
+          "스토어 구매 내역"
         ]
       },
       "get": {
@@ -524,7 +566,7 @@
           }
         },
         "tags": [
-          "스토어 구매"
+          "스토어 구매 내역"
         ]
       }
     },
@@ -692,7 +734,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       }
     },
     "/photos/folderList": {
@@ -723,7 +768,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       }
     },
     "/photos/save": {
@@ -752,7 +800,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       }
     },
     "/photos/{hostId}": {
@@ -783,7 +834,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       }
     },
     "/photos/logout/{hostId}": {
@@ -814,7 +868,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       }
     },
     "/photos/{photoId}/clip": {
@@ -835,7 +892,10 @@
           "200": {
             "description": "스크랩 완료"
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       }
     },
     "/photos/{photoId}": {
@@ -873,7 +933,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       },
       "delete": {
         "operationId": "PhotosController_deletePhoto",
@@ -892,7 +955,10 @@
           "200": {
             "description": "삭제 완료"
           }
-        }
+        },
+        "tags": [
+          "사진첩"
+        ]
       }
     },
     "/photos-comments/{postId}": {
@@ -1000,12 +1066,26 @@
     "/diary/saveTree": {
       "patch": {
         "operationId": "DiaryController_saveFolderTree",
+        "summary": "사용자의 폴더 트리 저장",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "사용자의 폴더 트리가 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiaryFolder"
+                  }
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "다이어리"
+        ]
       }
     },
     "/diary/folderList": {
@@ -1036,7 +1116,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "다이어리"
+        ]
       }
     },
     "/diary/save": {
@@ -1060,12 +1143,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Diary"
+                  "$ref": "#/components/schemas/DiaryResponseDto"
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "다이어리"
+        ]
       }
     },
     "/diary/{hostId}": {
@@ -1090,13 +1176,16 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Diary"
+                    "$ref": "#/components/schemas/DiaryResponseDto"
                   }
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "다이어리"
+        ]
       }
     },
     "/diary/logout/{hostId}": {
@@ -1127,7 +1216,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "다이어리"
+        ]
       }
     },
     "/diary/{diaryId}": {
@@ -1166,6 +1258,9 @@
             }
           }
         },
+        "tags": [
+          "다이어리"
+        ],
         "security": [
           {
             "bearer": []
@@ -1189,7 +1284,10 @@
           "200": {
             "description": "삭제 완료"
           }
-        }
+        },
+        "tags": [
+          "다이어리"
+        ]
       }
     },
     "/diaryComments/{diaryId}": {
@@ -1228,6 +1326,9 @@
             }
           }
         },
+        "tags": [
+          "다이어리 댓글"
+        ],
         "security": [
           {
             "bearer": []
@@ -1258,7 +1359,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "다이어리 댓글"
+        ]
       }
     },
     "/diaryComments/{commentId}": {
@@ -1287,6 +1391,9 @@
             }
           }
         },
+        "tags": [
+          "다이어리 댓글"
+        ],
         "security": [
           {
             "bearer": []
@@ -1311,7 +1418,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌"
+        ]
       }
     },
     "/friends/request": {
@@ -1322,7 +1432,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌"
+        ]
       }
     },
     "/friends/accept": {
@@ -1333,7 +1446,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌"
+        ]
       }
     },
     "/friends/reject": {
@@ -1344,7 +1460,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌"
+        ]
       }
     },
     "/friends/list": {
@@ -1355,7 +1474,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌"
+        ]
       }
     },
     "/friends/status/{userId}": {
@@ -1375,7 +1497,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌"
+        ]
       }
     },
     "/friends/{targetId}": {
@@ -1397,6 +1522,9 @@
             "description": ""
           }
         },
+        "tags": [
+          "일촌"
+        ],
         "security": [
           {
             "bearer": []
@@ -1412,7 +1540,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "방문"
+        ]
       }
     },
     "/visit/guest": {
@@ -1423,7 +1554,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "방문"
+        ]
       }
     },
     "/minihomepis/history/{hostId}": {
@@ -1443,7 +1577,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minihomepis/count/{hostId}": {
@@ -1463,7 +1600,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minihomepis/info": {
@@ -1475,7 +1615,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minihomepis/{userId}/my-status": {
@@ -1503,7 +1646,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minihomepis/management": {
@@ -1514,7 +1660,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minihomepis/management/{userId}": {
@@ -1534,7 +1683,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minihomepis/photo/{userId}": {
@@ -1554,7 +1706,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minihomepis/postCount/{userId}": {
@@ -1574,7 +1729,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니홈피"
+        ]
       }
     },
     "/minirooms/background": {
@@ -1586,7 +1744,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니룸"
+        ]
       }
     },
     "/minirooms/{userId}/background": {
@@ -1607,7 +1768,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니룸"
+        ]
       }
     },
     "/minirooms/title": {
@@ -1619,7 +1783,10 @@
           "200": {
             "description": "미니룸 이름 저장 완료"
           }
-        }
+        },
+        "tags": [
+          "미니룸"
+        ]
       }
     },
     "/minirooms/{userId}/title": {
@@ -1640,7 +1807,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니룸"
+        ]
       }
     },
     "/minirooms/save-layout": {
@@ -1652,7 +1822,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니룸"
+        ]
       }
     },
     "/minirooms/{userId}/layout": {
@@ -1673,7 +1846,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "미니룸"
+        ]
       }
     },
     "/storeitems": {
@@ -1796,7 +1972,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "방명록"
+        ]
       }
     },
     "/guestbooks/{hostId}": {
@@ -1824,7 +2003,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "방명록"
+        ]
       }
     },
     "/guestbooks/status/{id}": {
@@ -1844,7 +2026,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "방명록"
+        ]
       }
     },
     "/guestbooks/{guestbookId}": {
@@ -1864,7 +2049,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "방명록"
+        ]
       }
     },
     "/pay/tossClientKey": {
@@ -1877,7 +2065,10 @@
           "200": {
             "description": "Toss Client Key 반환"
           }
-        }
+        },
+        "tags": [
+          "결제 내역"
+        ]
       }
     },
     "/pay/save": {
@@ -1898,7 +2089,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "결제 내역"
+        ]
       }
     },
     "/pay": {
@@ -1909,10 +2103,13 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "결제 내역"
+        ]
       }
     },
-    "/friend-comments": {
+    "/friendComments": {
       "post": {
         "operationId": "FriendCommentsController_createFriendComment",
         "parameters": [],
@@ -1920,10 +2117,13 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌평"
+        ]
       }
     },
-    "/friend-comments/{hostId}": {
+    "/friendComments/{hostId}": {
       "get": {
         "operationId": "FriendCommentsController_getComments",
         "parameters": [
@@ -1940,7 +2140,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌평"
+        ]
       },
       "delete": {
         "operationId": "FriendCommentsController_deleteComment",
@@ -1958,7 +2161,10 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "일촌평"
+        ]
       }
     },
     "/guestbooks-comments/{guestbookId}": {
@@ -2508,6 +2714,47 @@
           "weather",
           "visibility",
           "folder_name"
+        ]
+      },
+      "DiaryResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "content": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "mood": {
+            "type": "string"
+          },
+          "weather": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "public",
+              "private",
+              "friends"
+            ]
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "content",
+          "title",
+          "mood",
+          "weather",
+          "visibility",
+          "created_at"
         ]
       },
       "Diary": {

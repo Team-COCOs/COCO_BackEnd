@@ -21,6 +21,7 @@ import {
   ApiConsumes,
   ApiOperation,
   ApiResponse,
+  ApiTags,
 } from "@nestjs/swagger";
 import { PhotoFolder } from "./photoFolder.entity";
 import { SavePhotoDto } from "./dto/photos.dto";
@@ -30,6 +31,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
 
+@ApiTags("사진첩")
 @Controller("photos")
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}

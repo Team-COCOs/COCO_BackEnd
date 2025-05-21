@@ -11,9 +11,9 @@ import {
 import { MiniroomsService } from "./minirooms.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UseritemsService } from "src/useritems/useritems.service";
-
+@ApiTags("미니룸")
 @Controller("minirooms")
 export class MiniroomsController {
   constructor(

@@ -11,11 +11,11 @@ import {
   ParseIntPipe,
 } from "@nestjs/common";
 import { UseritemsService } from "./useritems.service";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { LanguageType } from "./useritems.entity";
-import { tap } from "rxjs";
+@ApiTags("유저 착용템")
 @Controller("useritems")
 export class UseritemsController {
   constructor(private readonly useritemsService: UseritemsService) {}

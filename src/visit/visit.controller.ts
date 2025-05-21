@@ -2,7 +2,8 @@ import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
 import { VisitService } from "./visit.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
-
+import { ApiTags } from "@nestjs/swagger";
+@ApiTags("방문")
 @Controller("visit")
 export class VisitController {
   constructor(private readonly visitService: VisitService) {}

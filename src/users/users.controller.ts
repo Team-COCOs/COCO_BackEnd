@@ -36,7 +36,7 @@ import { ChangePasswordDto } from "./dto/updateInfo.dto";
 import { ChangePhoneDto } from "./dto/updateInfo.dto";
 import { UserRoleDto } from "./dto/userProfile.dto";
 
-@ApiTags("Users")
+@ApiTags("유저")
 @Controller("users")
 export class UsersController {
   constructor(

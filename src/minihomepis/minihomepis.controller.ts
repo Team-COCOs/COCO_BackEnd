@@ -21,7 +21,12 @@ import { UsersService } from "src/users/users.service";
 import { VisitService } from "src/visit/visit.service";
 import { MinihomepisService } from "./minihomepis.service";
 import { OtherProfileDto } from "src/users/dto/otherUsers.dto";
-import { ApiConsumes, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import {
+  ApiConsumes,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { MinihomepiStatusDto } from "./dto/minihomepiInfo.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -31,6 +36,7 @@ import { PhotosService } from "src/photos/photos.service";
 import { DiaryService } from "src/diary/diary.service";
 import { GuestbooksService } from "src/guestbooks/guestbooks.service";
 
+@ApiTags("미니홈피")
 @Controller("minihomepis")
 export class MinihomepisController {
   constructor(

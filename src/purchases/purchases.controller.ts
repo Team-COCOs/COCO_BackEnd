@@ -5,7 +5,7 @@ import { Request } from "express";
 import { ApiTags, ApiOperation } from "@nestjs/swagger";
 import { PurchaseItemDto } from "./dto/purchases.dto";
 
-@ApiTags("스토어 구매")
+@ApiTags("스토어 구매 내역")
 @Controller("purchases")
 @UseGuards(AuthGuard("jwt"))
 export class PurchasesController {

@@ -11,8 +11,8 @@ import { AuthGuard } from "@nestjs/passport";
 import { PaymentsService } from "./payments.service";
 import { CreatePaymentDto } from "./dto/payments.dto";
 import { Request } from "express";
-import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
-
+import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+@ApiTags("결제 내역")
 @Controller("pay")
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}

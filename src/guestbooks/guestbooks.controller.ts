@@ -14,7 +14,9 @@ import { GuestbooksService } from "./guestbooks.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { VisibilityStatus } from "./guestbooks.entity";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("방명록")
 @Controller("guestbooks")
 export class GuestbooksController {
   constructor(private readonly guestbooksService: GuestbooksService) {}

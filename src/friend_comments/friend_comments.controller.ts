@@ -11,8 +11,9 @@ import {
 import { FriendCommentsService } from "./friend_comments.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
-
-@Controller("friend-comments")
+import { ApiTags } from "@nestjs/swagger";
+@ApiTags("일촌평")
+@Controller("friendComments")
 export class FriendCommentsController {
   constructor(private readonly friendCommentsService: FriendCommentsService) {}
 

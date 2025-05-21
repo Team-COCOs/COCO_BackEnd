@@ -11,7 +11,12 @@ import {
 } from "@nestjs/common";
 import { DiaryCommentsService } from "./diary_comments.service";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { UserRole } from "src/users/users.entity";
 import {
   CommentResponseDto,
@@ -25,6 +30,7 @@ interface AuthRequest extends Request {
     role: UserRole;
   };
 }
+@ApiTags("다이어리 댓글")
 @Controller("diaryComments")
 export class DiaryCommentsController {
   constructor(private readonly diaryCommentsService: DiaryCommentsService) {}
