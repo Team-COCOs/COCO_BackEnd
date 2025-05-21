@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThanOrEqual } from "typeorm";
 import { Visit } from "./visit.entity";
-import { startOfToday } from "date-fns";
+import { addHours, startOfToday } from "date-fns";
 import { UsersService } from "src/users/users.service";
 
 @Injectable()
@@ -59,7 +59,7 @@ export class VisitService {
 
   // today 방문자 수
   async countTodayVisits(hostId: number): Promise<number> {
-    const todayStart = startOfToday(); // 00:00:00
+    const todayStart = addHours(startOfToday(), -9);
 
     const raw = await this.visitRepository
       .createQueryBuilder("visit")
