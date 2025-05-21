@@ -28,7 +28,8 @@ import { AdminGuard } from "../auth/guards/admin.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
-
+import * as dotenv from "dotenv";
+dotenv.config();
 @ApiTags("스토어 아이템")
 @Controller("storeitems")
 export class StoreitemsController {
@@ -95,7 +96,9 @@ export class StoreitemsController {
       throw new NotFoundException("유효하지 않은 category입니다.");
     }
 
-    const imageUrl = `http://localhost:5001/uploads/${file.filename}`;
+    const serverHost = process.env.SERVER_HOST;
+
+    const imageUrl = `${serverHost}/uploads/${file.filename}`;
 
     return this.storeitemsService.create({
       ...dto,

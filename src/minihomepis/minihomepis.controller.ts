@@ -35,7 +35,8 @@ import { extname } from "path";
 import { PhotosService } from "src/photos/photos.service";
 import { DiaryService } from "src/diary/diary.service";
 import { GuestbooksService } from "src/guestbooks/guestbooks.service";
-
+import * as dotenv from "dotenv";
+dotenv.config();
 @ApiTags("미니홈피")
 @Controller("minihomepis")
 export class MinihomepisController {
@@ -111,8 +112,10 @@ export class MinihomepisController {
 
     let imageUrl: string | null = null;
 
+    const serverHost = process.env.SERVER_HOST;
+
     if (file) {
-      imageUrl = `http://localhost:5001/uploads/${file.filename}`;
+      imageUrl = `${serverHost}/uploads/${file.filename}`;
     } else if (
       body.minihompi_image_url &&
       typeof body.minihompi_image_url === "string"

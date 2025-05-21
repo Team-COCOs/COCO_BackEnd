@@ -7,6 +7,8 @@ import { CreateStoreItemDto, UpdateStoreItemDto } from "./dto/storeitem.dto";
 import { exec } from "child_process";
 import { promisify } from "util";
 const execAsync = promisify(exec);
+import * as dotenv from "dotenv";
+dotenv.config();
 
 @Injectable()
 export class StoreitemsService {
@@ -19,9 +21,9 @@ export class StoreitemsService {
   async create(dto: CreateStoreItemDto & { file: string }) {
     const item = this.storeItemRepository.create(dto);
     const saved = await this.storeItemRepository.save(item);
-
+    const serverHost = process.env.SERVER_HOST;
     if (dto.category === StoreItemType.BGM) {
-      const filePath = dto.file.replace("http://localhost:5001", ".");
+      const filePath = dto.file.replace(`${serverHost}`, ".");
       const previewPath = filePath.replace(".mp3", "_preview.mp3");
 
       const command = `ffmpeg -y -i ${filePath} -t 10 ${previewPath}`;
