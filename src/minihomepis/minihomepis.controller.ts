@@ -146,7 +146,6 @@ export class MinihomepisController {
   @UseGuards(AuthGuard("jwt"))
   async setManagement(@Req() req: Request, @Body("quote") quote: string) {
     const userId = req.user["id"];
-    console.log(quote, "sdfsd");
     return await this.minihomepisService.setManagement(userId, quote);
   }
 
