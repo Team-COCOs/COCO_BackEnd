@@ -59,9 +59,10 @@ export class VisitService {
 
   // today 방문자 수
   async countTodayVisits(hostId: number): Promise<number> {
-    const koreaTime = new Date(); // 현재 시간
-    const todayKST = startOfDay(koreaTime); // KST 기준 오늘 00:00
-    const todayStartUTC = zonedTimeToUtc(todayKST, "Asia/Seoul"); // → UTC로 환산
+    const now = new Date();
+    const koreaNow = addHours(now, 9); // 현재 시간을 KST로 보정
+    const koreaStartOfToday = startOfDay(koreaNow); // 오늘 KST 자정
+    const todayStartUTC = addHours(koreaStartOfToday, -9); // UTC로 변환
 
     const raw = await this.visitRepository
       .createQueryBuilder("visit")
