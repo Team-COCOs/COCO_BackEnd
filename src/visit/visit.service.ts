@@ -60,6 +60,7 @@ export class VisitService {
   // today 방문자 수
   async countTodayVisits(hostId: number): Promise<number> {
     const todayStart = addHours(startOfToday(), -9);
+    // 한국 기준 오늘 00시를 UTC로 변환
 
     const raw = await this.visitRepository
       .createQueryBuilder("visit")
@@ -67,6 +68,11 @@ export class VisitService {
       .where("visit.host_id = :hostId", { hostId })
       .andWhere("visit.visited_at >= :todayStart", { todayStart })
       .getRawOne<{ count: string }>();
+
+    console.log(
+      "KST 기준 todayStart(UTC 기준 시각):",
+      todayStart.toISOString()
+    );
 
     return parseInt(raw.count, 10);
   }
