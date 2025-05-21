@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThanOrEqual } from "typeorm";
 import { Visit } from "./visit.entity";
-import { addHours, startOfToday } from "date-fns";
+import { addHours, startOfDay, startOfToday } from "date-fns";
 import { UsersService } from "src/users/users.service";
 
 @Injectable()
@@ -59,20 +59,19 @@ export class VisitService {
 
   // today 방문자 수
   async countTodayVisits(hostId: number): Promise<number> {
-    const todayStart = addHours(startOfToday(), -9);
-    // 한국 기준 오늘 00시를 UTC로 변환
+    const koreaTime = new Date(); // 현재 시간
+    const todayKST = startOfDay(koreaTime); // KST 기준 오늘 00:00
+    const todayStartUTC = zonedTimeToUtc(todayKST, "Asia/Seoul"); // → UTC로 환산
 
     const raw = await this.visitRepository
       .createQueryBuilder("visit")
       .select("COUNT(*)", "count")
       .where("visit.host_id = :hostId", { hostId })
-      .andWhere("visit.visited_at >= :todayStart", { todayStart })
+      .andWhere("visit.visitor_id IS NOT NULL")
+      .andWhere("visit.visited_at >= :todayStart", {
+        todayStart: todayStartUTC,
+      })
       .getRawOne<{ count: string }>();
-
-    console.log(
-      "KST 기준 todayStart(UTC 기준 시각):",
-      todayStart.toISOString()
-    );
 
     return parseInt(raw.count, 10);
   }
@@ -87,4 +86,7 @@ export class VisitService {
 
     return parseInt(raw.count, 10);
   }
+}
+function zonedTimeToUtc(arg0: any, arg1: string) {
+  throw new Error("Function not implemented.");
 }
