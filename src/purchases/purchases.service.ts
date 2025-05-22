@@ -36,11 +36,17 @@ export class PurchasesService {
     });
 
     if (existing) {
-      throw new BadRequestException("이미 구매한 아이템입니다.");
+      return {
+        success: false,
+        message: "이미 구매한 아이템입니다.",
+      };
     }
 
     if (user.dotoris < item.price) {
-      throw new BadRequestException("도토리가 부족합니다.");
+      return {
+        success: false,
+        message: "도토리가 부족합니다.",
+      };
     }
 
     // 도토리 차감
