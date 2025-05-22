@@ -73,4 +73,30 @@ export class PaymentsService {
   async countPayments() {
     return this.paymentRepository.count();
   }
+
+  // 총 결제 금액
+  async totalPaymentAmount(): Promise<number> {
+    const { sum } = await this.paymentRepository
+      .createQueryBuilder("payment")
+      .select("SUM(payment.amount)", "sum")
+      .getRawOne<{ sum: string }>();
+
+    return parseInt(sum ?? "0", 10);
+  }
+
+  // 일별 결제 금액
+  async dailyPaymentAmounts(): Promise<{ date: string; total: number }[]> {
+    const rawResults = await this.paymentRepository
+      .createQueryBuilder("payment")
+      .select("DATE_ADD(DATE(payment.created_at), INTERVAL 9 HOUR)", "date")
+      .addSelect("SUM(payment.amount)", "total")
+      .groupBy("date")
+      .orderBy("date", "DESC")
+      .getRawMany<{ date: string; total: string }>();
+
+    return rawResults.map((r) => ({
+      date: r.date.split("T")[0],
+      total: parseInt(r.total, 10),
+    }));
+  }
 }

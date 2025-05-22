@@ -18,12 +18,12 @@ export class Friend {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, { eager: false })
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "requester_id" })
   requester: User;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "accepter_id" })
+  @JoinColumn({ name: "receiver_id" })
   receiver: User;
 
   // 내가 상대를 부르는 이름

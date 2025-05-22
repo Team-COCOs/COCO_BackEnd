@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, ILike, Not } from "typeorm";
+import { Repository, ILike, Not, In } from "typeorm";
 import { User, Gender, UserRole } from "./users.entity";
 import { SearchUserDto } from "./dto/searchUsers.dto";
 import { MiniroomsService } from "src/minirooms/minirooms.service";
@@ -13,7 +13,7 @@ import { UseritemsService } from "src/useritems/useritems.service";
 import { PhotosService } from "src/photos/photos.service";
 import * as bcrypt from "bcrypt";
 import { DiaryService } from "src/diary/diary.service";
-import { addHours, startOfDay } from "date-fns";
+import { addHours, format, startOfDay } from "date-fns";
 @Injectable()
 export class UsersService {
   constructor(
@@ -220,8 +220,30 @@ export class UsersService {
   }
 
   // 관리자용
-  findAllUser() {
-    return this.userRepository.find();
+  async findAllUser() {
+    const users = await this.userRepository.find();
+
+    return users.map((user) => {
+      const createdAtKST = addHours(user.created_at, 9);
+      const joinDate = format(createdAtKST, "yyyy-MM-dd");
+
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        joinDate,
+      };
+    });
+  }
+
+  // 총 가입자 수
+  async getUserCount() {
+    return this.userRepository.count({
+      where: {
+        role: Not(In([UserRole.ADMIN, UserRole.WITHDRAWN])),
+      },
+    });
   }
 
   // 일별 가입자 수
@@ -229,12 +251,15 @@ export class UsersService {
     const now = new Date();
     const koreaNow = addHours(now, 9);
     const startOfTodayKST = startOfDay(koreaNow);
-    const startOfTodayUTC = addHours(startOfTodayKST, -9); // UTC 기준으로 변환
+    const startOfTodayUTC = addHours(startOfTodayKST, -9);
 
     const raw = await this.userRepository
       .createQueryBuilder("user")
       .select("COUNT(*)", "count")
       .where("user.created_at >= :todayStart", { todayStart: startOfTodayUTC })
+      .andWhere("user.role NOT IN (:...excludedRoles)", {
+        excludedRoles: [UserRole.ADMIN, UserRole.WITHDRAWN],
+      })
       .getRawOne<{ count: string }>();
 
     return parseInt(raw.count, 10);
@@ -250,6 +275,9 @@ export class UsersService {
       )
       .addSelect("COUNT(*)", "count")
       .where("user.created_at IS NOT NULL")
+      .andWhere("user.role NOT IN (:...excludedRoles)", {
+        excludedRoles: [UserRole.ADMIN, UserRole.WITHDRAWN],
+      })
       .groupBy("month")
       .orderBy("month", "ASC")
       .getRawMany<{ month: string; count: string }>();
@@ -258,5 +286,27 @@ export class UsersService {
       month: row.month,
       count: parseInt(row.count, 10),
     }));
+  }
+
+  // 관리자용 유저 삭제
+  async deleteUser(params: {
+    targetUserId: number;
+    requester: { id: number; role: UserRole };
+  }): Promise<User> {
+    const { targetUserId, requester } = params;
+
+    if (requester.role !== UserRole.ADMIN) {
+      throw new ForbiddenException("관리자만 유저를 삭제할 수 있습니다.");
+    }
+
+    const user = await this.userRepository.findOne({
+      where: { id: targetUserId },
+    });
+
+    if (!user) {
+      throw new NotFoundException("유저를 찾을 수 없습니다.");
+    }
+
+    return this.userRepository.remove(user);
   }
 }

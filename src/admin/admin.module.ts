@@ -7,7 +7,7 @@ import { PhotosModule } from "src/photos/photos.module";
 import { DiaryModule } from "src/diary/diary.module";
 
 @Module({
-  imports: [UsersModule, PaymentsModule, PhotosModule, DiaryModule],
+  imports: [UsersModule, PaymentsModule],
   providers: [AdminService],
   controllers: [AdminController],
 })

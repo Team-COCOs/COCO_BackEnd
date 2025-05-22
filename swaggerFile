@@ -2214,6 +2214,123 @@
           "방명록 댓글"
         ]
       }
+    },
+    "/admin/users": {
+      "get": {
+        "operationId": "AdminController_getUsers",
+        "summary": "모든 유저 조회",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/users/{id}": {
+      "delete": {
+        "operationId": "AdminController_deleteUser",
+        "summary": "유저 삭제 (강제 탈퇴)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/users/total": {
+      "get": {
+        "operationId": "AdminController_totalSignupCount",
+        "summary": "총 가입자 수 (관리자/탈퇴자 제외)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/users/daily": {
+      "get": {
+        "operationId": "AdminController_todaySignupCount",
+        "summary": "일별 가입자 수 (KST 기준, 관리자/탈퇴자 제외)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/users/monthly": {
+      "get": {
+        "operationId": "AdminController_monthlySignupStats",
+        "summary": "월별 가입자 수 (KST 기준, 관리자/탈퇴자 제외)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/payments": {
+      "get": {
+        "operationId": "AdminController_getAllPayments",
+        "summary": "전체 결제 내역 조회",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/payments/count": {
+      "get": {
+        "operationId": "AdminController_getPaymentsCount",
+        "summary": "전체 결제 건수",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/payments/total": {
+      "get": {
+        "operationId": "AdminController_getTotalPaymentAmount",
+        "summary": "총 결제 금액",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/payments/daily": {
+      "get": {
+        "operationId": "AdminController_getDailyPaymentStats",
+        "summary": "일별 결제 금액 (KST 기준)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {

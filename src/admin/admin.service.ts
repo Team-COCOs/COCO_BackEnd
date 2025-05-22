@@ -14,9 +14,7 @@ interface AdminRequest {
 export class AdminService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly paymentsService: PaymentsService,
-    private readonly photosService: PhotosService,
-    private readonly diaryService: DiaryService
+    private readonly paymentsService: PaymentsService
   ) {}
 
   // 관리자 확인
@@ -32,10 +30,19 @@ export class AdminService {
     return this.usersService.findAllUser();
   }
 
-  // 유저 탈퇴 유저로 변경
-  async withDrawUserByAdmin(requester: AdminRequest, userId: number) {
+  // 유저 삭제
+  async deleteUserAsAdmin(userId: number, requester: AdminRequest) {
     this.checkAdmin(requester);
-    return this.usersService.withdrawUser(userId);
+    return this.usersService.deleteUser({
+      targetUserId: userId,
+      requester,
+    });
+  }
+
+  // 총 가입자 수
+  async totalSignupUser(requester: AdminRequest) {
+    this.checkAdmin(requester);
+    return this.usersService.getUserCount();
   }
 
   // 일별 가입자 수
@@ -45,7 +52,7 @@ export class AdminService {
   }
 
   // 월별 가입자 수
-  async totalSignupUser(requester: AdminRequest) {
+  async monthSignupUser(requester: AdminRequest) {
     this.checkAdmin(requester);
     return this.usersService.countMonthlySignups();
   }
@@ -60,5 +67,19 @@ export class AdminService {
   async getPaymentsCount(requester: AdminRequest) {
     this.checkAdmin(requester);
     return this.paymentsService.countPayments();
+  }
+
+  // 총 결제 금액
+  async getTotalPaymentAmount(requester: AdminRequest): Promise<number> {
+    this.checkAdmin(requester);
+    return this.paymentsService.totalPaymentAmount();
+  }
+
+  // 일별 결제 금액
+  async getDailyPaymentAmounts(
+    requester: AdminRequest
+  ): Promise<{ date: string; total: number }[]> {
+    this.checkAdmin(requester);
+    return this.paymentsService.dailyPaymentAmounts();
   }
 }
