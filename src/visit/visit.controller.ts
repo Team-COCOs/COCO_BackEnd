@@ -17,8 +17,8 @@ export class VisitController {
   }
 
   // 로그아웃 유저
-  @Post("guest")
-  async visitGuest(@Body("hostId") hostId: number) {
-    return this.visitService.visit(hostId, null);
-  }
+  // @Post("guest")
+  // async visitGuest(@Body("hostId") hostId: number) {
+  //   return this.visitService.visit(hostId, null);
+  // }
 }

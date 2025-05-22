@@ -1546,20 +1546,6 @@
         ]
       }
     },
-    "/visit/guest": {
-      "post": {
-        "operationId": "VisitController_visitGuest",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "방문"
-        ]
-      }
-    },
     "/minihomepis/history/{hostId}": {
       "get": {
         "operationId": "MinihomepisController_getOtherProfile",
