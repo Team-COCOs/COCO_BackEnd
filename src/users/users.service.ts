@@ -13,7 +13,7 @@ import { UseritemsService } from "src/useritems/useritems.service";
 import { PhotosService } from "src/photos/photos.service";
 import * as bcrypt from "bcrypt";
 import { DiaryService } from "src/diary/diary.service";
-import { addHours, format, startOfDay } from "date-fns";
+import { addHours, format, startOfDay, subDays } from "date-fns";
 @Injectable()
 export class UsersService {
   constructor(
@@ -247,22 +247,31 @@ export class UsersService {
   }
 
   // 일별 가입자 수
-  async countTodaySignups(): Promise<number> {
+  async countRecentSignups(): Promise<{ date: string; count: number }[]> {
     const now = new Date();
     const koreaNow = addHours(now, 9);
-    const startOfTodayKST = startOfDay(koreaNow);
-    const startOfTodayUTC = addHours(startOfTodayKST, -9);
+    const startDateKST = startOfDay(subDays(koreaNow, 14));
+    const startDateUTC = addHours(startDateKST, -9);
 
     const raw = await this.userRepository
       .createQueryBuilder("user")
-      .select("COUNT(*)", "count")
-      .where("user.created_at >= :todayStart", { todayStart: startOfTodayUTC })
+      .select(
+        "DATE_FORMAT(DATE_ADD(user.created_at, INTERVAL 9 HOUR), '%Y-%m-%d')",
+        "date"
+      )
+      .addSelect("COUNT(*)", "count")
+      .where("user.created_at >= :startDate", { startDate: startDateUTC })
       .andWhere("user.role NOT IN (:...excludedRoles)", {
         excludedRoles: [UserRole.ADMIN, UserRole.WITHDRAWN],
       })
-      .getRawOne<{ count: string }>();
+      .groupBy("date")
+      .orderBy("date", "ASC")
+      .getRawMany<{ date: string; count: string }>();
 
-    return parseInt(raw.count, 10);
+    return raw.map((r) => ({
+      date: r.date,
+      count: parseInt(r.count, 10),
+    }));
   }
 
   // 월별 가입자 수

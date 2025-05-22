@@ -46,7 +46,7 @@ export class AdminService {
   // 일별 가입자 수
   async todaySignupUser(requester: AdminRequest) {
     this.checkAdmin(requester);
-    return this.usersService.countTodaySignups();
+    return this.usersService.countRecentSignups();
   }
 
   // 월별 가입자 수
