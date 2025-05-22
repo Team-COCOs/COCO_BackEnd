@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { Friend, FriendStatus } from "./friends.entity";
 import { UsersService } from "../users/users.service";
 import { FriendListDto, NewFriendDto } from "./dto/friends.dto";
@@ -67,8 +67,16 @@ export class FriendsService {
 
     const existing = await this.friendsRepository.findOne({
       where: [
-        { requester: { id: requesterId }, receiver: { id: receiverId } },
-        { requester: { id: receiverId }, receiver: { id: requesterId } },
+        {
+          requester: { id: requesterId },
+          receiver: { id: receiverId },
+          status: In([FriendStatus.PENDING, FriendStatus.ACCEPTED]),
+        },
+        {
+          requester: { id: receiverId },
+          receiver: { id: requesterId },
+          status: In([FriendStatus.PENDING, FriendStatus.ACCEPTED]),
+        },
       ],
     });
 

@@ -5,6 +5,7 @@ import {
   JoinColumn,
   CreateDateColumn,
   Column,
+  Index,
 } from "typeorm";
 import { User } from "../users/users.entity";
 
@@ -12,6 +13,7 @@ export enum FriendStatus {
   PENDING = "pending",
   ACCEPTED = "accepted",
 }
+@Index(["requester", "receiver"], { unique: true })
 @Entity("friends")
 export class Friend {
   @PrimaryGeneratedColumn()
