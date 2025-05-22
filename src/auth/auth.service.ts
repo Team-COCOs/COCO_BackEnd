@@ -105,14 +105,19 @@ export class AuthService {
   }
 
   // 아이디 찾기
-  async findId(name: string, phone: string): Promise<{ email: string }> {
+  async findId(
+    name: string,
+    phone: string
+  ): Promise<{ email: string; phone: string } | { message: string }> {
     const user = await this.userService.findUserByNameAndPhone(name, phone);
 
     if (!user) {
-      throw new NotFoundException("일치하는 회원 정보가 없습니다.");
+      return {
+        message: "유저 정보가 없습니다.",
+      };
     }
 
-    return { email: user.email };
+    return { email: user.email, phone: user.phone };
   }
 
   // 새 비밀번호 발급
@@ -124,7 +129,9 @@ export class AuthService {
     const user = await this.userService.findUserByEmail(email);
 
     if (!user || user.phone !== phone) {
-      throw new NotFoundException("일치하는 회원 정보가 없습니다.");
+      return {
+        message: "유저 정보가 없습니다.",
+      };
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
