@@ -70,7 +70,10 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException("유저 정보 없음.");
+      return {
+        success: false,
+        message: "유저 정보가 없습니다.",
+      };
     }
 
     // 비밀번호 검증
