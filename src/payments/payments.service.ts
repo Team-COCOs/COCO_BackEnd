@@ -88,14 +88,17 @@ export class PaymentsService {
   async dailyPaymentAmounts(): Promise<{ date: string; total: number }[]> {
     const rawResults = await this.paymentRepository
       .createQueryBuilder("payment")
-      .select("DATE_ADD(DATE(payment.created_at), INTERVAL 9 HOUR)", "date")
+      .select(
+        "DATE_FORMAT(DATE_ADD(payment.created_at, INTERVAL 9 HOUR), '%Y-%m-%d')",
+        "date"
+      )
       .addSelect("SUM(payment.amount)", "total")
       .groupBy("date")
       .orderBy("date", "DESC")
       .getRawMany<{ date: string; total: string }>();
 
     return rawResults.map((r) => ({
-      date: r.date.split("T")[0],
+      date: r.date,
       total: parseInt(r.total, 10),
     }));
   }

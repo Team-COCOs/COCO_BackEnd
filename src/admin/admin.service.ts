@@ -2,8 +2,6 @@ import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PaymentsService } from "../payments/payments.service";
 import { UsersService } from "../users/users.service";
 import { UserRole } from "../users/users.entity";
-import { PhotosService } from "src/photos/photos.service";
-import { DiaryService } from "src/diary/diary.service";
 
 interface AdminRequest {
   id: number;
