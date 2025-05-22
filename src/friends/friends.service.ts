@@ -120,12 +120,12 @@ export class FriendsService {
         status: FriendStatus.PENDING,
       },
     });
+
     if (!friendship) {
       throw new NotFoundException("해당 일촌 요청을 찾을 수 없습니다.");
     }
 
-    friendship.status = FriendStatus.REJECTED;
-    await this.friendsRepository.save(friendship);
+    await this.friendsRepository.remove(friendship);
   }
 
   // 아직 수락되지 않은 일촌 요청
