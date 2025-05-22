@@ -87,6 +87,3 @@ export class VisitService {
     return parseInt(raw.count, 10);
   }
 }
-function zonedTimeToUtc(arg0: any, arg1: string) {
-  throw new Error("Function not implemented.");
-}

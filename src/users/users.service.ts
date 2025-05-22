@@ -13,6 +13,7 @@ import { UseritemsService } from "src/useritems/useritems.service";
 import { PhotosService } from "src/photos/photos.service";
 import * as bcrypt from "bcrypt";
 import { DiaryService } from "src/diary/diary.service";
+import { addHours, startOfDay } from "date-fns";
 @Injectable()
 export class UsersService {
   constructor(
@@ -216,5 +217,46 @@ export class UsersService {
     }
 
     return user.id;
+  }
+
+  // 관리자용
+  findAllUser() {
+    return this.userRepository.find();
+  }
+
+  // 일별 가입자 수
+  async countTodaySignups(): Promise<number> {
+    const now = new Date();
+    const koreaNow = addHours(now, 9);
+    const startOfTodayKST = startOfDay(koreaNow);
+    const startOfTodayUTC = addHours(startOfTodayKST, -9); // UTC 기준으로 변환
+
+    const raw = await this.userRepository
+      .createQueryBuilder("user")
+      .select("COUNT(*)", "count")
+      .where("user.created_at >= :todayStart", { todayStart: startOfTodayUTC })
+      .getRawOne<{ count: string }>();
+
+    return parseInt(raw.count, 10);
+  }
+
+  // 월별 가입자 수
+  async countMonthlySignups(): Promise<{ month: string; count: number }[]> {
+    const raw = await this.userRepository
+      .createQueryBuilder("user")
+      .select(
+        `DATE_FORMAT(DATE_ADD(user.created_at, INTERVAL 9 HOUR), '%Y-%m')`,
+        "month"
+      )
+      .addSelect("COUNT(*)", "count")
+      .where("user.created_at IS NOT NULL")
+      .groupBy("month")
+      .orderBy("month", "ASC")
+      .getRawMany<{ month: string; count: string }>();
+
+    return raw.map((row) => ({
+      month: row.month,
+      count: parseInt(row.count, 10),
+    }));
   }
 }

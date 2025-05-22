@@ -40,6 +40,7 @@ import { Minimi } from "./minirooms/minimi.entity";
 import { Guestbook } from "./guestbooks/guestbooks.entity";
 import { GuestbooksCommentsModule } from "./guestbooks_comments/guestbooks_comments.module";
 import { GuestbookComment } from "./guestbooks_comments/guestbooks.entity";
+import { AdminModule } from './admin/admin.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -96,6 +97,7 @@ import { GuestbookComment } from "./guestbooks_comments/guestbooks.entity";
     MiniroomsModule,
     GuestbooksModule,
     GuestbooksCommentsModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

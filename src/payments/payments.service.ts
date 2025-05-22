@@ -56,6 +56,7 @@ export class PaymentsService {
     return savedPayment;
   }
 
+  // 유저 결제 정보
   async getPaymentByUser(userId: number) {
     return this.paymentRepository.find({
       where: { user: { id: userId } },
@@ -66,5 +67,10 @@ export class PaymentsService {
   // 관리자 페이지 결제 내역
   async allPayments() {
     return this.paymentRepository.find();
+  }
+
+  // 관리자 페이지 결제 내역 수
+  async countPayments() {
+    return this.paymentRepository.count();
   }
 }
