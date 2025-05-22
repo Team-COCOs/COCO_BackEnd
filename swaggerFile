@@ -2098,20 +2098,44 @@
     "/friend-comments": {
       "post": {
         "operationId": "FriendCommentsController_createFriendComment",
+        "summary": "일촌평 등록",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FriendCommentDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "일촌평이 등록되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FriendCommentResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
           "일촌평"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
     "/friend-comments/{hostId}": {
       "get": {
         "operationId": "FriendCommentsController_getComments",
+        "summary": "일촌평 조회",
         "parameters": [
           {
             "name": "hostId",
@@ -2124,7 +2148,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "일촌평 목록 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FriendCommentResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2133,6 +2167,7 @@
       },
       "delete": {
         "operationId": "FriendCommentsController_deleteComment",
+        "summary": "일촌평 삭제",
         "parameters": [
           {
             "name": "hostId",
@@ -2145,11 +2180,16 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "일촌평이 삭제되었습니다."
           }
         },
         "tags": [
           "일촌평"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2963,6 +3003,68 @@
       "CreatePaymentDto": {
         "type": "object",
         "properties": {}
+      },
+      "FriendCommentDto": {
+        "type": "object",
+        "properties": {
+          "hostId": {
+            "type": "number",
+            "example": 2,
+            "description": "일촌평을 받을 유저 ID"
+          },
+          "content": {
+            "type": "string",
+            "example": "좋은 친구야~",
+            "description": "일촌평 내용"
+          }
+        },
+        "required": [
+          "hostId",
+          "content"
+        ]
+      },
+      "FriendCommentResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "authorId": {
+            "type": "number"
+          },
+          "hostId": {
+            "type": "number"
+          },
+          "authorRealName": {
+            "type": "string"
+          },
+          "hostRealName": {
+            "type": "string"
+          },
+          "authorName": {
+            "type": "string"
+          },
+          "hostName": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "authorId",
+          "hostId",
+          "authorRealName",
+          "hostRealName",
+          "authorName",
+          "hostName",
+          "content",
+          "created_at"
+        ]
       }
     }
   }

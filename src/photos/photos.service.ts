@@ -114,8 +114,13 @@ export class PhotosService {
             is_deleted: false,
           },
         });
+
         if (duplicate) {
-          throw new NotFoundException(`폴더명이 중복되었습니다: ${dto.title}`);
+          return {
+            success: false,
+            message: `폴더명이 중복되었습니다: ${dto.title}`,
+            duplicatedTitle: dto.title,
+          };
         }
 
         // 새 폴더 생성

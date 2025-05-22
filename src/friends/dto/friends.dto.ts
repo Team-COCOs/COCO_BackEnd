@@ -1,104 +1,73 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Gender } from "src/users/users.entity";
 
-export class NewFriendDto {
-  @ApiProperty({ example: 42, description: "친구 요청 레코드 ID" })
-  id: number;
+export class FriendRequestDto {
+  @ApiProperty({ example: 2, description: "상대방 유저 ID" })
+  receiverId: number;
 
-  @ApiProperty({ example: 3, description: "요청자 유저 ID" })
-  requesterId: number;
-
-  @ApiProperty({ example: "도도", description: "요청자가 설정한 내 별명" })
+  @ApiProperty({ example: "민수", description: "내가 상대를 부르는 이름" })
   requester_name: string;
 
-  @ApiProperty({ example: "man", description: "요청자 성별" })
-  requester_gender: Gender;
-
-  @ApiProperty({ example: "나나", description: "요청자가 설정한 본인 별명" })
+  @ApiProperty({ example: "철수", description: "상대가 나를 부르는 이름" })
   receiver_name: string;
 
-  @ApiProperty({
-    example: "https://…/avatar.png",
-    description: "요청자 프로필 이미지 URL",
-  })
-  profileImg: string;
-
-  @ApiProperty({
-    example: "친구해요~!",
-    description: "요청 메시지 (최대 50자)",
-  })
+  @ApiProperty({ example: "우리 친하게 지내요!", description: "신청 메시지" })
   message: string;
-
-  @ApiProperty({
-    example: "2025-05-08 14:30",
-    description: "요청 받은 일시 (yyyy-MM-dd HH:mm)",
-  })
-  receivedAt: string;
 }
 
 export class FriendListDto {
-  @ApiProperty({ example: 42, description: "친구 관계 레코드 ID" })
+  @ApiProperty()
   id: number;
 
-  @ApiProperty({ example: 3, description: "친구 유저 ID" })
+  @ApiProperty()
   userId: number;
 
-  @ApiProperty({ example: "홍길동", description: "친구 이름" })
+  @ApiProperty()
   friend: string;
 
-  @ApiProperty({
-    example: "https://…/avatar.png",
-    description: "친구 프로필 이미지 URL",
-  })
+  @ApiProperty()
   profile_image: string;
 
-  @ApiProperty({
-    example: "나의 일촌명",
-    description: "내가 친구를 부르는 이름",
-  })
+  @ApiProperty()
   myNaming: string;
 
-  @ApiProperty({
-    example: "친구가 나를 부르는 이름",
-    description: "친구가 나를 부르는 이름",
-  })
+  @ApiProperty()
   theirNaming: string;
 
-  @ApiProperty({
-    example: "2025-05-01 14:22",
-    description: "친구가 된 날짜 (yyyy-MM-dd HH:mm)",
-  })
+  @ApiProperty()
+  friend_gender: string;
+
+  @ApiProperty()
   since: string;
 }
 
-export class TheirFriendListDto {
-  @ApiProperty({ example: 3, description: "친구 유저 ID" })
-  userId: number;
+export class NewFriendDto {
+  @ApiProperty()
+  id: number;
 
-  @ApiProperty({ example: "홍길동", description: "친구 이름" })
-  friend: string;
+  @ApiProperty()
+  requesterId: number;
 
-  @ApiProperty({
-    example: "https://…/avatar.png",
-    description: "친구 프로필 이미지 URL",
-  })
-  profile_image: string;
+  @ApiProperty()
+  requester: string;
 
-  @ApiProperty({
-    example: "나의 일촌명",
-    description: "내가 친구를 부르는 이름",
-  })
-  myNaming: string;
+  @ApiProperty()
+  receiver: string;
 
-  @ApiProperty({
-    example: "친구가 나를 부르는 이름",
-    description: "친구가 나를 부르는 이름",
-  })
-  theirNaming: string;
+  @ApiProperty()
+  requester_name: string;
 
-  @ApiProperty({
-    example: "2025-05-01 14:22",
-    description: "친구가 된 날짜 (yyyy-MM-dd HH:mm)",
-  })
-  since: string;
+  @ApiProperty()
+  requester_gender: string;
+
+  @ApiProperty()
+  receiver_name: string;
+
+  @ApiProperty()
+  message: string;
+
+  @ApiProperty()
+  profileImg: string;
+
+  @ApiProperty()
+  receivedAt: string;
 }
