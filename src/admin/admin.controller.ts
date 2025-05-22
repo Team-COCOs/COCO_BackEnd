@@ -56,10 +56,14 @@ export class AdminController {
   async todaySignupCount(@Req() req: Request) {
     const user = req.user as JwtUser;
     const count = await this.adminService.todaySignupUser(user);
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date();
+    const dateKST = new Date(today.getTime() + 9 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
+
     return {
       ok: true,
-      daily: [{ date: today, count }],
+      daily: [{ date: dateKST, count }],
     };
   }
 
