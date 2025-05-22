@@ -61,18 +61,26 @@ export class AuthService {
   }
 
   // 로그인
-  async localLogin(email: string, password: string): Promise<LoginResponseDto> {
+  async localLogin(
+    email: string,
+    password: string
+  ): Promise<LoginResponseDto | { success: false; message: string }> {
     const user = await this.userService.findUserByEmail(email, {
       withPassword: true,
     });
+
     if (!user) {
       throw new UnauthorizedException("유저 정보 없음.");
     }
 
     // 비밀번호 검증
     const match = await bcrypt.compare(password, user.password!);
+
     if (!match) {
-      throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
+      return {
+        success: false,
+        message: "비밀번호가 틀렸습니다.",
+      };
     }
 
     // 토큰 발급
