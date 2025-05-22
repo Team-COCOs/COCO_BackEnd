@@ -118,10 +118,12 @@ export class AuthService {
   // 새 비밀번호 발급
   async resetPw(
     email: string,
+    phone: string,
     newPassword: string
   ): Promise<{ message: string }> {
     const user = await this.userService.findUserByEmail(email);
-    if (!user) {
+
+    if (!user || user.phone !== phone) {
       throw new NotFoundException("일치하는 회원 정보가 없습니다.");
     }
 

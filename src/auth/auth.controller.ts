@@ -72,8 +72,8 @@ export class AuthController {
   @ApiOperation({ summary: "비밀번호 재설정" })
   @ApiBody({ type: ResetPasswordDto })
   async resetPassword(@Body() body: ResetPasswordDto) {
-    const { email, newPassword } = body;
-    return await this.authService.resetPw(email, newPassword);
+    const { email, phone, newPassword } = body;
+    return await this.authService.resetPw(email, phone, newPassword);
   }
 
   @Post("refresh")

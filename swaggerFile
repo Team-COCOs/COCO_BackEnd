@@ -2641,6 +2641,10 @@
             "type": "string",
             "example": "user@example.com"
           },
+          "phone": {
+            "type": "string",
+            "example": "010-1234-1234"
+          },
           "newPassword": {
             "type": "string",
             "example": "newpassword123!"
@@ -2648,6 +2652,7 @@
         },
         "required": [
           "email",
+          "phone",
           "newPassword"
         ]
       },
