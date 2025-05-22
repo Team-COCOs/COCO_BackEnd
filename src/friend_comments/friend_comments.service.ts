@@ -122,6 +122,8 @@ export class FriendCommentsService {
       if (!hostComment || hostComment.host.id !== authorId) {
         throw new NotFoundException("삭제할 일촌평이 존재하지 않습니다.");
       }
+      await this.friendCommentsRepository.remove(hostComment);
+      return { message: "일촌평이 삭제되었습니다." };
     }
 
     await this.friendCommentsRepository.remove(comment);
