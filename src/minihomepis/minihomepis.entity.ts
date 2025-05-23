@@ -18,7 +18,7 @@ export class Minihomepi {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Column({ type: "varchar", length: 100 })
+  @Column({ type: "varchar", length: 100, nullable: true })
   title: string;
 
   @Column({ type: "varchar", length: 100, nullable: true })
