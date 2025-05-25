@@ -59,7 +59,7 @@ export class Photo {
   @Column({ type: "boolean", default: false })
   isScripted: boolean;
 
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: "origin_author_id" })
   origin_author: User;
 

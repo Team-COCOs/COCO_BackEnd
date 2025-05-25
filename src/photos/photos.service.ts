@@ -370,6 +370,7 @@ export class PhotosService {
     }
 
     const copiedPhoto = new Photo();
+
     copiedPhoto.title = originalPhoto.title;
     copiedPhoto.content = originalPhoto.content;
     copiedPhoto.photo_url = originalPhoto.photo_url;
@@ -377,7 +378,8 @@ export class PhotosService {
     copiedPhoto.folder = scrapFolder;
     copiedPhoto.isScripted = true;
     copiedPhoto.user = user;
-    copiedPhoto.origin_author = originalPhoto.user;
+    copiedPhoto.origin_author =
+      originalPhoto.origin_author ?? originalPhoto.user;
 
     originalPhoto.use_count = (originalPhoto.use_count || 0) + 1;
     await this.photoRepository.save(originalPhoto);
