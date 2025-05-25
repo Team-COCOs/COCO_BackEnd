@@ -343,7 +343,7 @@ export class PhotosService {
   async clipPhoto(userId: number, photoId: number): Promise<Photo> {
     const originalPhoto = await this.photoRepository.findOne({
       where: { id: photoId },
-      relations: ["folder", "user"],
+      relations: ["folder", "user", "origin_author"],
     });
 
     if (!originalPhoto) {
