@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 import { StoreItemType } from "src/storeitems/storeitems.entity";
 
 export class PurchaseStoreItemDto {
@@ -32,5 +33,6 @@ export class PurchaseResDto {
   acquired_at: Date;
 
   @ApiProperty({ type: PurchaseStoreItemDto })
+  @Type(() => PurchaseStoreItemDto)
   storeItems: PurchaseStoreItemDto;
 }
