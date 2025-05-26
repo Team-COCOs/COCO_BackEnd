@@ -11,7 +11,7 @@ import { Purchase } from "./purchases.entity";
 import { UsersService } from "../users/users.service";
 import { StoreitemsService } from "../storeitems/storeitems.service";
 import { PurchaseResDto } from "./dto/purchasesRes.dto";
-
+import { plainToInstance } from "class-transformer";
 @Injectable()
 export class PurchasesService {
   constructor(
@@ -100,7 +100,7 @@ export class PurchasesService {
       order: { acquired_at: "DESC" },
     });
 
-    return purchases.map((purchase) => ({
+    const results = purchases.map((purchase) => ({
       id: purchase.id,
       acquired_at: purchase.acquired_at,
       storeItems: {
@@ -113,5 +113,7 @@ export class PurchasesService {
         duration: purchase.storeItems.duration,
       },
     }));
+
+    return plainToInstance(PurchaseResDto, results);
   }
 }
