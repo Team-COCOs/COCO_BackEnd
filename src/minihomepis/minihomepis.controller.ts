@@ -171,7 +171,8 @@ export class MinihomepisController {
   async getRecentTitles(
     @Param("userId", ParseIntPipe) userId: number
   ): Promise<RecentPhotoTitleDto[]> {
-    return await this.photosService.getRecentPhotoTitles(userId);
+    const titles = await this.photosService.getRecentPhotoTitles(userId);
+    return titles;
   }
 
   // 카운트
