@@ -562,7 +562,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseResDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2541,6 +2551,71 @@
       "PurchaseItemDto": {
         "type": "object",
         "properties": {}
+      },
+      "PurchaseStoreItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "tapcolor",
+              "minihomepis",
+              "diary_background",
+              "miniroom",
+              "minimi",
+              "bgm"
+            ]
+          },
+          "file": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "artist",
+          "category",
+          "file",
+          "price",
+          "duration"
+        ]
+      },
+      "PurchaseResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "acquired_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "storeItems": {
+            "$ref": "#/components/schemas/PurchaseStoreItemDto"
+          }
+        },
+        "required": [
+          "id",
+          "acquired_at",
+          "storeItems"
+        ]
       },
       "SignUpDto": {
         "type": "object",
