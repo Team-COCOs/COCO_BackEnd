@@ -99,18 +99,22 @@ export class PurchasesService {
       order: { acquired_at: "DESC" },
     });
 
-    return purchases.map((purchase) => ({
-      id: purchase.id,
-      acquired_at: purchase.acquired_at,
-      storeItems: {
-        id: purchase.storeItems.id,
-        name: purchase.storeItems.name,
-        artist: purchase.storeItems.artist,
-        category: purchase.storeItems.category,
-        file: purchase.storeItems.file,
-        price: purchase.storeItems.price,
-        duration: purchase.storeItems.duration,
-      },
-    }));
+    return purchases.map((purchase) => {
+      const item = purchase.storeItems;
+
+      return {
+        id: purchase.id,
+        acquired_at: purchase.acquired_at,
+        storeItems: {
+          id: item.id,
+          name: item.name,
+          artist: item.artist,
+          category: item.category,
+          file: item.file,
+          price: item.price,
+          duration: item.duration,
+        },
+      };
+    });
   }
 }
