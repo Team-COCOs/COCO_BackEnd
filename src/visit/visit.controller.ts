@@ -2,7 +2,13 @@ import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
 import { VisitService } from "./visit.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
-import { ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
+import { VisitAuthDto, VisitResponseDto } from "./dto/visit.dto";
 @ApiTags("방문")
 @Controller("visit")
 export class VisitController {
@@ -10,15 +16,16 @@ export class VisitController {
 
   // 로그인 유저
   @Post("auth")
+  @ApiBearerAuth()
   @UseGuards(AuthGuard("jwt"))
-  async visitAuth(@Body("hostId") hostId: number, @Req() req: Request) {
+  @ApiOperation({ summary: "방문 등록 (로그인 유저용)" })
+  @ApiResponse({
+    status: 200,
+    description: "방문 성공 메시지",
+    type: VisitResponseDto,
+  })
+  async visitAuth(@Body() body: VisitAuthDto, @Req() req: Request) {
     const visitorId = req.user["id"];
-    return this.visitService.visit(hostId, visitorId);
+    return this.visitService.visit(body.hostId, visitorId);
   }
-
-  // 로그아웃 유저
-  // @Post("guest")
-  // async visitGuest(@Body("hostId") hostId: number) {
-  //   return this.visitService.visit(hostId, null);
-  // }
 }

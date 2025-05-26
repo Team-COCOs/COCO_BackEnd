@@ -1545,14 +1545,37 @@
     "/visit/auth": {
       "post": {
         "operationId": "VisitController_visitAuth",
+        "summary": "방문 등록 (로그인 유저용)",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisitAuthDto"
+              }
+            }
+          }
+        },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "방문 성공 메시지",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisitResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
           "방문"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -2994,6 +3017,32 @@
       "Diary": {
         "type": "object",
         "properties": {}
+      },
+      "VisitAuthDto": {
+        "type": "object",
+        "properties": {
+          "hostId": {
+            "type": "number",
+            "example": 1,
+            "description": "방문하려는 미니홈피 주인의 유저 ID"
+          }
+        },
+        "required": [
+          "hostId"
+        ]
+      },
+      "VisitResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "방문 완료",
+            "description": "방문 처리 결과 메시지"
+          }
+        },
+        "required": [
+          "message"
+        ]
       },
       "MinihomepiStatusDto": {
         "type": "object",
