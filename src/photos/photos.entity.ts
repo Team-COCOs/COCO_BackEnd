@@ -34,7 +34,7 @@ export class Photo {
   @JoinColumn({ name: "folder_id" })
   folder: PhotoFolder;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 255, nullable: true })
   photo_url: string;
 
   @Column({ type: "varchar", length: 100 })
