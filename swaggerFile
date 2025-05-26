@@ -2292,9 +2292,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/users/{id}": {
@@ -2313,9 +2323,12 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "삭제 완료"
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/users/total": {
@@ -2325,9 +2338,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCountDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/users/daily": {
@@ -2337,9 +2360,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailySignupResDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/users/monthly": {
@@ -2349,9 +2382,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlySignupResDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/payments": {
@@ -2361,9 +2404,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentListDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/payments/count": {
@@ -2373,9 +2426,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentCountDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/payments/total": {
@@ -2385,9 +2448,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TotalPaymentAmountDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     },
     "/admin/payments/daily": {
@@ -2397,9 +2470,19 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyPaymentAmountResDto"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "관리자"
+        ]
       }
     }
   },
@@ -3221,6 +3304,286 @@
           "hostName",
           "content",
           "created_at"
+        ]
+      },
+      "AdminUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "홍길동"
+          },
+          "phone": {
+            "type": "string",
+            "example": "010-1234-5678"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "man",
+              "woman"
+            ],
+            "example": "man"
+          },
+          "birthday": {
+            "type": "string",
+            "example": "1990-01-01"
+          },
+          "dotoris": {
+            "type": "number",
+            "example": 100
+          },
+          "profile_image": {
+            "type": "string",
+            "example": "/avatars/avatar1.png"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "admin",
+              "withdrawn"
+            ],
+            "example": "user"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2024-05-01T12:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "phone",
+          "gender",
+          "birthday",
+          "dotoris",
+          "profile_image",
+          "role",
+          "created_at"
+        ]
+      },
+      "UserListResDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminUserDto"
+            }
+          }
+        },
+        "required": [
+          "ok",
+          "users"
+        ]
+      },
+      "UserCountDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "count": {
+            "type": "number",
+            "example": 100
+          }
+        },
+        "required": [
+          "ok",
+          "count"
+        ]
+      },
+      "DailyUserSignupDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "count"
+        ]
+      },
+      "DailySignupResDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "daily": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyUserSignupDto"
+            }
+          }
+        },
+        "required": [
+          "ok",
+          "daily"
+        ]
+      },
+      "MonthlySignupStatDto": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "month",
+          "count"
+        ]
+      },
+      "MonthlySignupResDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MonthlySignupStatDto"
+            }
+          }
+        },
+        "required": [
+          "ok",
+          "data"
+        ]
+      },
+      "PaymentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "number"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "amount",
+          "user_id",
+          "created_at"
+        ]
+      },
+      "PaymentListDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "payments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentDto"
+            }
+          }
+        },
+        "required": [
+          "ok",
+          "payments"
+        ]
+      },
+      "PaymentCountDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "count": {
+            "type": "number",
+            "example": 123
+          }
+        },
+        "required": [
+          "ok",
+          "count"
+        ]
+      },
+      "TotalPaymentAmountDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "amount": {
+            "type": "number",
+            "example": 123456
+          }
+        },
+        "required": [
+          "ok",
+          "amount"
+        ]
+      },
+      "DailyPaymentAmountDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "total"
+        ]
+      },
+      "DailyPaymentAmountResDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true
+          },
+          "daily": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyPaymentAmountDto"
+            }
+          }
+        },
+        "required": [
+          "ok",
+          "daily"
         ]
       }
     }
