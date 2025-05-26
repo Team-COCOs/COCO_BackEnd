@@ -12,6 +12,7 @@ import { PhotoFolder } from "./photoFolder.entity";
 import { UsersService } from "../users/users.service";
 import { SavePhotoFolderDto } from "./dto/photoFolder.dto";
 import { FriendsService } from "src/friends/friends.service";
+import { RecentPhotoTitleDto } from "./dto/recentPhotoTitle.dto";
 
 @Injectable()
 export class PhotosService {
@@ -430,17 +431,19 @@ export class PhotosService {
   }
 
   // 최근 업로드한 게시글 제목 2개
-  async getRecentPhotoTitles(userId: number): Promise<string[]> {
+  async getRecentPhotoTitles(userId: number): Promise<RecentPhotoTitleDto[]> {
     const rows = await this.photoRepository
       .createQueryBuilder("photo")
-      .select("photo.title", "title")
+      .select(["photo.title AS title", "photo.isScripted AS isScripted"])
       .where("photo.user_id = :userId", { userId })
       .andWhere("photo.visibility = :visibility", { visibility: "public" })
       .orderBy("photo.created_at", "DESC")
       .limit(2)
-      .limit(2)
       .getRawMany();
 
-    return rows.map((row) => row.title);
+    return rows.map((row) => ({
+      title: row.title,
+      isScripted: !!row.isScripted,
+    }));
   }
 }

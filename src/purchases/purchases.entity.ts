@@ -1,4 +1,3 @@
-// user-items.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,

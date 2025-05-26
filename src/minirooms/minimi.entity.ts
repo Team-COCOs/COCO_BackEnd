@@ -25,7 +25,11 @@ export class Minimi {
   storeItem: StoreItems;
   // 미니미 아이템
 
-  @ManyToOne(() => Purchase, { nullable: true, eager: true })
+  @ManyToOne(() => Purchase, {
+    nullable: true,
+    onDelete: "SET NULL",
+    eager: true,
+  })
   @JoinColumn({ name: "purchase_id" })
   purchase: Purchase;
 

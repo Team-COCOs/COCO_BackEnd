@@ -25,6 +25,7 @@ import {
   ApiConsumes,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
@@ -36,6 +37,7 @@ import { PhotosService } from "src/photos/photos.service";
 import { DiaryService } from "src/diary/diary.service";
 import { GuestbooksService } from "src/guestbooks/guestbooks.service";
 import * as dotenv from "dotenv";
+import { RecentPhotoTitleDto } from "src/photos/dto/recentPhotoTitle.dto";
 dotenv.config();
 @ApiTags("미니홈피")
 @Controller("minihomepis")
@@ -160,9 +162,16 @@ export class MinihomepisController {
 
   // 최근에 올린 사진첩 title 2개
   @Get("photo/:userId")
-  async getRecentTitles(@Param("userId", ParseIntPipe) userId: number) {
-    const titles = await this.photosService.getRecentPhotoTitles(userId);
-    return { titles };
+  @ApiOperation({ summary: "최근 사진첩 제목 2개 가져오기" })
+  @ApiResponse({
+    status: 200,
+    description: "최신 사진첩 제목 리스트",
+    type: [RecentPhotoTitleDto],
+  })
+  async getRecentTitles(
+    @Param("userId", ParseIntPipe) userId: number
+  ): Promise<RecentPhotoTitleDto[]> {
+    return await this.photosService.getRecentPhotoTitles(userId);
   }
 
   // 카운트
