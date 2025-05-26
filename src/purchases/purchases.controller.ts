@@ -14,14 +14,14 @@ export class PurchasesController {
   @Post()
   @ApiOperation({ summary: "스토어 아이템 구매" })
   async buyItem(@Body() body: PurchaseItemDto, @Req() req: Request) {
-    const userId = (req.user as any).id;
+    const userId = req.user["id"];
     return this.purchasesService.buyItem(userId, body.storeItemId);
   }
 
   @Get()
   @ApiOperation({ summary: "내가 구매한 아이템 목록" })
   async getMyItems(@Req() req: Request) {
-    const userId = (req.user as any).id;
+    const userId = req.user["id"];
     return this.purchasesService.getUserPurchases(userId);
   }
 }

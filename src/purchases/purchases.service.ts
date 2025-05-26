@@ -93,28 +93,10 @@ export class PurchasesService {
 
   // 유저가 구매한 아이템
   async getUserPurchases(userId: number) {
-    const purchases = await this.purchaseRepository.find({
+    return await this.purchaseRepository.find({
       where: { user: { id: userId } },
       relations: ["storeItems"],
       order: { acquired_at: "DESC" },
-    });
-
-    return purchases.map((purchase) => {
-      const item = purchase.storeItems;
-
-      return {
-        id: purchase.id,
-        acquired_at: purchase.acquired_at,
-        storeItems: {
-          id: item.id,
-          name: item.name,
-          artist: item.artist,
-          category: item.category,
-          file: item.file,
-          price: item.price,
-          duration: item.duration,
-        },
-      };
     });
   }
 }
