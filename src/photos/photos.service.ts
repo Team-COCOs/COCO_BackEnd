@@ -442,7 +442,7 @@ export class PhotosService {
 
     return rows.map((row) => ({
       title: row.title,
-      isScripted: !!row.isScripted, // 명시적으로 boolean 처리
+      isScripted: !!row.isScripted,
     }));
   }
 }

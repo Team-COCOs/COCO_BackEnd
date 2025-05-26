@@ -91,12 +91,14 @@ export class PurchasesService {
     });
   }
 
-  // 구매한 유저 확인
+  // 유저가 구매한 아이템
   async getUserPurchases(userId: number) {
-    return this.purchaseRepository.find({
+    const purchases = await this.purchaseRepository.find({
       where: { user: { id: userId } },
       relations: ["storeItems"],
       order: { acquired_at: "DESC" },
     });
+
+    return purchases.filter((purchase) => purchase.storeItems !== null);
   }
 }
