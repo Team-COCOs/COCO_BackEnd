@@ -10,6 +10,7 @@ import { Repository } from "typeorm";
 import { Purchase } from "./purchases.entity";
 import { UsersService } from "../users/users.service";
 import { StoreitemsService } from "../storeitems/storeitems.service";
+import { PurchaseResDto } from "./dto/purchasesRes.dto";
 
 @Injectable()
 export class PurchasesService {
@@ -92,11 +93,25 @@ export class PurchasesService {
   }
 
   // 유저가 구매한 아이템
-  async getUserPurchases(userId: number) {
-    return await this.purchaseRepository.find({
+  async getUserPurchases(userId: number): Promise<PurchaseResDto[]> {
+    const purchases = await this.purchaseRepository.find({
       where: { user: { id: userId } },
       relations: ["storeItems"],
       order: { acquired_at: "DESC" },
     });
+
+    return purchases.map((purchase) => ({
+      id: purchase.id,
+      acquired_at: purchase.acquired_at,
+      storeItems: {
+        id: purchase.storeItems.id,
+        name: purchase.storeItems.name,
+        artist: purchase.storeItems.artist,
+        category: purchase.storeItems.category,
+        file: purchase.storeItems.file,
+        price: purchase.storeItems.price,
+        duration: purchase.storeItems.duration,
+      },
+    }));
   }
 }
