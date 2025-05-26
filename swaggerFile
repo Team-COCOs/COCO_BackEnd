@@ -3454,31 +3454,49 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number"
+            "type": "number",
+            "example": 12,
+            "description": "일촌평 ID"
           },
           "authorId": {
-            "type": "number"
+            "type": "number",
+            "example": 5,
+            "description": "작성자 유저 ID"
           },
           "hostId": {
-            "type": "number"
+            "type": "number",
+            "example": 2,
+            "description": "받는 사람(호스트) 유저 ID"
           },
           "authorRealName": {
-            "type": "string"
+            "type": "string",
+            "example": "김철수",
+            "description": "작성자 실제 이름"
           },
           "hostRealName": {
-            "type": "string"
+            "type": "string",
+            "example": "김영희",
+            "description": "호스트 실제 이름"
           },
           "authorName": {
-            "type": "string"
+            "type": "string",
+            "example": "bestfriend",
+            "description": "작성자가 호스트를 부르는 별칭"
           },
           "hostName": {
-            "type": "string"
+            "type": "string",
+            "example": "buddy",
+            "description": "호스트가 작성자를 부르는 별칭"
           },
           "content": {
-            "type": "string"
+            "type": "string",
+            "example": "좋은 친구야~",
+            "description": "일촌평 내용"
           },
           "created_at": {
-            "type": "string"
+            "type": "string",
+            "example": "2025-05-25 14:32",
+            "description": "작성 일시 (KST)"
           }
         },
         "required": [
