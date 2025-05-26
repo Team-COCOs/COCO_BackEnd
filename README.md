@@ -32,18 +32,14 @@
 >
 > 📌 [⑤ ERD](#-erd)
 
-> 📌 [⑥  프로토타입](#-프로토타입)
-
-> 📌 [⑦  화면 구성](#-화면-구성)
-
-> 📌 [⑧  주요 기능](#-주요-기능)  
+> 📌 [⑥  주요 기능](#-주요-기능)  
 
 <br/>
 
 ## 🔅 프로젝트 실행
 ```
 npm install
-npm run dev
+npm run start:dev
 ```
 
 <br/>
@@ -159,16 +155,6 @@ npm run dev
 
 <br/>
 
-## 📝 프로토타입
-
-<div align="center">
-
- ![Image](https://github.com/user-attachments/assets/5e4ef7da-6c01-46c6-97e8-0b6507639d25)
- 
-</div>
-
-<br/>
-
 ## 🖼️ 화면 구성
 
 <div align="center">
@@ -230,23 +216,6 @@ npm run dev
  </div>
 
 ![image](https://github.com/user-attachments/assets/78a186a0-e3ba-4268-92cd-1128a480f0b5)
-
-<br/>
-
-### 🖼️ 반응형 화면 구성
-
-<div align="center">
- <table>
-    <tr>
-     <th> MINIHOMPY(PROFILE) </th>
-     <th> MINIHOMPY(CONTENT) </th>
-    </tr>
-    <tr>
-     <td><img src="https://github.com/user-attachments/assets/42b97022-3f4a-4dae-b7c2-c53431441537"/></td>
-     <td><img src="https://github.com/user-attachments/assets/e3005417-8118-49e4-988d-7564c3e7aeb2"/></td>
-    </tr>
-  </table>
-</div>
 
 <br/>
 
