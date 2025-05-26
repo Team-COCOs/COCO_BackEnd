@@ -99,11 +99,6 @@ export class PurchasesService {
       order: { acquired_at: "DESC" },
     });
 
-    return purchases
-      .filter((p) => p.storeItems !== null)
-      .map((p) => ({
-        ...p,
-        category: p.storeItems.category,
-      }));
+    return purchases.filter((purchase) => purchase.storeItems !== null);
   }
 }
