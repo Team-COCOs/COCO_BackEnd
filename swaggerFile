@@ -1414,13 +1414,15 @@
     "/friends/names/{userId}": {
       "get": {
         "operationId": "FriendsController_getUserNames",
+        "summary": "일촌 신청 전 상대방 이름 및 정보 조회",
         "parameters": [
           {
             "name": "userId",
             "required": true,
             "in": "path",
+            "description": "상대 유저 ID",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
@@ -1431,13 +1433,29 @@
         },
         "tags": [
           "일촌"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
     "/friends/request": {
       "post": {
         "operationId": "FriendsController_requestFriend",
+        "summary": "일촌 신청",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FriendRequestDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -1445,13 +1463,29 @@
         },
         "tags": [
           "일촌"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
     "/friends/accept": {
       "post": {
         "operationId": "FriendsController_acceptFriend",
+        "summary": "일촌 신청 수락",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptRejectDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -1459,13 +1493,29 @@
         },
         "tags": [
           "일촌"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
     "/friends/reject": {
       "post": {
         "operationId": "FriendsController_rejectFriend",
+        "summary": "일촌 신청 거절",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptRejectDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -1473,33 +1523,56 @@
         },
         "tags": [
           "일촌"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
     "/friends/list": {
       "get": {
         "operationId": "FriendsController_getMainProfile",
+        "summary": "일촌 목록 조회",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FriendListDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
           "일촌"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
     "/friends/status/{userId}": {
       "get": {
         "operationId": "FriendsController_checkFollowStatus",
+        "summary": "일촌 관계 상태 확인",
         "parameters": [
           {
             "name": "userId",
             "required": true,
             "in": "path",
+            "description": "상대 유저 ID",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
@@ -1510,6 +1583,11 @@
         },
         "tags": [
           "일촌"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -1522,6 +1600,7 @@
             "name": "targetId",
             "required": true,
             "in": "path",
+            "description": "삭제할 상대 유저 ID",
             "schema": {
               "type": "number"
             }
@@ -1529,7 +1608,16 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "ok": true
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3100,6 +3188,105 @@
       "Diary": {
         "type": "object",
         "properties": {}
+      },
+      "FriendRequestDto": {
+        "type": "object",
+        "properties": {
+          "receiverId": {
+            "type": "number",
+            "example": 2,
+            "description": "상대방 유저 ID"
+          },
+          "requester_name": {
+            "type": "string",
+            "example": "민수",
+            "description": "내가 상대를 부르는 이름"
+          },
+          "receiver_name": {
+            "type": "string",
+            "example": "철수",
+            "description": "상대가 나를 부르는 이름"
+          },
+          "message": {
+            "type": "string",
+            "example": "우리 친하게 지내요!",
+            "description": "신청 메시지"
+          }
+        },
+        "required": [
+          "receiverId",
+          "requester_name",
+          "receiver_name",
+          "message"
+        ]
+      },
+      "AcceptRejectDto": {
+        "type": "object",
+        "properties": {
+          "requesterId": {
+            "type": "number",
+            "example": 5,
+            "description": "요청자 유저 ID"
+          }
+        },
+        "required": [
+          "requesterId"
+        ]
+      },
+      "FriendListDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 12,
+            "description": "일촌 관계 ID"
+          },
+          "userId": {
+            "type": "number",
+            "example": 5,
+            "description": "상대방 유저 ID"
+          },
+          "friend": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "상대방 이름"
+          },
+          "profile_image": {
+            "type": "string",
+            "example": "/avatarImg/default.png",
+            "description": "상대방 프로필 이미지 URL"
+          },
+          "myNaming": {
+            "type": "string",
+            "example": "츄미",
+            "description": "내가 상대를 부르는 별명"
+          },
+          "theirNaming": {
+            "type": "string",
+            "example": "달링",
+            "description": "상대가 나를 부르는 별명"
+          },
+          "friend_gender": {
+            "type": "string",
+            "example": "female",
+            "description": "상대방 성별"
+          },
+          "since": {
+            "type": "string",
+            "example": "2025-05-25 14:30",
+            "description": "일촌이 된 날짜"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "friend",
+          "profile_image",
+          "myNaming",
+          "theirNaming",
+          "friend_gender",
+          "since"
+        ]
       },
       "VisitAuthDto": {
         "type": "object",
