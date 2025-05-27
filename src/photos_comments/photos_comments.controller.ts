@@ -15,12 +15,17 @@ import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { UserRole } from "src/users/users.entity";
 
-import { ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiTags,
+} from "@nestjs/swagger";
 import { CommentResponseDto } from "./dto/commentRes.dto";
 import { CreateCommentDto } from "./dto/createComment.dto";
 import { GetCommentsResponseDto } from "./dto/getCommentRes.dto";
 import { DeleteCommentResponseDto } from "./dto/deleteCommentRes.dto";
-
+@ApiTags("사진첩 댓글")
 @Controller("photos-comments")
 export class PhotosCommentsController {
   constructor(private readonly commentsService: PhotosCommentsService) {}

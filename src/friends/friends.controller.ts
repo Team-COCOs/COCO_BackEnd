@@ -23,6 +23,7 @@ import {
 import { Request } from "express";
 import { FriendListDto, FriendRequestDto } from "./dto/friends.dto";
 import { AcceptRejectDto } from "./dto/accept-reject.dto";
+import { FriendStatusDto } from "./dto/status.dto";
 @ApiTags("일촌")
 @Controller("friends")
 export class FriendsController {
@@ -117,6 +118,10 @@ export class FriendsController {
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
   @ApiOperation({ summary: "일촌 관계 상태 확인" })
+  @ApiOkResponse({
+    type: FriendStatusDto,
+    description: "일촌 상태 확인 응답",
+  })
   @ApiParam({ name: "userId", type: Number, description: "상대 유저 ID" })
   async checkFollowStatus(
     @Param("userId") userId: string,

@@ -1007,6 +1007,9 @@
             }
           }
         },
+        "tags": [
+          "사진첩 댓글"
+        ],
         "security": [
           {
             "bearer": []
@@ -1037,7 +1040,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "사진첩 댓글"
+        ]
       }
     },
     "/photos-comments/{commentId}": {
@@ -1066,6 +1072,9 @@
             }
           }
         },
+        "tags": [
+          "사진첩 댓글"
+        ],
         "security": [
           {
             "bearer": []
@@ -1578,7 +1587,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "일촌 상태 확인 응답",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FriendStatusDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3365,6 +3381,31 @@
           "theirNaming",
           "friend_gender",
           "since"
+        ]
+      },
+      "FriendStatusDto": {
+        "type": "object",
+        "properties": {
+          "areFriends": {
+            "type": "boolean",
+            "example": true,
+            "description": "서로 일촌 관계인지 여부"
+          },
+          "requested": {
+            "type": "boolean",
+            "example": true,
+            "description": "내가 상대에게 일촌 신청을 보냈는지 여부"
+          },
+          "received": {
+            "type": "boolean",
+            "example": false,
+            "description": "상대가 나에게 일촌 신청을 보냈는지 여부"
+          }
+        },
+        "required": [
+          "areFriends",
+          "requested",
+          "received"
         ]
       },
       "VisitAuthDto": {
