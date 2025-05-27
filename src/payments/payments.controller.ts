@@ -12,6 +12,7 @@ import { PaymentsService } from "./payments.service";
 import { CreatePaymentDto } from "./dto/payments.dto";
 import { Request } from "express";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { CreateResPaymentDto } from "./dto/saveRes.dto";
 @ApiTags("결제 내역")
 @Controller("pay")
 export class PaymentsController {
@@ -30,6 +31,11 @@ export class PaymentsController {
 
   @Post("save")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "결제 내역 저장" })
+  @ApiOkResponse({
+    type: CreateResPaymentDto,
+    description: "결제 정보 저장 후 응답",
+  })
   async createPayment(
     @Req() req: Request,
     @Body() { dotori, tossPaymentId }: CreatePaymentDto
@@ -40,6 +46,12 @@ export class PaymentsController {
   }
 
   @Get()
+  @ApiOperation({ summary: "내 결제 내역 조회" })
+  @ApiOkResponse({
+    type: CreateResPaymentDto,
+    isArray: true,
+    description: "유저 결제 내역 반환",
+  })
   async getMyPayments(@Req() req: Request) {
     const userId = (req.user as any).id;
     return this.paymentsService.getPaymentByUser(userId);

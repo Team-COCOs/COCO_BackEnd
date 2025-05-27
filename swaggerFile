@@ -2286,6 +2286,7 @@
     "/pay/save": {
       "post": {
         "operationId": "PaymentsController_createPayment",
+        "summary": "결제 내역 저장",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2298,8 +2299,15 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "결제 정보 저장 후 응답",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResPaymentDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2310,10 +2318,21 @@
     "/pay": {
       "get": {
         "operationId": "PaymentsController_getMyPayments",
+        "summary": "내 결제 내역 조회",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "유저 결제 내역 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CreateResPaymentDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3965,7 +3984,77 @@
       },
       "CreatePaymentDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "dotori": {
+            "type": "number",
+            "example": 10,
+            "description": "도토리 수량"
+          },
+          "tossPaymentId": {
+            "type": "string",
+            "example": "tpv_abc123xyz",
+            "description": "Toss 결제 ID (toss에서 받은 ID)"
+          }
+        },
+        "required": [
+          "dotori",
+          "tossPaymentId"
+        ]
+      },
+      "CreateResPaymentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 12,
+            "description": "결제 고유 ID"
+          },
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "description": "유저 ID"
+          },
+          "userName": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "유저 이름"
+          },
+          "dotori_amount": {
+            "type": "number",
+            "example": 10,
+            "description": "결제한 도토리 개수"
+          },
+          "amount": {
+            "type": "number",
+            "example": 1000,
+            "description": "결제 금액 (원)"
+          },
+          "order_id": {
+            "type": "string",
+            "example": "order-1716612345678-123",
+            "description": "주문 ID"
+          },
+          "toss_payment_id": {
+            "type": "string",
+            "example": "tpv_abc123xyz",
+            "description": "Toss 결제 ID"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2025-05-25T12:34:56.000Z",
+            "description": "결제 일시 (ISO 8601)"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "userName",
+          "dotori_amount",
+          "amount",
+          "order_id",
+          "toss_payment_id",
+          "created_at"
+        ]
       },
       "FriendCommentDto": {
         "type": "object",
