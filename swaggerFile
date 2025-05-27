@@ -2038,7 +2038,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StoreItemResDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2095,7 +2105,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "수정된 아이템 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreItemResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3705,6 +3722,57 @@
         "required": [
           "title",
           "isScripted"
+        ]
+      },
+      "StoreItemResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "좋은 날"
+          },
+          "price": {
+            "type": "number",
+            "example": 30
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "tapcolor",
+              "minihomepis",
+              "diary_background",
+              "miniroom",
+              "minimi",
+              "bgm"
+            ],
+            "example": "bgm"
+          },
+          "artist": {
+            "type": "string",
+            "example": "아이유"
+          },
+          "duration": {
+            "type": "number",
+            "example": 180
+          },
+          "full_url": {
+            "type": "string",
+            "example": "/uploads/goodDay.mp3"
+          },
+          "preview_url": {
+            "type": "string",
+            "example": "/uploads/goodDay_preview.mp3"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "price",
+          "category"
         ]
       },
       "CreateStoreItemDto": {

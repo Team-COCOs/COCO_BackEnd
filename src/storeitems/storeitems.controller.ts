@@ -22,6 +22,7 @@ import {
   ApiQuery,
   ApiParam,
   ApiConsumes,
+  ApiOkResponse,
 } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { AdminGuard } from "../auth/guards/admin.guard";
@@ -29,6 +30,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
 import * as dotenv from "dotenv";
+import { StoreItemResDto } from "./dto/res.dto";
 dotenv.config();
 @ApiTags("스토어 아이템")
 @Controller("storeitems")
@@ -43,6 +45,7 @@ export class StoreitemsController {
     enum: StoreItemType,
     description: "아이템 타입 필터 (예: minimi, tapcolor 등)",
   })
+  @ApiOkResponse({ type: StoreItemResDto, isArray: true })
   async findAll(@Query("category") category?: StoreItemType) {
     const items = await this.storeitemsService.findItems(category);
 
@@ -111,6 +114,7 @@ export class StoreitemsController {
   @UseGuards(AuthGuard("jwt"), AdminGuard)
   @ApiOperation({ summary: "스토어 아이템 수정 (관리자)" })
   @ApiParam({ name: "id", type: Number })
+  @ApiOkResponse({ type: StoreItemResDto, description: "수정된 아이템 반환" })
   update(
     @Param("id", ParseIntPipe) id: number,
     @Body() dto: UpdateStoreItemDto
