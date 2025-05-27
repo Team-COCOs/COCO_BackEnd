@@ -365,14 +365,24 @@ export class DiaryService {
       where: {
         user: { id: userId },
         created_at: MoreThan(todayStart),
+        folder: {
+          is_deleted: false,
+        },
       },
+      relations: ["folder"],
     });
   }
 
   // 총 게시글 개수
   async getTotalDiaryCount(userId: number): Promise<number> {
     return await this.diaryRepository.count({
-      where: { user: { id: userId } },
+      where: {
+        user: { id: userId },
+        folder: {
+          is_deleted: false,
+        },
+      },
+      relations: ["folder"],
     });
   }
 }

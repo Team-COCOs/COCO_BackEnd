@@ -419,14 +419,24 @@ export class PhotosService {
       where: {
         user: { id: userId },
         created_at: MoreThan(todayStart),
+        folder: {
+          is_deleted: false,
+        },
       },
+      relations: ["folder"],
     });
   }
 
   // 총 게시글 개수
   async getTotalPhotoCount(userId: number): Promise<number> {
     return await this.photoRepository.count({
-      where: { user: { id: userId } },
+      where: {
+        user: { id: userId },
+        folder: {
+          is_deleted: false,
+        },
+      },
+      relations: ["folder"],
     });
   }
 
@@ -434,9 +444,11 @@ export class PhotosService {
   async getRecentPhotoTitles(userId: number): Promise<RecentPhotoTitleDto[]> {
     const rows = await this.photoRepository
       .createQueryBuilder("photo")
+      .leftJoin("photo.folder", "folder")
       .select(["photo.title AS title", "photo.isScripted AS isScripted"])
       .where("photo.user_id = :userId", { userId })
       .andWhere("photo.visibility = :visibility", { visibility: "public" })
+      .andWhere("folder.is_deleted = false")
       .orderBy("photo.created_at", "DESC")
       .limit(2)
       .getRawMany();

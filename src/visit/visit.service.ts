@@ -20,7 +20,7 @@ export class VisitService {
     private readonly usersService: UsersService
   ) {}
 
-  // 방문자 수 (로그인/로그아웃)
+  // 방문자 수 (로그인)
   async visit(hostId: number, visitorId: number | null) {
     const host = await this.usersService.findUserById(hostId);
     if (!host) {
