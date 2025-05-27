@@ -271,3 +271,6 @@ npm run start:dev
 - 일촌 관리가 가능합니다.
 - 회원 탈퇴가 가능합니다. 
 - 탈퇴 시 유저 삭제가 아닌 탈퇴한 미니홈피로 검색 및 이동 되도록 설정하였습니다.
+
+
+👉 **프론트 레포지토리**: [COCO_FrontEnd](https://github.com/Team-COCOs/COCO_FrontEnd)
