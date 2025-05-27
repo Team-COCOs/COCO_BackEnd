@@ -35,7 +35,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MainProfileDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -180,7 +187,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "오늘 방문자 수 기준 Top 5 유저 목록",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PopularUserDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -248,14 +265,24 @@
             "name": "hostId",
             "required": true,
             "in": "path",
+            "description": "현재 미니홈피 ID (제외 대상)",
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "랜덤 유저 ID 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "userId": 11
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2747,6 +2774,230 @@
           "birthday"
         ]
       },
+      "NewPostDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 42,
+            "description": "포스트 ID"
+          },
+          "type": {
+            "type": "string",
+            "example": "diary",
+            "description": "포스트 타입 (diary | photo)",
+            "enum": [
+              "diary",
+              "photo"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "example": "오늘 하루 일기",
+            "description": "포스트 제목 또는 사진 이름"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2025-05-25 20:01",
+            "description": "작성일 (yyyy-MM-dd HH:mm)"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "title",
+          "created_at"
+        ]
+      },
+      "NewFriendDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 17,
+            "description": "일촌 요청 ID"
+          },
+          "requesterId": {
+            "type": "number",
+            "example": 3,
+            "description": "요청자 유저 ID"
+          },
+          "requester": {
+            "type": "string",
+            "example": "현빈",
+            "description": "요청자 실명"
+          },
+          "receiver": {
+            "type": "string",
+            "example": "수지",
+            "description": "수신자 실명"
+          },
+          "requester_name": {
+            "type": "string",
+            "example": "빈이",
+            "description": "요청자가 수신자를 부르는 이름"
+          },
+          "requester_gender": {
+            "type": "string",
+            "example": "male",
+            "description": "요청자 성별"
+          },
+          "receiver_name": {
+            "type": "string",
+            "example": "찌유",
+            "description": "수신자가 요청자를 부르는 이름"
+          },
+          "message": {
+            "type": "string",
+            "example": "같이 놀자~",
+            "description": "신청 메시지"
+          },
+          "profileImg": {
+            "type": "string",
+            "example": "/avatars/3.png",
+            "description": "요청자 프로필 이미지 URL"
+          },
+          "receivedAt": {
+            "type": "string",
+            "example": "2025-05-25",
+            "description": "일촌 요청 받은 날짜"
+          }
+        },
+        "required": [
+          "id",
+          "requesterId",
+          "requester",
+          "receiver",
+          "requester_name",
+          "requester_gender",
+          "receiver_name",
+          "message",
+          "profileImg",
+          "receivedAt"
+        ]
+      },
+      "FriendListDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 12,
+            "description": "일촌 관계 ID"
+          },
+          "userId": {
+            "type": "number",
+            "example": 5,
+            "description": "상대방 유저 ID"
+          },
+          "friend": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "상대방 이름"
+          },
+          "profile_image": {
+            "type": "string",
+            "example": "/avatarImg/default.png",
+            "description": "상대방 프로필 이미지 URL"
+          },
+          "myNaming": {
+            "type": "string",
+            "example": "츄미",
+            "description": "내가 상대를 부르는 별명"
+          },
+          "theirNaming": {
+            "type": "string",
+            "example": "달링",
+            "description": "상대가 나를 부르는 별명"
+          },
+          "friend_gender": {
+            "type": "string",
+            "example": "female",
+            "description": "상대방 성별"
+          },
+          "since": {
+            "type": "string",
+            "example": "2025-05-25 14:30",
+            "description": "일촌이 된 날짜"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "friend",
+          "profile_image",
+          "myNaming",
+          "theirNaming",
+          "friend_gender",
+          "since"
+        ]
+      },
+      "MainProfileDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "유저 이름"
+          },
+          "todayVisit": {
+            "type": "number",
+            "example": 7,
+            "description": "오늘 방문자 수"
+          },
+          "newPost": {
+            "description": "새 다이어리 또는 사진 포스트",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewPostDto"
+            }
+          },
+          "newPostCount": {
+            "type": "number",
+            "example": 3,
+            "description": "새 게시물 개수"
+          },
+          "friendRequest": {
+            "description": "받은 일촌 신청 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewFriendDto"
+            }
+          },
+          "friendRequestCount": {
+            "type": "number",
+            "example": 2,
+            "description": "일촌 신청 개수"
+          },
+          "profile_image": {
+            "type": "string",
+            "example": "/avatars/user1.png",
+            "description": "프로필 이미지"
+          },
+          "dotoris": {
+            "type": "number",
+            "example": 95,
+            "description": "보유 도토리 개수"
+          },
+          "friends": {
+            "description": "일촌 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FriendListDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "todayVisit",
+          "newPost",
+          "newPostCount",
+          "friendRequest",
+          "friendRequestCount",
+          "profile_image",
+          "dotoris",
+          "friends"
+        ]
+      },
       "ChangePasswordDto": {
         "type": "object",
         "properties": {
@@ -2827,6 +3078,43 @@
           "minimi_image",
           "gender",
           "birthday"
+        ]
+      },
+      "PopularUserDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number",
+            "example": 3,
+            "description": "유저 ID"
+          },
+          "name": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "유저 이름"
+          },
+          "profileImage": {
+            "type": "string",
+            "example": "/avatars/3.png",
+            "description": "유저의 프로필 이미지 경로"
+          },
+          "todayVisitCount": {
+            "type": "number",
+            "example": 28,
+            "description": "오늘 방문자 수"
+          },
+          "totalVisitCount": {
+            "type": "number",
+            "example": 300,
+            "description": "총 방문자 수"
+          }
+        },
+        "required": [
+          "userId",
+          "name",
+          "profileImage",
+          "todayVisitCount",
+          "totalVisitCount"
         ]
       },
       "UserRoleDto": {
@@ -3326,61 +3614,6 @@
         },
         "required": [
           "requesterId"
-        ]
-      },
-      "FriendListDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 12,
-            "description": "일촌 관계 ID"
-          },
-          "userId": {
-            "type": "number",
-            "example": 5,
-            "description": "상대방 유저 ID"
-          },
-          "friend": {
-            "type": "string",
-            "example": "홍길동",
-            "description": "상대방 이름"
-          },
-          "profile_image": {
-            "type": "string",
-            "example": "/avatarImg/default.png",
-            "description": "상대방 프로필 이미지 URL"
-          },
-          "myNaming": {
-            "type": "string",
-            "example": "츄미",
-            "description": "내가 상대를 부르는 별명"
-          },
-          "theirNaming": {
-            "type": "string",
-            "example": "달링",
-            "description": "상대가 나를 부르는 별명"
-          },
-          "friend_gender": {
-            "type": "string",
-            "example": "female",
-            "description": "상대방 성별"
-          },
-          "since": {
-            "type": "string",
-            "example": "2025-05-25 14:30",
-            "description": "일촌이 된 날짜"
-          }
-        },
-        "required": [
-          "id",
-          "userId",
-          "friend",
-          "profile_image",
-          "myNaming",
-          "theirNaming",
-          "friend_gender",
-          "since"
         ]
       },
       "FriendStatusDto": {

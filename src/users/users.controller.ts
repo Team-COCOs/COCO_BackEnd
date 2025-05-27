@@ -20,6 +20,7 @@ import {
   ApiQuery,
   ApiBearerAuth,
   ApiBody,
+  ApiParam,
 } from "@nestjs/swagger";
 import { SearchUserDto } from "./dto/searchUsers.dto";
 import { DiaryService } from "../diary/diary.service";
@@ -35,6 +36,8 @@ import { UseritemsService } from "src/useritems/useritems.service";
 import { ChangePasswordDto } from "./dto/updateInfo.dto";
 import { ChangePhoneDto } from "./dto/updateInfo.dto";
 import { UserRoleDto } from "./dto/userProfile.dto";
+import { MainProfileDto } from "./dto/main.dto";
+import { PopularUserDto } from "./dto/popular.dto";
 
 @ApiTags("유저")
 @Controller("users")
@@ -76,6 +79,7 @@ export class UsersController {
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
   @ApiOperation({ summary: "메인화면용 프로필 데이터" })
+  @ApiOkResponse({ type: MainProfileDto })
   async getMainProfile(@Req() req: Request) {
     const userId = req.user["id"];
     const user = await this.usersService.findUserById(userId);
@@ -151,6 +155,10 @@ export class UsersController {
 
   @Get("getPopularUser")
   @ApiOperation({ summary: "화제의 미니홈피 Top 5" })
+  @ApiOkResponse({
+    description: "오늘 방문자 수 기준 Top 5 유저 목록",
+    type: [PopularUserDto],
+  })
   async getHotMinihomepis() {
     return this.minihomepisService.getTop5HotMinihomepis();
   }
@@ -173,6 +181,17 @@ export class UsersController {
 
   @Get("wave/:hostId")
   @ApiOperation({ summary: "파도타기 (랜덤 유저 조회)" })
+  @ApiParam({
+    name: "hostId",
+    type: Number,
+    description: "현재 미니홈피 ID (제외 대상)",
+  })
+  @ApiOkResponse({
+    description: "랜덤 유저 ID 반환",
+    schema: {
+      example: { userId: 11 },
+    },
+  })
   async getRandomUser(@Param("hostId") hostId: string) {
     const parsed = Number(hostId);
     if (isNaN(parsed)) {
