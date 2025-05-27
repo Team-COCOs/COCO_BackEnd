@@ -155,6 +155,22 @@ npm run start:dev
 
 <br/>
 
+## 💬 Botpress 활용 챗봇 (COCO)
+
+- 2000년대 말투로 대답해주는 챗봇 기능입니다. 
+- Botpress를 활용해, 2000년대 말투와 감성을 살린 레트로 스타일 챗봇을 구현했습니다.
+
+ <div align="center">
+  <table>
+   <tr>
+    <th> 코코 채팅 </th>
+   </tr>
+   <tr>
+     <td> <img src="https://github.com/user-attachments/assets/af2c496a-140c-4b18-b2f5-0e34e724cc42" /> </td>
+   </tr>
+  </table>
+ </div>
+
 ## 🧩 모듈별 기능
 
 ### 🛠 Admin
@@ -162,17 +178,6 @@ npm run start:dev
 - 관리자 전용 페이지로, 토큰 기반 인증 후 AdminGuard를 통해 관리자 권한 여부를 확인합니다.
 - 상품 관리, 유저 관리, 가입자 통계, 결제 내역 확인 등의 기능을 제공합니다.
 - 모든 엔드포인트는 jwt 인증 + 관리자 권한을 필요로 합니다.
-
-<div align="center">
-  <table>
-   <tr>
-    <th> ADMIN </th>
-   </tr>
-   <tr>
-     <td> <img src="https://github.com/user-attachments/assets/c31dc6ca-c846-4724-af90-c51367e30dd8" /> </td>
-   </tr>
-  </table>
- </div>
 
 ### 💳 Payments
 
@@ -196,93 +201,42 @@ npm run start:dev
 - 구매 여부 확인 후 저장하도록 되어있으며, 기본 아이템의 경우 default- 접두어를 사용해 복원 처리를 하였습니다.
 
 ### 🧸 Minihomepi (홈)
+
 - 유저의 미니홈피 정보를 저장 및 조회하고, 홈 화면에서 보여줄 방문자 수, 프로필 정보, 최근 활동 정보 등을 관리하는 모듈입니다.
 - 일촌 확인, 파도타기 기능, 방명록 관리글, 최근 사진첩 제목, 오늘/전체 게시글 수 등을 조회할 수 있습니다.
 - 유저가 직접 홈 스킨(제목, 무드, 소개글, 이미지) 을 설정하고, UI를 커스터마이징할 수 있습니다.
 
 ### 🧸 미니미 & 미니룸
+
 - 유저의 미니룸 공간을 커스터마이징할 수 있는 모듈입니다.
 - 드래그 앤 드롭 방식으로 미니미와 말풍선을 배치할 수 있으며, 구매한 아이템으로 미니룸을 자유롭게 꾸밀 수 있습니다.
 
-<div align="center">
-  <table>
-   <tr>
-    <th> 미니룸 설정 </th>
-   </tr>
-   <tr>
-     <td> <img src="https://github.com/user-attachments/assets/84e6a217-58fe-49e0-9675-ba4210788f30" /> </td>
-   </tr>
-  </table>
- </div>
+### 🎨 visit
 
- ### 🎨 visit
 - 미니홈피 방문자 기록을 저장하고, 오늘 방문자 수 / 총 방문자 수를 계산하는 기능을 제공합니다.
 - 로그인한 유저만 계산되며, 유저가 타인의 미니홈피를 방문한 경우 하루에 한 번만 기록됩니다.
 
-<div align="center">
-  <table>
-   <tr>
-    <th> 프로필 설정 </th>
-   </tr>
-   <tr>
-     <td> <img src="https://github.com/user-attachments/assets/4d011e0b-5a06-4ebc-b2f0-66658e6a7507" /> </td>
-   </tr>
-  </table>
- </div>
-
 ### 📅 Diary/Diary_comments
+
 - 사용자가 작성한 **일기(다이어리)**를 저장, 조회, 수정, 삭제할 수 있는 기능을 제공합니다.
 - 일기는 기분, 날씨, 공개 범위(PUBLIC, FRIENDS_ONLY, PRIVATE), 폴더명과 함께 저장되며, 일자별/내용별/폴더별로 조회할 수 있습니다.
 - 유저는 일기 폴더를 트리 구조로 생성/수정/삭제할 수 있으며, Soft Delete 방식으로 관리됩니다.
 - 댓글 및 대댓글을 작성/삭제할 수 있으며, 게시글 작성자 또는 댓글 작성자만 삭제가 가능합니다.
 - 비로그인 유저/일촌/본인에 따라 열람 가능한 공개 범위가 다르게 적용됩니다.
 
-<div align="center">
-  <table>
-   <tr>
-    <th> 글 작성 및 수정, 삭제 </th>
-   </tr>
-   <tr>
-     <td> <img src="https://github.com/user-attachments/assets/f25a3c91-0b06-4f99-95af-0328826ac054" /> </td>
-   </tr>
-  </table>
- </div>
-
 ### 🖼️ Photos/Photos_comments
+
 - 사용자가 사진을 포함한 게시글을 작성하고, 트리 구조의 폴더로 분류 및 관리할 수 있도록 지원하는 모듈입니다.
 - 게시글에 대한 공개 범위 설정(전체공개 / 일촌공개 / 비공개)이 가능하며, 스크랩 기능을 통해 다른 유저의 게시글을 복사 저장할 수 있습니다.
 - 각 게시글에는 댓글 및 대댓글 작성/삭제 기능이 제공되며, 게시글 소유자 또는 댓글 작성자만 삭제할 수 있습니다.
 
-<div align="center">
-  <table>
-   <tr>
-    <th> 글 작성 </th>
-    <th> 스크랩 </th>
-   </tr>
-   <tr>
-     <td> <img src="https://github.com/user-attachments/assets/afc09510-d268-4982-a368-dbf09c1f4e15" /> </td>
-     <td><img src="https://github.com/user-attachments/assets/d1921fe0-15b0-4b49-b43b-bbc4553eb474" /></td>
-   </tr>
-  </table>
- </div>
-
 ### 📝 Guestbooks / Guestbooks_Comments
+
 - 미니홈피 방문자가 메시지를 남길 수 있는 방명록 기능을 제공합니다.
 - 각 방명록은 작성 시 공개/비공개 설정(VisibilityStatus) 이 가능하며, 미니홈피 주인 또는 작성자가 삭제할 수 있습니다.
 - 미니홈피 주인은 자신의 방명록 게시물에 대한 공개 상태를 토글할 수 있습니다.
 - 방명록에는 대댓글(1-depth) 기능이 포함되어 있어 추가적인 소통이 가능합니다.
 - 각 유저에 대해 오늘 등록된 방명록 수, 총 방명록 수를 조회할 수 있는 API도 제공됩니다.
-
-<div align="center">
-  <table>
-   <tr>
-    <th> 방명록 </th>
-   </tr>
-   <tr>
-     <td> <img src="https://github.com/user-attachments/assets/bcabb381-8b0a-4ecd-9195-e7c88d3bd573" /> </td>
-   </tr>
-  </table>
- </div>
 
 ### 👥 Friends
 
@@ -301,22 +255,7 @@ npm run start:dev
 - 각 일촌평에는 요청자/수락자 이름 커스터마이징이 반영되어, 친밀한 호칭이 함께 저장/표시됩니다.
 - 최신 순으로 일촌평을 불러오되, 작성자별 1개만 유지하도록 구성되어 있습니다.
 
-### 💬 COCO (챗봇)
-- 2000년대 말투로 대답해주는 챗봇 기능입니다. 
-- Botpress를 활용해, 2000년대 말투와 감성을 살린 레트로 스타일 챗봇을 구현했습니다.
-
- <div align="center">
-  <table>
-   <tr>
-    <th> 코코 채팅 </th>
-   </tr>
-   <tr>
-     <td> <img src="https://github.com/user-attachments/assets/af2c496a-140c-4b18-b2f5-0e34e724cc42" /> </td>
-   </tr>
-  </table>
- </div>
-
-### Users
+### 👤 Users
 
 - 유저 정보를 관리하는 핵심 모듈로, 회원가입/탈퇴, 비밀번호/전화번호 수정, 프로필 조회, 유저 검색 등의 기능을 제공합니다.
 - 회원가입 시 기본적으로 미니홈피, 미니룸, 유저 아이템, 폴더 등이 자동 생성됩니다.
@@ -326,6 +265,7 @@ npm run start:dev
 - 파도타기 기능을 통해 랜덤한 다른 유저를 탐색할 수 있습니다.
 
 ### ⚙️ 관리 페이지
+
 - 미니홈피 효과 변경이 가능합니다. (미니홈피 배경, 탭 색, 탭 언어)
 - 유저 정보 수정이 가능합니다. (전화번호, 비밀번호)
 - 일촌 관리가 가능합니다.
