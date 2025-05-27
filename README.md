@@ -32,14 +32,18 @@
 >
 > 📌 [⑤ ERD](#-erd)
 
-> 📌 [⑥  주요 기능](#-주요-기능)  
+> 📌 [⑥  프로토타입](#-프로토타입)
+
+> 📌 [⑦  화면 구성](#-화면-구성)
+
+> 📌 [⑧  모듈별 기능](#-모듈별-기능)  
 
 <br/>
 
 ## 🔅 프로젝트 실행
 ```
 npm install
-npm run start:dev
+npm run dev
 ```
 
 <br/>
@@ -152,6 +156,80 @@ npm run start:dev
  ![Image](https://github.com/user-attachments/assets/8080ba52-5a61-4e67-9eac-4993ea6f14f5)
  
 </div>
+
+<br/>
+
+## 📝 프로토타입
+
+<div align="center">
+
+ ![Image](https://github.com/user-attachments/assets/5e4ef7da-6c01-46c6-97e8-0b6507639d25)
+ 
+</div>
+
+<br/>
+
+## 🖼️ 화면 구성
+
+<div align="center">
+ <table>
+  <tr>
+   <th> MAIN(LOGIN X) </th>
+   <th> MAIN(LOGIN O) </th>
+  </tr>
+  <tr>
+    <td> <img src="https://github.com/user-attachments/assets/0f5f4d2a-d5b4-4f04-a84f-574966040506" /> </td>
+    <td><img src="https://github.com/user-attachments/assets/d8772cbf-2807-4013-b1c2-394e80d900ce" /></td>
+  </tr>
+ </table>
+
+ <table>
+   <tr>
+    <th> JOIN </th>
+    <th> FIND </th>
+   </tr>
+   <tr>
+    <td><img src="https://github.com/user-attachments/assets/2e8c02fd-464d-4f5b-a352-9ff9d6571428"/></td>
+    <td><img src="https://github.com/user-attachments/assets/c4c4afb8-968e-4b6d-aaa7-a7103c475ac2"/></td>
+   </tr>
+  </table>
+
+   <table>
+   <tr>
+    <th> SEARCH </th>
+   </tr>
+   <tr>
+    <td><img src="https://github.com/user-attachments/assets/bd3e0e73-b0ce-417a-b764-f642f4696988"/></td>
+   </tr>
+  </table>
+ </div>
+
+ <div align="center">
+ <table>
+  <tr>
+   <th> MINIHOMPY(LOGIN X) </th>
+   <th> MINIHOMPY(LOGIN O) </th>
+  </tr>
+  <tr>
+    <td> <img src="https://github.com/user-attachments/assets/afac238e-2599-4a75-aa9f-d2f76f6b1391" /> </td>
+    <td><img src="https://github.com/user-attachments/assets/5ca2e4cf-8755-4f1e-819a-c51c1a78beb4" /></td>
+  </tr>
+ </table>
+
+ <table>
+   <tr>
+    <th> ADMIN </th>
+    <th> WITHDRAWN HOMPY </th>
+   </tr>
+   <tr>
+    <td><img src="https://github.com/user-attachments/assets/2d75f56e-5cb2-40d8-963a-244b2c031351"/></td>
+    <td><img src="https://github.com/user-attachments/assets/2adf1e16-b7b3-443d-ac83-ad79906e877e"/></td>
+   </tr>
+ </table>
+  
+ </div>
+
+![image](https://github.com/user-attachments/assets/78a186a0-e3ba-4268-92cd-1128a480f0b5)
 
 <br/>
 
