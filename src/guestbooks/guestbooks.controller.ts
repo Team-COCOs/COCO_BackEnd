@@ -14,7 +14,20 @@ import { GuestbooksService } from "./guestbooks.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { VisibilityStatus } from "./guestbooks.entity";
-import { ApiTags } from "@nestjs/swagger";
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from "@nestjs/swagger";
+import { CreateGuestbookDto } from "./dto/create.dto";
+import { GuestbookResponseDto } from "./dto/guestbookRes.dto";
+import {
+  GuestbookDeleteMessageDto,
+  GuestbookToggleMessageDto,
+} from "./dto/message.dto";
 
 @ApiTags("방명록")
 @Controller("guestbooks")
@@ -24,13 +37,18 @@ export class GuestbooksController {
   // 등록
   @Post()
   @UseGuards(AuthGuard("jwt"))
+  @ApiBody({ type: CreateGuestbookDto })
+  @ApiCreatedResponse({
+    type: GuestbookResponseDto,
+    description: "방명록 등록 성공",
+  })
+  @ApiOperation({ summary: "방명록 등록" })
   async createFriendComment(
-    @Body("miniUserId") miniUserId: number,
-    @Body("content") content: string,
-    @Body("status") status: VisibilityStatus,
+    @Body() createGuestbookDto: CreateGuestbookDto,
     @Req() req: Request
   ) {
     const authorId = req.user["id"];
+    const { miniUserId, content, status } = createGuestbookDto;
 
     const result = await this.guestbooksService.create(
       authorId,
@@ -47,6 +65,13 @@ export class GuestbooksController {
 
   // 조회
   @Get(":hostId")
+  @ApiOperation({ summary: "방명록 조회" })
+  @ApiParam({ name: "hostId", example: 3, description: "미니홈피 주인의 ID" })
+  @ApiOkResponse({
+    type: GuestbookResponseDto,
+    isArray: true,
+    description: "방명록 조회 성공",
+  })
   async getComments(
     @Param("hostId") hostId: number,
     @Query("viewer") viewId?: number
@@ -60,7 +85,13 @@ export class GuestbooksController {
 
   // 비밀로 하기
   @Patch("status/:id")
+  @ApiOperation({ summary: "방명록 공개/비공개 토글" })
   @UseGuards(AuthGuard("jwt"))
+  @ApiParam({ name: "id", example: 7, description: "방명록 ID" })
+  @ApiOkResponse({
+    type: GuestbookToggleMessageDto,
+    description: "공개/비공개 전환 성공",
+  })
   async toggleVisibility(@Param("id") id: number, @Req() req: Request) {
     const userId = req.user["id"];
     const result = await this.guestbooksService.toggleVisibility(userId, id);
@@ -72,7 +103,17 @@ export class GuestbooksController {
 
   // 삭제
   @Delete(":guestbookId")
+  @ApiOperation({ summary: "방명록 삭제" })
   @UseGuards(AuthGuard("jwt"))
+  @ApiParam({
+    name: "guestbookId",
+    example: 12,
+    description: "삭제할 방명록 ID",
+  })
+  @ApiOkResponse({
+    type: GuestbookDeleteMessageDto,
+    description: "방명록 삭제 성공",
+  })
   async deleteComment(
     @Param("guestbookId") guestbookId: number,
     @Req() req: Request

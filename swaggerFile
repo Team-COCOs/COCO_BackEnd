@@ -2085,10 +2085,28 @@
     "/guestbooks": {
       "post": {
         "operationId": "GuestbooksController_createFriendComment",
+        "summary": "방명록 등록",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGuestbookDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "방명록 등록 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestbookResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2099,11 +2117,14 @@
     "/guestbooks/{hostId}": {
       "get": {
         "operationId": "GuestbooksController_getComments",
+        "summary": "방명록 조회",
         "parameters": [
           {
             "name": "hostId",
             "required": true,
             "in": "path",
+            "example": 3,
+            "description": "미니홈피 주인의 ID",
             "schema": {
               "type": "number"
             }
@@ -2119,7 +2140,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "방명록 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GuestbookResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2130,11 +2161,14 @@
     "/guestbooks/status/{id}": {
       "patch": {
         "operationId": "GuestbooksController_toggleVisibility",
+        "summary": "방명록 공개/비공개 토글",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
+            "example": 7,
+            "description": "방명록 ID",
             "schema": {
               "type": "number"
             }
@@ -2142,7 +2176,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "공개/비공개 전환 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestbookToggleMessageDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2153,11 +2194,14 @@
     "/guestbooks/{guestbookId}": {
       "delete": {
         "operationId": "GuestbooksController_deleteComment",
+        "summary": "방명록 삭제",
         "parameters": [
           {
             "name": "guestbookId",
             "required": true,
             "in": "path",
+            "example": 12,
+            "description": "삭제할 방명록 ID",
             "schema": {
               "type": "number"
             }
@@ -2165,7 +2209,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "방명록 삭제 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestbookDeleteMessageDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2334,14 +2385,33 @@
             "name": "guestbookId",
             "required": true,
             "in": "path",
+            "example": 3,
+            "description": "방명록 ID",
             "schema": {
               "type": "number"
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGuestbookCommentDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "댓글 작성 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestbookCommentResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2358,6 +2428,8 @@
             "name": "commentId",
             "required": true,
             "in": "path",
+            "example": 7,
+            "description": "댓글 ID",
             "schema": {
               "type": "number"
             }
@@ -2365,7 +2437,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "댓글 삭제 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestbookCommentDeleteResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3427,6 +3506,189 @@
           }
         }
       },
+      "CreateGuestbookDto": {
+        "type": "object",
+        "properties": {
+          "miniUserId": {
+            "type": "number",
+            "example": 3,
+            "description": "미니홈피 주인의 ID"
+          },
+          "content": {
+            "type": "string",
+            "example": "안녕하세요~ 잘 지내시죠?",
+            "description": "방명록 내용"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "private",
+              "public"
+            ],
+            "example": "public",
+            "description": "공개 여부 (public 또는 private)"
+          }
+        },
+        "required": [
+          "miniUserId",
+          "content",
+          "status"
+        ]
+      },
+      "GuestbookCommentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "댓글 ID"
+          },
+          "content": {
+            "type": "string",
+            "example": "좋은 하루 되세요!",
+            "description": "댓글 내용"
+          },
+          "authorId": {
+            "type": "number",
+            "example": 5,
+            "description": "댓글 작성자 ID"
+          },
+          "authorName": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "댓글 작성자 이름"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2025-05-25 15:30",
+            "description": "댓글 작성 시간"
+          }
+        },
+        "required": [
+          "id",
+          "content",
+          "authorId",
+          "authorName",
+          "created_at"
+        ]
+      },
+      "GuestbookResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "방명록 ID"
+          },
+          "authorId": {
+            "type": "number",
+            "example": 2,
+            "description": "작성자 ID"
+          },
+          "hostId": {
+            "type": "number",
+            "example": 3,
+            "description": "호스트 ID (미니홈피 주인)"
+          },
+          "authorRealName": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "작성자 이름"
+          },
+          "authorProfile": {
+            "type": "string",
+            "example": "/avatars/1.png",
+            "description": "작성자 프로필 이미지 URL"
+          },
+          "authorGender": {
+            "type": "string",
+            "example": "female",
+            "description": "작성자 성별"
+          },
+          "hostRealName": {
+            "type": "string",
+            "example": "주인공",
+            "description": "호스트 이름"
+          },
+          "content": {
+            "type": "string",
+            "example": "잘 지내시죠?",
+            "description": "방명록 내용"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "private",
+              "public"
+            ],
+            "example": "public",
+            "description": "공개 여부"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2025-05-25 14:23",
+            "description": "작성 시간"
+          },
+          "isMine": {
+            "type": "boolean",
+            "example": true,
+            "description": "본인이 작성한 글인지 여부"
+          },
+          "comments": {
+            "description": "방명록에 달린 댓글 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GuestbookCommentDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "authorId",
+          "hostId",
+          "authorRealName",
+          "authorProfile",
+          "authorGender",
+          "hostRealName",
+          "content",
+          "status",
+          "created_at",
+          "isMine",
+          "comments"
+        ]
+      },
+      "GuestbookToggleMessageDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "방명록이 공개로 설정되었습니다."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "private",
+              "public"
+            ]
+          }
+        },
+        "required": [
+          "message",
+          "status"
+        ]
+      },
+      "GuestbookDeleteMessageDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "방명록이 삭제되었습니다."
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
       "CreatePaymentDto": {
         "type": "object",
         "properties": {}
@@ -3509,6 +3771,70 @@
           "hostName",
           "content",
           "created_at"
+        ]
+      },
+      "CreateGuestbookCommentDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "좋은 하루 되세요!",
+            "description": "댓글 내용"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "GuestbookCommentResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "댓글 ID"
+          },
+          "content": {
+            "type": "string",
+            "example": "좋은 하루 되세요!",
+            "description": "댓글 내용"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-05-27T10:00:00.000Z",
+            "description": "작성 시간"
+          },
+          "guestbookId": {
+            "type": "number",
+            "example": 3,
+            "description": "연결된 방명록 ID"
+          },
+          "authorName": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "작성자 이름"
+          }
+        },
+        "required": [
+          "id",
+          "content",
+          "created_at",
+          "guestbookId",
+          "authorName"
+        ]
+      },
+      "GuestbookCommentDeleteResponseDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true,
+            "description": "삭제 성공 여부"
+          }
+        },
+        "required": [
+          "ok"
         ]
       },
       "AdminUserDto": {
