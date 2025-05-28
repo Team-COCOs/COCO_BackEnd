@@ -41,6 +41,7 @@ import { Guestbook } from "./guestbooks/guestbooks.entity";
 import { GuestbooksCommentsModule } from "./guestbooks_comments/guestbooks_comments.module";
 import { GuestbookComment } from "./guestbooks_comments/guestbooks.entity";
 import { AdminModule } from './admin/admin.module';
+import { HealthModule } from './health/health.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
@@ -98,6 +99,7 @@ import { AdminModule } from './admin/admin.module';
     GuestbooksModule,
     GuestbooksCommentsModule,
     AdminModule,
+    HealthModule,
   ],
 })
 export class AppModule {}
