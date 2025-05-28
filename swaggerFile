@@ -770,6 +770,31 @@
         ]
       }
     },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_ppLogin",
+        "summary": "포폴용 로그인",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/photos/saveTree": {
       "patch": {
         "operationId": "PhotosController_saveFolderTree",
