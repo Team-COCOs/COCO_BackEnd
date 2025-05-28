@@ -33,12 +33,6 @@ export class MainProfileDto {
   @ApiProperty({ example: 7, description: "오늘 방문자 수" })
   todayVisit: number;
 
-  @ApiProperty({
-    type: [NewPostDto],
-    description: "새 다이어리 또는 사진 포스트",
-  })
-  newPost: NewPostDto[];
-
   @ApiProperty({ example: 3, description: "새 게시물 개수" })
   newPostCount: number;
 

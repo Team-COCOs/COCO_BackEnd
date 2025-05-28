@@ -104,7 +104,6 @@ export class UsersController {
     return {
       name: user.name,
       todayVisit,
-      newPost,
       newPostCount: newPost.length,
       friendRequest,
       friendRequestCount: friendRequest.length,

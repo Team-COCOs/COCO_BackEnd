@@ -575,8 +575,15 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "구매 성공 시: 구매 정보 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3025,7 +3032,6 @@
         "required": [
           "name",
           "todayVisit",
-          "newPost",
           "newPostCount",
           "friendRequest",
           "friendRequestCount",
