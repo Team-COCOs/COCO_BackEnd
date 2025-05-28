@@ -131,6 +131,15 @@ export class UsersService {
     return this.userRepository.findOne({ where: { email } });
   }
 
+  // 로그인용
+  async findUserByEmailForLogin(email: string): Promise<User | null> {
+    return this.userRepository
+      .createQueryBuilder("user")
+      .addSelect("user.password")
+      .where("user.email = :email", { email })
+      .getOne();
+  }
+
   // 아이디로 유저 찾기
   findUserById(id: number): Promise<User | null> {
     return this.userRepository.findOne({ where: { id } });
