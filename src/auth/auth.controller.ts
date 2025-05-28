@@ -10,6 +10,7 @@ import { FindIdRequestDto } from "./dto/findId.dto";
 import { ResetPasswordDto } from "./dto/password.dto";
 import { CheckDuplicateRequestDto } from "./dto/check-duplicate.dto";
 import * as jwt from "jsonwebtoken";
+import * as bcrypt from "bcrypt";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -112,5 +113,29 @@ export class AuthController {
     } catch (err) {
       return { ok: false, error: "토큰 검증 실패" };
     }
+  }
+
+  @Post("login")
+  @ApiOperation({ summary: "포폴용 로그인" })
+  @ApiBody({ type: LoginRequestDto })
+  async ppLogin(@Body() body: LoginRequestDto) {
+    const user = await this.usersService.findUserByEmail(body.email);
+
+    if (!user) {
+      return { ok: false, error: "이메일 또는 비밀번호가 일치하지 않습니다." };
+    }
+
+    const valid = await bcrypt.compare(body.password, user.password);
+
+    if (!valid) {
+      return { ok: false, error: "이메일 또는 비밀번호가 일치하지 않습니다." };
+    }
+
+    const tokens = await this.authService.issueTokens(user);
+    return {
+      ok: true,
+      message: "로그인 성공",
+      ...tokens,
+    };
   }
 }

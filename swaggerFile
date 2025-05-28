@@ -2817,41 +2817,6 @@
           "birthday"
         ]
       },
-      "NewPostDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 42,
-            "description": "포스트 ID"
-          },
-          "type": {
-            "type": "string",
-            "example": "diary",
-            "description": "포스트 타입 (diary | photo)",
-            "enum": [
-              "diary",
-              "photo"
-            ]
-          },
-          "title": {
-            "type": "string",
-            "example": "오늘 하루 일기",
-            "description": "포스트 제목 또는 사진 이름"
-          },
-          "created_at": {
-            "type": "string",
-            "example": "2025-05-25 20:01",
-            "description": "작성일 (yyyy-MM-dd HH:mm)"
-          }
-        },
-        "required": [
-          "id",
-          "type",
-          "title",
-          "created_at"
-        ]
-      },
       "NewFriendDto": {
         "type": "object",
         "properties": {
@@ -2986,13 +2951,6 @@
             "type": "number",
             "example": 7,
             "description": "오늘 방문자 수"
-          },
-          "newPost": {
-            "description": "새 다이어리 또는 사진 포스트",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/NewPostDto"
-            }
           },
           "newPostCount": {
             "type": "number",
