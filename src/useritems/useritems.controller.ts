@@ -15,6 +15,12 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { LanguageType } from "./useritems.entity";
+import { IdResDto } from "./dto/res.dto";
+import { MinimiResDto } from "./dto/minimiRes.dto";
+import { BgmResDto } from "./dto/bgmRes.dto";
+import { LanguageResDto } from "./dto/languageRes.dto";
+import { TabsResDto } from "./dto/tabRes.dto";
+import { UserItemDetailResDto } from "./dto/userItemRes.dto";
 @ApiTags("유저 착용템")
 @Controller("useritems")
 export class UseritemsController {
@@ -24,7 +30,11 @@ export class UseritemsController {
   @Patch("set-minimi")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "미니미 아이템 저장" })
-  @ApiResponse({ status: 200, description: "미니미 아이템이 저장되었습니다." })
+  @ApiResponse({
+    status: 200,
+    type: IdResDto,
+    description: "미니미 아이템이 저장되었습니다.",
+  })
   async setMinimi(
     @Body() body: { purchaseId: number | "default-minimi" },
     @Req() req: Request
@@ -38,7 +48,11 @@ export class UseritemsController {
   // 대표 미니미 조회
   @Get("minimi/profile-image/:userId")
   @ApiOperation({ summary: "대표 미니미 이미지 조회" })
-  @ApiResponse({ status: 200, description: "대표 미니미 이미지 경로 반환" })
+  @ApiResponse({
+    status: 200,
+    type: MinimiResDto,
+    description: "대표 미니미 이미지 경로 반환",
+  })
   async getMinimiProfileImage(
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string }> {
@@ -61,7 +75,11 @@ export class UseritemsController {
   @Patch("set-bgm")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "bgm 아이템 저장" })
-  @ApiResponse({ status: 200, description: "bgm 아이템이 저장되었습니다." })
+  @ApiResponse({
+    status: 200,
+    type: IdResDto,
+    description: "bgm 아이템이 저장되었습니다.",
+  })
   async setBGM(@Body() body: { bgmId: number }, @Req() req: Request) {
     // store_item_id
     const { bgmId } = body;
@@ -73,10 +91,12 @@ export class UseritemsController {
   // 대표 bgm 조회
   @Get("bgm/:userId")
   @ApiOperation({ summary: "대표 미니미 이미지 조회" })
-  @ApiResponse({ status: 200, description: "대표 미니미 이미지 경로 반환" })
-  async getMainBGM(
-    @Param("userId") userId: number
-  ): Promise<{ id: number; file: string }[]> {
+  @ApiResponse({
+    status: 200,
+    type: [BgmResDto],
+    description: "대표 미니미 이미지 경로 반환",
+  })
+  async getMainBGM(@Param("userId") userId: number): Promise<BgmResDto[]> {
     const bgms = await this.useritemsService.getUserBGM(userId);
 
     if (!bgms || bgms.length === 0) {
@@ -89,6 +109,12 @@ export class UseritemsController {
   // 언어 저장
   @Patch("set-language")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "언어 설정" })
+  @ApiResponse({
+    status: 200,
+    type: String,
+    description: "언어가 저장되었습니다.",
+  })
   async setLanguage(
     @Body("language") language: LanguageType,
     @Req() req: Request
@@ -99,6 +125,12 @@ export class UseritemsController {
 
   // 언어 조회
   @Get("language/:userId")
+  @ApiOperation({ summary: "언어 조회" })
+  @ApiResponse({
+    status: 200,
+    type: LanguageResDto,
+    description: "사용자가 설정한 언어 반환",
+  })
   async getLanguage(@Param("userId", ParseIntPipe) userId: number) {
     return this.useritemsService.getUserLanguage(userId);
   }
@@ -106,6 +138,12 @@ export class UseritemsController {
   // 탭 저장
   @Patch("set-tabs")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "탭 설정" })
+  @ApiResponse({
+    status: 200,
+    type: TabsResDto,
+    description: "탭이 저장되었습니다.",
+  })
   async setTabs(@Body("tabs") tabs: string[], @Req() req: Request) {
     const userId = (req.user as any).id;
 
@@ -114,6 +152,12 @@ export class UseritemsController {
 
   // 탭 조회
   @Get("tabs/:userId")
+  @ApiOperation({ summary: "탭 조회" })
+  @ApiResponse({
+    status: 200,
+    type: TabsResDto,
+    description: "사용자가 설정한 탭 반환",
+  })
   async getTabs(@Param("userId", ParseIntPipe) userId: number) {
     return this.useritemsService.getTabs(userId);
   }
@@ -124,6 +168,7 @@ export class UseritemsController {
   @ApiOperation({ summary: "미니홈피 스킨 저장" })
   @ApiResponse({
     status: 200,
+    type: IdResDto,
     description: "미니홈피 아이템이 저장되었습니다.",
   })
   async setMinihomepis(
@@ -137,7 +182,12 @@ export class UseritemsController {
 
   // 미니홈피 배경 조회
   @Get("minihomepis/:userId")
-  @ApiOperation({ summary: "대표 미니미 이미지 조회" })
+  @ApiOperation({ summary: "미니홈피 스킨 조회" })
+  @ApiResponse({
+    status: 200,
+    type: UserItemDetailResDto,
+    description: "사용자가 설정한 미니홈피 배경 반환",
+  })
   async getMinihomepis(
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string; category: string; name: string }> {
@@ -166,6 +216,7 @@ export class UseritemsController {
   @ApiOperation({ summary: "다이어리 배경 저장" })
   @ApiResponse({
     status: 200,
+    type: IdResDto,
     description: "다이어리 배경 아이템이 저장되었습니다.",
   })
   async setBK(
@@ -181,6 +232,11 @@ export class UseritemsController {
   // 다이어리 배경 조회
   @Get("bk/:userId")
   @ApiOperation({ summary: "다이어리 배경 조회" })
+  @ApiResponse({
+    status: 200,
+    type: UserItemDetailResDto,
+    description: "사용자가 설정한 다이어리 배경 반환",
+  })
   async getBK(
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string; category: string; name: string }> {
@@ -209,6 +265,7 @@ export class UseritemsController {
   @ApiOperation({ summary: "탭 색깔 저장" })
   @ApiResponse({
     status: 200,
+    type: IdResDto,
     description: "탭 컬러 아이템이 저장되었습니다.",
   })
   async settapcolor(
@@ -224,6 +281,7 @@ export class UseritemsController {
   // 탭 컬러 조회
   @Get("tapcolor/:userId")
   @ApiOperation({ summary: "탭 컬러 조회" })
+  @ApiResponse({ status: 200, type: UserItemDetailResDto })
   async getTapColor(
     @Param("userId") userId: number
   ): Promise<{ id: number; file: string; category: string; name: string }> {

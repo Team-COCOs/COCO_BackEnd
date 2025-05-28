@@ -297,7 +297,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "미니미 아이템이 저장되었습니다."
+            "description": "미니미 아이템이 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -321,7 +328,14 @@
         ],
         "responses": {
           "200": {
-            "description": "대표 미니미 이미지 경로 반환"
+            "description": "대표 미니미 이미지 경로 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MinimiResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -336,7 +350,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "bgm 아이템이 저장되었습니다."
+            "description": "bgm 아이템이 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -360,7 +381,17 @@
         ],
         "responses": {
           "200": {
-            "description": "대표 미니미 이미지 경로 반환"
+            "description": "대표 미니미 이미지 경로 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BgmResDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -371,10 +402,18 @@
     "/useritems/set-language": {
       "patch": {
         "operationId": "UseritemsController_setLanguage",
+        "summary": "언어 설정",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "언어가 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -385,6 +424,7 @@
     "/useritems/language/{userId}": {
       "get": {
         "operationId": "UseritemsController_getLanguage",
+        "summary": "언어 조회",
         "parameters": [
           {
             "name": "userId",
@@ -397,7 +437,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "사용자가 설정한 언어 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -408,10 +455,18 @@
     "/useritems/set-tabs": {
       "patch": {
         "operationId": "UseritemsController_setTabs",
+        "summary": "탭 설정",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "탭이 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TabsResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -422,6 +477,7 @@
     "/useritems/tabs/{userId}": {
       "get": {
         "operationId": "UseritemsController_getTabs",
+        "summary": "탭 조회",
         "parameters": [
           {
             "name": "userId",
@@ -434,7 +490,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "사용자가 설정한 탭 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TabsResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -449,7 +512,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "미니홈피 아이템이 저장되었습니다."
+            "description": "미니홈피 아이템이 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -460,7 +530,7 @@
     "/useritems/minihomepis/{userId}": {
       "get": {
         "operationId": "UseritemsController_getMinihomepis",
-        "summary": "대표 미니미 이미지 조회",
+        "summary": "미니홈피 스킨 조회",
         "parameters": [
           {
             "name": "userId",
@@ -473,7 +543,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "사용자가 설정한 미니홈피 배경 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserItemDetailResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -488,7 +565,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "다이어리 배경 아이템이 저장되었습니다."
+            "description": "다이어리 배경 아이템이 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -512,7 +596,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "사용자가 설정한 다이어리 배경 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserItemDetailResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -527,7 +618,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "탭 컬러 아이템이 저장되었습니다."
+            "description": "탭 컬러 아이템이 저장되었습니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -551,7 +649,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserItemDetailResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2762,6 +2867,17 @@
           "관리자"
         ]
       }
+    },
+    "/health": {
+      "get": {
+        "operationId": "HealthController_getStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {
@@ -3159,6 +3275,132 @@
         "required": [
           "id",
           "role"
+        ]
+      },
+      "IdResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "MinimiResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "file": {
+            "type": "string",
+            "example": "/uploads/minimi.png",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "file"
+        ]
+      },
+      "BgmResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "file": {
+            "type": "string",
+            "example": "/uploads/music.mp3"
+          },
+          "name": {
+            "type": "string",
+            "example": "Love Song"
+          },
+          "artist": {
+            "type": "string",
+            "example": "SG워너비"
+          }
+        },
+        "required": [
+          "id",
+          "file",
+          "name",
+          "artist"
+        ]
+      },
+      "LanguageResDto": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "enum": [
+              "ko",
+              "en"
+            ],
+            "example": "ko"
+          }
+        },
+        "required": [
+          "language"
+        ]
+      },
+      "TabsResDto": {
+        "type": "object",
+        "properties": {
+          "tabs": {
+            "example": [
+              "diary",
+              "visitor",
+              "photo",
+              "coco"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "tabs"
+        ]
+      },
+      "UserItemDetailResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "file": {
+            "type": "string",
+            "example": "/uploads/skin.png",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "example": "skin",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "example": "우주 배경",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "file",
+          "category",
+          "name"
         ]
       },
       "PurchaseItemDto": {
