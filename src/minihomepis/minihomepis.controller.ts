@@ -7,7 +7,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Query,
   Req,
   UploadedFile,
   UseGuards,
@@ -38,6 +37,9 @@ import { DiaryService } from "src/diary/diary.service";
 import { GuestbooksService } from "src/guestbooks/guestbooks.service";
 import * as dotenv from "dotenv";
 import { RecentPhotoTitleDto } from "src/photos/dto/recentPhotoTitle.dto";
+import { VisitCountDto } from "./dto/visitCount.dto";
+import { ManagementResDto } from "./dto/managementRes.dto";
+import { PostCountDto } from "./dto/postCount.dto";
 dotenv.config();
 @ApiTags("미니홈피")
 @Controller("minihomepis")
@@ -54,6 +56,8 @@ export class MinihomepisController {
 
   // 파도타기
   @Get("history/:hostId")
+  @ApiOperation({ summary: "타인의 미니홈피 프로필 조회 (파도타기)" })
+  @ApiOkResponse({ type: OtherProfileDto })
   async getOtherProfile(
     @Param("hostId") hostId: number
   ): Promise<OtherProfileDto> {
@@ -74,7 +78,11 @@ export class MinihomepisController {
 
   // 방문자 수 조회
   @Get("count/:hostId")
-  async getTotalVisits(@Param("hostId", ParseIntPipe) hostId: number) {
+  @ApiOperation({ summary: "방문자 수 조회" })
+  @ApiResponse({ status: 200, type: VisitCountDto })
+  async getTotalVisits(
+    @Param("hostId", ParseIntPipe) hostId: number
+  ): Promise<VisitCountDto> {
     const total = await this.visitService.countTotalVisits(hostId);
     const today = await this.visitService.countTodayVisits(hostId);
 
@@ -149,6 +157,8 @@ export class MinihomepisController {
   // 관리글 저장
   @Patch("management")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "관리글 저장" })
+  @ApiResponse({ status: 200, description: "관리글 저장 완료" })
   async setManagement(@Req() req: Request, @Body("quote") quote: string) {
     const userId = req.user["id"];
     return await this.minihomepisService.setManagement(userId, quote);
@@ -156,7 +166,11 @@ export class MinihomepisController {
 
   // 관리글 조회
   @Get("management/:userId")
-  async getManagement(@Param("userId") userId: number) {
+  @ApiOperation({ summary: "관리글 조회" })
+  @ApiOkResponse({ type: ManagementResDto })
+  async getManagement(
+    @Param("userId", ParseIntPipe) userId: number
+  ): Promise<ManagementResDto> {
     return await this.minihomepisService.getManagement(userId);
   }
 
@@ -176,7 +190,11 @@ export class MinihomepisController {
 
   // 카운트
   @Get("postCount/:userId")
-  async getPostCount(@Param("userId", ParseIntPipe) userId: number) {
+  @ApiOperation({ summary: "오늘 및 전체 게시물 수 조회" })
+  @ApiOkResponse({ type: PostCountDto })
+  async getPostCount(
+    @Param("userId", ParseIntPipe) userId: number
+  ): Promise<PostCountDto> {
     const photoCount = await this.photosService.getTodayPhotoCount(userId);
     const photoTotalCount = await this.photosService.getTotalPhotoCount(userId);
     const diaryCount = await this.diaryService.getTodayDiaryCount(userId);
@@ -185,6 +203,7 @@ export class MinihomepisController {
       await this.guestbookService.getTodayGuestBookCount(userId);
     const guestBookTotalCount =
       await this.guestbookService.getTotalGuestBookCount(userId);
+
     return {
       photoCount,
       photoTotalCount,

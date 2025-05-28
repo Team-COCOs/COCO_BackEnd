@@ -1850,6 +1850,7 @@
     "/minihomepis/history/{hostId}": {
       "get": {
         "operationId": "MinihomepisController_getOtherProfile",
+        "summary": "타인의 미니홈피 프로필 조회 (파도타기)",
         "parameters": [
           {
             "name": "hostId",
@@ -1862,7 +1863,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtherProfileDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1873,6 +1881,7 @@
     "/minihomepis/count/{hostId}": {
       "get": {
         "operationId": "MinihomepisController_getTotalVisits",
+        "summary": "방문자 수 조회",
         "parameters": [
           {
             "name": "hostId",
@@ -1885,7 +1894,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisitCountDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1942,10 +1958,11 @@
     "/minihomepis/management": {
       "patch": {
         "operationId": "MinihomepisController_setManagement",
+        "summary": "관리글 저장",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "관리글 저장 완료"
           }
         },
         "tags": [
@@ -1956,6 +1973,7 @@
     "/minihomepis/management/{userId}": {
       "get": {
         "operationId": "MinihomepisController_getManagement",
+        "summary": "관리글 조회",
         "parameters": [
           {
             "name": "userId",
@@ -1968,7 +1986,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2013,6 +2038,7 @@
     "/minihomepis/postCount/{userId}": {
       "get": {
         "operationId": "MinihomepisController_getPostCount",
+        "summary": "오늘 및 전체 게시물 수 조회",
         "parameters": [
           {
             "name": "userId",
@@ -2025,7 +2051,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostCountDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3934,9 +3967,144 @@
           "message"
         ]
       },
+      "FriendDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number",
+            "example": 3,
+            "description": "친구 ID"
+          },
+          "friend": {
+            "type": "string",
+            "example": "김민수",
+            "description": "친구 실명"
+          },
+          "myNaming": {
+            "type": "string",
+            "example": "베프",
+            "description": "내가 설정한 친구 별명"
+          },
+          "theirNaming": {
+            "type": "string",
+            "example": "짱친",
+            "description": "상대가 설정한 나의 별명"
+          },
+          "since": {
+            "type": "string",
+            "example": "2025-05-08 14:30",
+            "description": "친구가 된 날짜"
+          }
+        },
+        "required": [
+          "userId",
+          "friend",
+          "myNaming",
+          "theirNaming",
+          "since"
+        ]
+      },
+      "OtherProfileDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "홍길동",
+            "description": "이름"
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "이메일"
+          },
+          "gender": {
+            "type": "string",
+            "example": "man",
+            "enum": [
+              "man",
+              "woman"
+            ],
+            "description": "성별"
+          },
+          "friends": {
+            "description": "친구 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FriendDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "gender",
+          "friends"
+        ]
+      },
+      "VisitCountDto": {
+        "type": "object",
+        "properties": {
+          "hostId": {
+            "type": "number",
+            "example": 3
+          },
+          "total": {
+            "type": "number",
+            "example": 132
+          },
+          "today": {
+            "type": "number",
+            "example": 7
+          }
+        },
+        "required": [
+          "hostId",
+          "total",
+          "today"
+        ]
+      },
       "MinihomepiStatusDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "유민이의 미니홈피",
+            "nullable": true
+          },
+          "mood": {
+            "type": "string",
+            "example": "행복 😊",
+            "nullable": true
+          },
+          "introduction": {
+            "type": "string",
+            "example": "안녕하세요! 반가워요~",
+            "nullable": true
+          },
+          "minihomepi_image": {
+            "type": "string",
+            "example": "/uploads/profile.jpg",
+            "nullable": true
+          }
+        },
+        "required": [
+          "title",
+          "mood",
+          "introduction",
+          "minihomepi_image"
+        ]
+      },
+      "ManagementResDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "오늘 하루도 행복하세요~"
+          }
+        },
+        "required": [
+          "content"
+        ]
       },
       "RecentPhotoTitleDto": {
         "type": "object",
@@ -3953,6 +4121,53 @@
         "required": [
           "title",
           "isScripted"
+        ]
+      },
+      "PostCountDto": {
+        "type": "object",
+        "properties": {
+          "photoCount": {
+            "type": "number",
+            "example": 1
+          },
+          "photoTotalCount": {
+            "type": "number",
+            "example": 5
+          },
+          "diaryCount": {
+            "type": "number",
+            "example": 2
+          },
+          "diaryTotalCount": {
+            "type": "number",
+            "example": 10
+          },
+          "guestBookCount": {
+            "type": "number",
+            "example": 0
+          },
+          "guestBookTotalCount": {
+            "type": "number",
+            "example": 8
+          },
+          "cocoCount": {
+            "type": "number",
+            "example": 1
+          },
+          "cocoTotalCount": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "photoCount",
+          "photoTotalCount",
+          "diaryCount",
+          "diaryTotalCount",
+          "guestBookCount",
+          "guestBookTotalCount",
+          "cocoCount",
+          "cocoTotalCount"
         ]
       },
       "StoreItemResDto": {
