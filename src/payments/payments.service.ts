@@ -66,7 +66,33 @@ export class PaymentsService {
 
   // 관리자 페이지 결제 내역
   async allPayments() {
-    return this.paymentRepository.find();
+    const payments = await this.paymentRepository
+      .createQueryBuilder("payment")
+      .leftJoinAndSelect("payment.user", "user")
+      .select([
+        "payment.id",
+        "payment.order_id",
+        "payment.amount",
+        "payment.dotori_amount",
+        "payment.created_at",
+        "payment.toss_payment_id",
+        "user.name",
+        "user.email",
+        "user.role",
+      ])
+      .getMany();
+
+    return payments.map((payment) => ({
+      id: payment.id,
+      order_id: payment.order_id,
+      amount: payment.amount,
+      dotori_amount: payment.dotori_amount,
+      created_at: payment.created_at,
+      toss_payment_id: payment.toss_payment_id,
+      name: payment.user.name,
+      email: payment.user.email,
+      role: payment.user.role,
+    }));
   }
 
   // 관리자 페이지 결제 내역 수
