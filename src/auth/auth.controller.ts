@@ -119,7 +119,9 @@ export class AuthController {
   @ApiOperation({ summary: "포폴용 로그인" })
   @ApiBody({ type: LoginRequestDto })
   async ppLogin(@Body() body: LoginRequestDto) {
-    const user = await this.usersService.findUserByEmail(body.email);
+    const user = await this.usersService.findUserByEmail(body.email, {
+      withPassword: true,
+    });
 
     if (!user) {
       return { ok: false, error: "이메일 또는 비밀번호가 일치하지 않습니다." };
