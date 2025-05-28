@@ -3,7 +3,7 @@ import { Controller, Get } from "@nestjs/common";
 @Controller("health")
 export class HealthController {
   @Get()
-  getStatus(): string {
-    return "ok";
+  getStatus() {
+    return { ok: true };
   }
 }
