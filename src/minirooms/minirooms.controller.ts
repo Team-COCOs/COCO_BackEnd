@@ -116,6 +116,6 @@ export class MiniroomsController {
   @ApiExtraModels(MinimiItemDto, SpeechBubbleItemDto)
   async getMiniroomLayoutByUserId(@Param("userId") userId: number) {
     const items = await this.miniRoomService.getMiniroomLayoutByUser(userId);
-    return { items };
+    return items;
   }
 }
