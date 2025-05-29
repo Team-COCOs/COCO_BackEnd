@@ -105,6 +105,7 @@ export class MiniroomsController {
   @ApiResponse({ status: 200, description: "미니미/말풍선 위치 저장 완료" })
   async saveLayout(@Body() body: SaveMiniroomLayoutDto, @Req() req: Request) {
     const userId = req.user["id"];
+    console.log(" 미니룸 배치 오늘 값", body);
     await this.miniRoomService.saveMiniroomLayoutByUser(userId, body.items);
     return { message: "미니미/말풍선 위치 저장 완료" };
   }
@@ -116,7 +117,6 @@ export class MiniroomsController {
   @ApiExtraModels(MinimiItemDto, SpeechBubbleItemDto)
   async getMiniroomLayoutByUserId(@Param("userId") userId: number) {
     const items = await this.miniRoomService.getMiniroomLayoutByUser(userId);
-    console.log("미니룸 배치 조회 결과:", items);
     return { items };
   }
 }
