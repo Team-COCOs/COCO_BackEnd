@@ -7,6 +7,7 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { writeFileSync } from "fs";
 import * as bodyParser from "body-parser";
+import { HealthService } from "./health/health.service";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -37,5 +38,8 @@ async function bootstrap() {
   });
 
   await app.listen(process.env.PORT!);
+
+  const healthService = app.get(HealthService);
+  healthService.setReady(true);
 }
 bootstrap();
