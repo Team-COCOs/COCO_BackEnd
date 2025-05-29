@@ -109,12 +109,14 @@ export class MiniroomsController {
     return { message: "미니미/말풍선 위치 저장 완료" };
   }
 
+  // 미니미/말풍선 조회
   @Get(":userId/layout")
   @ApiOperation({ summary: "미니룸 배치 조회 (미니미/말풍선)" })
   @ApiResponse({ status: 200, type: GetMiniroomLayoutResDto })
   @ApiExtraModels(MinimiItemDto, SpeechBubbleItemDto)
   async getMiniroomLayoutByUserId(@Param("userId") userId: number) {
     const items = await this.miniRoomService.getMiniroomLayoutByUser(userId);
+    console.log("미니룸 배치 조회 결과:", items);
     return { items };
   }
 }
