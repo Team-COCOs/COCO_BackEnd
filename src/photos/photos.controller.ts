@@ -14,22 +14,27 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { PhotosService } from "./photos.service";
-import { SavePhotoFolderDto } from "./dto/photoFolder.dto";
+import {
+  PhotoFolderResDto,
+  SavePhotoFolderDto,
+  SavePhotoFolderTreeResDto,
+} from "./dto/photoFolder.dto";
 import { AuthGuard } from "@nestjs/passport";
 import {
-  ApiBearerAuth,
   ApiConsumes,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { PhotoFolder } from "./photoFolder.entity";
-import { SavePhotoDto } from "./dto/photos.dto";
+import { PhotoResDto, SavePhotoDto } from "./dto/photos.dto";
 import { Photo } from "./photos.entity";
 import { Request } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
+import { PhotoClipResDto } from "./dto/clip.dto";
 
 @ApiTags("사진첩")
 @Controller("photos")
@@ -39,6 +44,12 @@ export class PhotosController {
   // 폴더 생성
   @Patch("saveTree")
   @UseGuards(AuthGuard("jwt"))
+  @ApiOperation({ summary: "사진 폴더 트리 저장" })
+  @ApiResponse({
+    status: 200,
+    description: "사진 폴더 트리 저장 성공",
+    type: SavePhotoFolderTreeResDto,
+  })
   async saveFolderTree(
     @Body("folders") folders: SavePhotoFolderDto[],
     @Req() req: Request
@@ -56,10 +67,12 @@ export class PhotosController {
   // 폴더 조회
   @Get("folderList")
   @ApiOperation({ summary: "사용자의 폴더 트리 조회" })
-  @ApiResponse({
-    status: 200,
-    description: "사용자의 폴더 트리가 조회되었습니다.",
-    type: [PhotoFolder],
+  @ApiResponse({ status: 200, type: [PhotoFolderResDto] })
+  @ApiQuery({
+    name: "userId",
+    required: true,
+    type: Number,
+    description: "조회할 유저 ID",
   })
   async getFolderTree(
     @Query("userId", ParseIntPipe) userId: number
@@ -110,7 +123,7 @@ export class PhotosController {
   @ApiResponse({
     status: 200,
     description: "사용자 사진 목록 반환",
-    type: [Photo],
+    type: [PhotoResDto],
   })
   async getMyPhotos(
     @Param("hostId", ParseIntPipe) hostId: number,
@@ -126,7 +139,7 @@ export class PhotosController {
   @ApiResponse({
     status: 200,
     description: "공개 사진 리스트",
-    type: [Photo],
+    type: [PhotoResDto],
   })
   async getPhotosForLogoutUser(
     @Param("hostId", ParseIntPipe) hostId: number
@@ -138,7 +151,11 @@ export class PhotosController {
   @Patch(":photoId/clip")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "사진 스크랩" })
-  @ApiResponse({ status: 200, description: "스크랩 완료" })
+  @ApiResponse({
+    status: 200,
+    description: "스크랩 완료",
+    type: PhotoClipResDto,
+  })
   async clipPhoto(
     @Param("photoId") photoId: number,
     @Req() req: Request

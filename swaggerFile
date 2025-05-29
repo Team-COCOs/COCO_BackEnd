@@ -903,10 +903,18 @@
     "/photos/saveTree": {
       "patch": {
         "operationId": "PhotosController_saveFolderTree",
+        "summary": "사진 폴더 트리 저장",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "사진 폴더 트리 저장 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavePhotoFolderTreeResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -923,6 +931,7 @@
             "name": "userId",
             "required": true,
             "in": "query",
+            "description": "조회할 유저 ID",
             "schema": {
               "type": "number"
             }
@@ -930,13 +939,13 @@
         ],
         "responses": {
           "200": {
-            "description": "사용자의 폴더 트리가 조회되었습니다.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PhotoFolder"
+                    "$ref": "#/components/schemas/PhotoFolderResDto"
                   }
                 }
               }
@@ -1002,7 +1011,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Photo"
+                    "$ref": "#/components/schemas/PhotoResDto"
                   }
                 }
               }
@@ -1036,7 +1045,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Photo"
+                    "$ref": "#/components/schemas/PhotoResDto"
                   }
                 }
               }
@@ -1064,7 +1073,14 @@
         ],
         "responses": {
           "200": {
-            "description": "스크랩 완료"
+            "description": "스크랩 완료",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoClipResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3683,30 +3699,91 @@
           "newPassword"
         ]
       },
-      "PhotoFolder": {
+      "SavePhotoFolderTreeResDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true,
+            "description": "저장 성공 여부"
+          },
+          "message": {
+            "type": "string",
+            "example": "폴더 트리 저장 완료",
+            "description": "메시지"
+          }
+        },
+        "required": [
+          "success",
+          "message"
+        ]
+      },
+      "PhotoFolderResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "여행앨범"
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "parentId": {
+            "type": "number",
+            "example": 0,
+            "nullable": true
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhotoFolderResDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "is_deleted",
+          "parentId"
+        ]
       },
       "SavePhotoDto": {
         "type": "object",
         "properties": {
           "photo_url": {
-            "type": "string"
+            "type": "string",
+            "example": "https://…/photo.jpg",
+            "description": "사진 URL"
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "example": "제주도 바다",
+            "description": "사진 제목"
           },
           "content": {
-            "type": "string"
+            "type": "string",
+            "example": "맑은 날의 제주 바다 사진입니다.",
+            "description": "본문 내용"
           },
           "user": {
-            "type": "string"
+            "type": "string",
+            "example": "ㅇㅇㅇ",
+            "description": "작성자 이름"
           },
           "folder_name": {
-            "type": "string"
+            "type": "string",
+            "example": "여행앨범",
+            "description": "폴더 이름"
           },
           "isScripted": {
-            "type": "boolean"
+            "type": "boolean",
+            "example": true,
+            "description": "스크랩 여부"
           },
           "visibility": {
             "type": "string",
@@ -3732,6 +3809,126 @@
       "Photo": {
         "type": "object",
         "properties": {}
+      },
+      "PhotoResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "photo_url": {
+            "type": "string",
+            "example": "https://.../photo.jpg"
+          },
+          "title": {
+            "type": "string",
+            "example": "여행 사진"
+          },
+          "content": {
+            "type": "string",
+            "example": "제주도에서 찍은 사진이에요~"
+          },
+          "visibility": {
+            "type": "string",
+            "example": "public",
+            "enum": [
+              "public",
+              "private",
+              "friends"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2025-05-29 14:00"
+          },
+          "isScripted": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "folderName": {
+            "type": "string",
+            "example": "여행앨범"
+          },
+          "author": {
+            "type": "string",
+            "example": "유민"
+          }
+        },
+        "required": [
+          "id",
+          "photo_url",
+          "title",
+          "content",
+          "visibility",
+          "created_at",
+          "isScripted",
+          "folderName",
+          "author"
+        ]
+      },
+      "PhotoClipResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "사진 ID"
+          },
+          "title": {
+            "type": "string",
+            "example": "제목"
+          },
+          "content": {
+            "type": "string",
+            "example": "본문 내용"
+          },
+          "photo_url": {
+            "type": "string",
+            "example": "/uploads/photo.jpg"
+          },
+          "isScripted": {
+            "type": "boolean",
+            "example": true
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "public",
+              "private",
+              "friends"
+            ],
+            "example": "public"
+          },
+          "folderName": {
+            "type": "string",
+            "example": "스크랩 폴더"
+          },
+          "originAuthorId": {
+            "type": "number",
+            "example": 99
+          },
+          "originAuthorName": {
+            "type": "string",
+            "example": "원본 작성자 이름"
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2025-05-26 13:00"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "content",
+          "photo_url",
+          "isScripted",
+          "visibility",
+          "folderName",
+          "originAuthorId",
+          "originAuthorName",
+          "created_at"
+        ]
       },
       "CreateCommentDto": {
         "type": "object",
