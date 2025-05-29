@@ -107,6 +107,7 @@ export class MinihomepisController {
   )
   @ApiConsumes("multipart/form-data")
   @ApiOperation({ summary: "내 미니홈피 상태 저장 (무드/소개글/제목/이미지)" })
+  @ApiResponse({ status: 200, description: "내 미니 홈피 상태 저장 완료" })
   async updateMyMinihomepi(
     @UploadedFile() file: Express.Multer.File,
     @Body()

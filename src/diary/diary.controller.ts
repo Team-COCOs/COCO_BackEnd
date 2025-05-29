@@ -13,18 +13,21 @@ import {
 } from "@nestjs/common";
 import { DiaryService } from "./diary.service";
 import { AuthGuard } from "@nestjs/passport";
-import { SaveDiaryFolderDto } from "./dto/diaryFolder.dto";
+import { DiaryFolderResDto, SaveDiaryFolderDto } from "./dto/diaryFolder.dto";
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { DiaryFolder } from "./diaryFolder.entity";
 import { Diary } from "./diary.entity";
-import { SaveDiaryDto } from "./dto/diary.dto";
+import { DeleteDiaryResponseDto, SaveDiaryDto } from "./dto/diary.dto";
 import { Request } from "express";
 import { DiaryResponseDto } from "./dto/diary-res.dto";
+import { SaveFolderTreeResDto } from "./dto/diaryFolder.dto";
 @ApiTags("다이어리")
 @Controller("diary")
 export class DiaryController {
@@ -36,7 +39,7 @@ export class DiaryController {
   @ApiResponse({
     status: 200,
     description: "사용자의 폴더 트리가 저장되었습니다.",
-    type: [DiaryFolder],
+    type: SaveFolderTreeResDto,
   })
   @UseGuards(AuthGuard("jwt"))
   async saveFolderTree(
@@ -56,15 +59,31 @@ export class DiaryController {
   // 폴더 조회
   @Get("folderList")
   @ApiOperation({ summary: "사용자의 폴더 트리 조회" })
-  @ApiResponse({
-    status: 200,
-    description: "사용자의 폴더 트리가 조회되었습니다.",
-    type: [DiaryFolder],
+  @ApiResponse({ status: 200, type: [DiaryFolderResDto] })
+  @ApiQuery({
+    name: "userId",
+    required: true,
+    type: Number,
+    description: "조회할 유저 ID",
   })
   async getFolderTree(
     @Query("userId", ParseIntPipe) userId: number
-  ): Promise<DiaryFolder[]> {
-    return await this.diaryService.getFolder(userId);
+  ): Promise<DiaryFolderResDto[]> {
+    const folders = await this.diaryService.getFolder(userId);
+    return folders.map((folder) => ({
+      id: folder.id,
+      title: folder.title,
+      is_deleted: folder.is_deleted,
+      parentId: folder.parent?.id || null,
+      children:
+        folder.children?.map((child) => ({
+          id: child.id,
+          title: child.title,
+          is_deleted: child.is_deleted,
+          parentId: child.parent?.id || null,
+          children: [],
+        })) || [],
+    }));
   }
 
   // 다이어리 저장
@@ -94,6 +113,7 @@ export class DiaryController {
     description: "사용자 사진 목록 반환",
     type: [DiaryResponseDto],
   })
+  @ApiParam({ name: "hostId", description: "조회할 유저 ID" })
   async getDiary(
     @Param("hostId", ParseIntPipe) hostId: number,
     @Req() req: Request
@@ -110,6 +130,7 @@ export class DiaryController {
     description: "공개 사진 리스트",
     type: [Diary],
   })
+  @ApiParam({ name: "hostId", description: "조회할 유저 ID" })
   async getPhotosForLogoutUser(
     @Param("hostId", ParseIntPipe) hostId: number
   ): Promise<Diary[]> {
@@ -122,6 +143,7 @@ export class DiaryController {
   @ApiBearerAuth()
   @ApiOperation({ summary: "다이어리 수정" })
   @ApiResponse({ status: 200, type: Diary })
+  @ApiParam({ name: "diaryId", description: "수정할 다이어리 ID" })
   async updateDiary(
     @Param("diaryId", ParseIntPipe) diaryId: number,
     @Body() dto: SaveDiaryDto,
@@ -135,11 +157,16 @@ export class DiaryController {
   @Delete(":diaryId")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "사진 삭제" })
-  @ApiResponse({ status: 200, description: "삭제 완료" })
+  @ApiResponse({
+    status: 200,
+    description: "삭제 완료",
+    type: DeleteDiaryResponseDto,
+  })
+  @ApiParam({ name: "diaryId", description: "삭제할 다이어리 ID" })
   async deletePhoto(
-    @Param("diaryId") diaryId: number,
+    @Param("diaryId", ParseIntPipe) diaryId: number,
     @Req() req: Request
-  ): Promise<{ ok: boolean }> {
+  ): Promise<DeleteDiaryResponseDto> {
     const userId = req.user["id"];
     return await this.diaryService.deletePost(userId, diaryId);
   }

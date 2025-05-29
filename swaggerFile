@@ -1257,10 +1257,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DiaryFolder"
-                  }
+                  "$ref": "#/components/schemas/SaveFolderTreeResDto"
                 }
               }
             }
@@ -1280,6 +1277,7 @@
             "name": "userId",
             "required": true,
             "in": "query",
+            "description": "조회할 유저 ID",
             "schema": {
               "type": "number"
             }
@@ -1287,13 +1285,13 @@
         ],
         "responses": {
           "200": {
-            "description": "사용자의 폴더 트리가 조회되었습니다.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/DiaryFolder"
+                    "$ref": "#/components/schemas/DiaryFolderResDto"
                   }
                 }
               }
@@ -1346,6 +1344,7 @@
             "name": "hostId",
             "required": true,
             "in": "path",
+            "description": "조회할 유저 ID",
             "schema": {
               "type": "number"
             }
@@ -1380,6 +1379,7 @@
             "name": "hostId",
             "required": true,
             "in": "path",
+            "description": "조회할 유저 ID",
             "schema": {
               "type": "number"
             }
@@ -1414,6 +1414,7 @@
             "name": "diaryId",
             "required": true,
             "in": "path",
+            "description": "수정할 다이어리 ID",
             "schema": {
               "type": "number"
             }
@@ -1458,6 +1459,7 @@
             "name": "diaryId",
             "required": true,
             "in": "path",
+            "description": "삭제할 다이어리 ID",
             "schema": {
               "type": "number"
             }
@@ -1465,7 +1467,14 @@
         ],
         "responses": {
           "200": {
-            "description": "삭제 완료"
+            "description": "삭제 완료",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteDiaryResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1915,8 +1924,8 @@
         "summary": "내 미니홈피 상태 저장 (무드/소개글/제목/이미지)",
         "parameters": [],
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "내 미니 홈피 상태 저장 완료"
           }
         },
         "tags": [
@@ -2071,9 +2080,21 @@
         "operationId": "MiniroomsController_saveBackground",
         "summary": "미니룸 배경(스킨) 설정",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "purchaseId": "default-miniroom"
+                }
+              }
+            }
+          }
+        },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "미니룸 배경 저장 완료"
           }
         },
         "tags": [
@@ -2084,7 +2105,7 @@
     "/minirooms/{userId}/background": {
       "get": {
         "operationId": "MiniroomsController_getMiniroomBackByUserId",
-        "summary": "유저 ID로 미니룸 배치 조회",
+        "summary": "유저 ID로 미니룸 배경 조회",
         "parameters": [
           {
             "name": "userId",
@@ -2097,7 +2118,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "미니룸 배경 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MiniroomBackgroundResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2110,6 +2138,18 @@
         "operationId": "MiniroomsController_saveMiniroomName",
         "summary": "미니룸 타이틀 저장",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "name": "나의 아늑한 방"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "미니룸 이름 저장 완료"
@@ -2123,7 +2163,7 @@
     "/minirooms/{userId}/title": {
       "get": {
         "operationId": "MiniroomsController_getMiniroomNameByUserId",
-        "summary": "유저 ID로 미니룸 배치 조회 (JWT 없음)",
+        "summary": "미니룸 타이틀 조회",
         "parameters": [
           {
             "name": "userId",
@@ -2136,7 +2176,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "미니룸 타이틀 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MiniroomTitleDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2147,11 +2194,21 @@
     "/minirooms/save-layout": {
       "post": {
         "operationId": "MiniroomsController_saveLayout",
-        "summary": "미니룸에 미니미/말풍선 저장 (유저 기준)",
+        "summary": "미니미/말풍선 배치 저장",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveMiniroomLayoutDto"
+              }
+            }
+          }
+        },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "미니미/말풍선 위치 저장 완료"
           }
         },
         "tags": [
@@ -2162,7 +2219,7 @@
     "/minirooms/{userId}/layout": {
       "get": {
         "operationId": "MiniroomsController_getMiniroomLayoutByUserId",
-        "summary": "유저 ID로 미니룸 배치 조회 (JWT 없음)",
+        "summary": "미니룸 배치 조회 (미니미/말풍선)",
         "parameters": [
           {
             "name": "userId",
@@ -2175,7 +2232,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMiniroomLayoutResDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3781,9 +3845,58 @@
           "ok"
         ]
       },
-      "DiaryFolder": {
+      "SaveFolderTreeResDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true,
+            "description": "성공 여부"
+          },
+          "message": {
+            "type": "string",
+            "example": "폴더 트리 저장 완료",
+            "description": "메시지"
+          }
+        },
+        "required": [
+          "success",
+          "message"
+        ]
+      },
+      "DiaryFolderResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "내 폴더"
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "parentId": {
+            "type": "number",
+            "example": 0,
+            "nullable": true
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiaryFolderResDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "is_deleted",
+          "parentId"
+        ]
       },
       "SaveDiaryDto": {
         "type": "object",
@@ -3831,19 +3944,24 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number"
-          },
-          "content": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
+            "type": "number",
+            "example": 1,
+            "description": "다이어리 ID"
           },
           "mood": {
-            "type": "string"
+            "type": "string",
+            "example": "행복",
+            "description": "기분"
           },
           "weather": {
-            "type": "string"
+            "type": "string",
+            "example": "맑음",
+            "description": "날씨"
+          },
+          "content": {
+            "type": "string",
+            "example": "오늘 하루도 수고했어요.",
+            "description": "내용"
           },
           "visibility": {
             "type": "string",
@@ -3851,26 +3969,52 @@
               "public",
               "private",
               "friends"
-            ]
+            ],
+            "description": "공개 범위"
+          },
+          "view_count": {
+            "type": "number",
+            "example": 0,
+            "description": "조회수"
           },
           "created_at": {
-            "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "example": "2025-05-29 12:34",
+            "description": "작성 시각"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2025-05-29 13:00",
+            "description": "수정 시각"
           }
         },
         "required": [
           "id",
-          "content",
-          "title",
           "mood",
           "weather",
+          "content",
           "visibility",
-          "created_at"
+          "view_count",
+          "created_at",
+          "updated_at"
         ]
       },
       "Diary": {
         "type": "object",
         "properties": {}
+      },
+      "DeleteDiaryResponseDto": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": true,
+            "description": "삭제 성공 여부"
+          }
+        },
+        "required": [
+          "ok"
+        ]
       },
       "FriendRequestDto": {
         "type": "object",
@@ -4168,6 +4312,174 @@
           "guestBookTotalCount",
           "cocoCount",
           "cocoTotalCount"
+        ]
+      },
+      "MiniroomBackgroundResDto": {
+        "type": "object",
+        "properties": {
+          "purchaseId": {
+            "type": "object",
+            "example": 42,
+            "description": "구매한 배경 아이템의 purchaseId 또는 기본 배경 ID"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://example.com/miniroom-background.png",
+            "description": "미니룸 배경 이미지 URL"
+          }
+        },
+        "required": [
+          "purchaseId",
+          "image"
+        ]
+      },
+      "MiniroomTitleDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "내 방",
+            "description": "미니룸 타이틀"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "MinimiItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "object",
+            "example": "default-minimi",
+            "description": "기본 미니미 또는 구매한 미니미 ID"
+          },
+          "type": {
+            "type": "string",
+            "example": "minimi",
+            "enum": [
+              "minimi"
+            ],
+            "description": "아이템 타입"
+          },
+          "left": {
+            "type": "number",
+            "example": 100,
+            "description": "X 좌표"
+          },
+          "top": {
+            "type": "number",
+            "example": 200,
+            "description": "Y 좌표"
+          },
+          "file": {
+            "type": "string",
+            "example": "https://example.com/image.png",
+            "description": "이미지 파일 URL (선택)"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "left",
+          "top"
+        ]
+      },
+      "SpeechBubbleItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 10,
+            "description": "말풍선 ID"
+          },
+          "type": {
+            "type": "string",
+            "example": "speechBubble",
+            "enum": [
+              "speechBubble"
+            ],
+            "description": "아이템 타입"
+          },
+          "left": {
+            "type": "number",
+            "example": 120,
+            "description": "X 좌표"
+          },
+          "top": {
+            "type": "number",
+            "example": 80,
+            "description": "Y 좌표"
+          },
+          "text": {
+            "type": "string",
+            "example": "안녕하세요!",
+            "description": "텍스트 내용"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "left",
+          "top",
+          "text"
+        ]
+      },
+      "SaveMiniroomLayoutDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "미니미 또는 말풍선 객체 배열",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MinimiItemDto"
+              },
+              {
+                "$ref": "#/components/schemas/SpeechBubbleItemDto"
+              }
+            ],
+            "example": [
+              {
+                "id": "default-minimi",
+                "type": "minimi",
+                "left": 100,
+                "top": 200,
+                "file": "https://example.com/image.png"
+              },
+              {
+                "id": 10,
+                "type": "speechBubble",
+                "left": 150,
+                "top": 250,
+                "text": "안녕!"
+              }
+            ],
+            "items": {
+              "type": "array"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "GetMiniroomLayoutResDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MinimiItemDto"
+              },
+              {
+                "$ref": "#/components/schemas/SpeechBubbleItemDto"
+              }
+            ],
+            "description": "미니미 및 말풍선 정보 목록"
+          }
+        },
+        "required": [
+          "items"
         ]
       },
       "StoreItemResDto": {

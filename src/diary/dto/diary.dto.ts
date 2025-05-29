@@ -41,3 +41,8 @@ export class NewDiaryDto {
   @ApiProperty({ example: "diary" })
   type: "diary";
 }
+
+export class DeleteDiaryResponseDto {
+  @ApiProperty({ example: true, description: "삭제 성공 여부" })
+  ok: boolean;
+}
