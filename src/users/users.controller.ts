@@ -52,6 +52,7 @@ export class UsersController {
     private readonly useritemsService: UseritemsService
   ) {}
 
+  // 유저 프로필
   @Get("profile")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
@@ -75,6 +76,7 @@ export class UsersController {
     };
   }
 
+  // 메인화면용 프로필
   @Get("mainProfile")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
@@ -113,6 +115,7 @@ export class UsersController {
     };
   }
 
+  // 비밀번호 변경
   @Patch("update/password")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
@@ -123,6 +126,7 @@ export class UsersController {
     return await this.usersService.changePw(userId, body.password);
   }
 
+  // 전화번호 변경
   @Patch("update/phone")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
@@ -133,6 +137,7 @@ export class UsersController {
     return await this.usersService.changePhone(userId, body.phone);
   }
 
+  // 유저 id 이름 조회
   @Get("id")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
@@ -142,6 +147,7 @@ export class UsersController {
     return this.usersService.getAllUserId();
   }
 
+  // 유저 검색
   @Get("search")
   @ApiOperation({ summary: "키워드로 유저 검색" })
   @ApiQuery({ name: "keyword", required: true, description: "검색 키워드" })
@@ -152,16 +158,18 @@ export class UsersController {
     return this.usersService.searchUsers(keyword);
   }
 
+  // 화제의 미니홈피 5명
   @Get("getPopularUser")
   @ApiOperation({ summary: "화제의 미니홈피 Top 5" })
   @ApiOkResponse({
-    description: "오늘 방문자 수 기준 Top 5 유저 목록",
+    description: "총 방문자 수 기준 Top 5 유저 목록",
     type: [PopularUserDto],
   })
   async getHotMinihomepis() {
     return this.minihomepisService.getTop5HotMinihomepis();
   }
 
+  // 탈퇴 처리
   @Patch("delete")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
@@ -171,6 +179,7 @@ export class UsersController {
     return await this.usersService.withdrawUser(userId);
   }
 
+  // 유저 역할 확인
   @Get("role/:userId")
   @ApiOperation({ summary: "유저 역할 정보 확인" })
   @ApiOkResponse({ type: UserRoleDto })
@@ -178,12 +187,19 @@ export class UsersController {
     return await this.usersService.getUserRole(userId);
   }
 
+  // 파도타기
   @Get("wave/:hostId")
   @ApiOperation({ summary: "파도타기 (랜덤 유저 조회)" })
   @ApiParam({
     name: "hostId",
     type: Number,
-    description: "현재 미니홈피 ID (제외 대상)",
+    description: "현재 유저 ID (자기 자신 제외 대상)",
+  })
+  @ApiQuery({
+    name: "exclude",
+    type: Number,
+    required: false,
+    description: "직전에 방문한 유저 ID (선택적 제외 대상)",
   })
   @ApiOkResponse({
     description: "랜덤 유저 ID 반환",
@@ -191,13 +207,27 @@ export class UsersController {
       example: { userId: 11 },
     },
   })
-  async getRandomUser(@Param("hostId") hostId: string) {
-    const parsed = Number(hostId);
-    if (isNaN(parsed)) {
+  async getRandomUser(
+    @Param("hostId") hostId: string,
+    @Query("exclude") exclude?: string
+  ) {
+    const parsedHostId = Number(hostId);
+    const parsedExclude = exclude ? Number(exclude) : null;
+
+    if (isNaN(parsedHostId)) {
       throw new BadRequestException("유효한 hostId가 아닙니다.");
     }
 
-    const userId = await this.usersService.getRandomUserExcept(parsed);
+    if (exclude && isNaN(parsedExclude)) {
+      throw new BadRequestException("유효한 exclude ID가 아닙니다.");
+    }
+
+    const excludeIds = [parsedHostId];
+    if (parsedExclude !== null) {
+      excludeIds.push(parsedExclude);
+    }
+
+    const userId = await this.usersService.getRandomUserExcept(excludeIds);
     return { userId };
   }
 }

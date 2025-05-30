@@ -24,7 +24,7 @@ export class VisitService {
   async visit(hostId: number, visitorId: number | null) {
     const host = await this.usersService.findUserById(hostId);
     if (!host) {
-      throw new NotFoundException("존재하지 않는 미니홈피입니다.");
+      throw new NotFoundException("존재하지 않는 유저입니다.");
     }
     if (visitorId && hostId === visitorId) return;
 
@@ -46,11 +46,6 @@ export class VisitService {
       await this.visitRepository.save({
         host: { id: hostId },
         visitor: { id: visitorId },
-      });
-    } else {
-      await this.visitRepository.save({
-        host: { id: hostId },
-        visitor: null,
       });
     }
 

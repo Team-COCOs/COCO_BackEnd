@@ -187,7 +187,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "오늘 방문자 수 기준 Top 5 유저 목록",
+            "description": "총 방문자 수 기준 Top 5 유저 목록",
             "content": {
               "application/json": {
                 "schema": {
@@ -265,7 +265,16 @@
             "name": "hostId",
             "required": true,
             "in": "path",
-            "description": "현재 미니홈피 ID (제외 대상)",
+            "description": "현재 유저 ID (자기 자신 제외 대상)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "exclude",
+            "required": false,
+            "in": "query",
+            "description": "직전에 방문한 유저 ID (선택적 제외 대상)",
             "schema": {
               "type": "number"
             }

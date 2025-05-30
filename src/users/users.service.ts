@@ -212,10 +212,10 @@ export class UsersService {
   }
 
   // 파도타기 (현재 있는 미니홈피 말고 랜덤하게 하나)
-  async getRandomUserExcept(excludeId: number): Promise<number> {
+  async getRandomUserExcept(excludeIds: number[]): Promise<number> {
     const user = await this.userRepository
       .createQueryBuilder("user")
-      .where("user.id != :excludeId", { excludeId })
+      .where("user.id NOT IN (:...excludeIds)", { excludeIds })
       .andWhere("user.role = :role", { role: "user" })
       .orderBy("RAND()") // MySQL용 랜덤 정렬
       .limit(1)
