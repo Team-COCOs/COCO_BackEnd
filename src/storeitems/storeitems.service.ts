@@ -6,6 +6,8 @@ import { CreateStoreItemDto, UpdateStoreItemDto } from "./dto/storeitem.dto";
 
 import { exec } from "child_process";
 import { promisify } from "util";
+import * as fs from "fs";
+
 const execAsync = promisify(exec);
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -21,13 +23,27 @@ export class StoreitemsService {
   async create(dto: CreateStoreItemDto & { file: string }) {
     const item = this.storeItemRepository.create(dto);
     const saved = await this.storeItemRepository.save(item);
-    const serverHost = process.env.SERVER_HOST;
-    if (dto.category === StoreItemType.BGM) {
-      const filePath = dto.file.replace(`${serverHost}`, ".");
-      const previewPath = filePath.replace(".mp3", "_preview.mp3");
 
-      const command = `ffmpeg -y -i ${filePath} -t 10 ${previewPath}`;
-      await execAsync(command);
+    if (dto.category === StoreItemType.BGM) {
+      try {
+        const serverHost = process.env.SERVER_HOST;
+
+        // 파일 경로 계산: 환경변수가 없으면 그대로 사용
+        const filePath = serverHost
+          ? dto.file.replace(`${serverHost}`, ".")
+          : dto.file;
+
+        const previewPath = filePath.replace(/\.mp3$/, "_preview.mp3");
+
+        if (!fs.existsSync(filePath)) {
+          throw new Error(`원본 음원 파일이 존재하지 않습니다: ${filePath}`);
+        }
+
+        const command = `ffmpeg -y -i "${filePath}" -t 10 "${previewPath}"`;
+        await execAsync(command);
+      } catch (error) {
+        console.error("🎵 FFmpeg 미리듣기 생성 실패:", error.message);
+      }
     }
 
     return saved;
